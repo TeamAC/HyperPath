@@ -1,0 +1,210 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8x]{inputenc}
+\usepackage{ucs}
+\author{Adel Attia, Chedi Toueiti}
+\begin{document}
+\tableofcontents
+\chapter{Introduction}
+\section{Project purpose}
+\subsection{Project definition}
+\paragraph{}
+This project aims to address the work-flow surrounding the acquisition, analysis and reporting of GPS data collected via a mobile device and exposing these data to the final user using a custom back office interface.
+\paragraph{}
+The finality of the process is to provide a complete solution for monitoring mobile target and acquiring instant knowledge of their current position and past movements history.
+
+\subsection{Challenges}
+\paragraph{}
+In the current days geo-localization have became a key feature for many industries, as it provide ways to track targets and by extension collect valuable data about their behaviors. Such data are used for logistics management and optimization and large amounts are spent every year in improving such technologies and investing in new one (such as the Galileo Stellite system).
+\paragraph{}
+In the recent past, price (especially the hardware cost) have been the main constraint for many small companies and individuals and the field had not retained the due attention and publicity. But, with the tsunami of mobile devices and smart phones equipped with GPS sensor and network connectivity on the market, the geo-localistion is back and the applications are more proliferous than ever. That's where the first challenge reside:
+\begin{itemize}
+\item using a mobile device, acquire GPS data and send them to the main server for storage and analysis.
+\item store the GPS data in the device in case of missing network connectivity and send them back to the server when restored.
+\item receive GPS data from the server and use them to guide the target through a specific path
+\end{itemize}
+
+
+\paragraph{}
+Because data without interpretation is merely obscure sequence of numbers, any decent geo-localization system must have a complete set of tool for the reception, storage, analysis and custom business logic. That's why the proposed system will be provided with back office for managing the following tasks:
+\begin{itemize}
+\item Receive and save the GPS data send by the mobile target in a persisting storage system (database, file...)
+\item Using third party map data, render a graphical representation of the current target position and the past movements history of one or more target.
+\item Based on the user data, compute paths and send them as GPS coordinate to the mobile target.
+\item Provide complete reporting schemas using the data acquired via the mobile target.
+\end{itemize}
+
+\subsection{State of the art}
+\subsection{Solution}
+\paragraph{}
+
+
+\section{Introduction to android}
+\subsection{History of Android}
+\subsubsection{The Not-So-Distant Past}
+
+\paragraph{}
+Historically, developers, generally coding in low-level C or C++, have needed to understand the specific
+hardware they were coding for, generally a single device or possibly a range of devices from a single
+manufacturer. As hardware technology and mobile Internet access has advanced, this closed approach
+has become outmoded.
+\paragraph{}
+More recently, platforms like Symbian have been created to provide developers with a wider target
+audience. These systems have proven more successful in encouraging mobile developers to provide rich
+applications that better leverage the hardware available.
+\paragraph{}
+These platforms offer some access to the device hardware, but require the developer to write complex
+C/C++ code and make heavy use of proprietary APIs that are notoriously difficult to work with. This
+difficulty is amplified for applications that must work on different hardware implementations and those
+that make use of a particular hardware feature, like GPS.
+\paragraph{}
+In more recent years, the biggest advance in mobile phone development was the introduction of Java-
+hosted MIDlets. MIDlets are executed on a Java virtual machine, a process that abstracts the underlying
+hardware and lets developers create applications that run on the wide variety of devices that supports
+the Java run time. Unfortunately, this convenience comes at the price of restricted access to the device
+hardware.
+\paragraph{}
+Google acquired the startup company Android Inc. in 2005 to start the development of the
+Android Platform (see Figure 1-3). The key players at Android Inc. included Andy Rubin, Rich
+Miner, Nick Sears, and Chris White.
+\paragraph{}
+The Android SDK was first issued as an “early look” release in November 2007. In September 2008, 
+T-Mobile announced the availability of the T-Mobile G1, the first smartphone based
+on the Android Platform. A few days after that, Google announced the availability of Android
+SDK Release Candidate 1.0. In October 2008, Google made the source code of the Android
+Platform available under Apache’s open source license.
+
+\subsubsection{The Future}
+
+\paragraph{}
+Android sits alongside a new wave of mobile operating systems designed for increasingly powerful
+mobile hardware. Windows Mobile, the Apple iPhone, and the Palm Pre now provide a richer, sim-
+plified development environment for mobile applications. However, unlike Android, they’re built on
+proprietary operating systems that in some cases prioritize native applications over those created by
+third parties, restrict communication among applications and native phone data, and restrict or control
+the distribution of third-party apps to their platforms.
+\paragraph{}
+Android offers new possibilities for mobile applications by offering an open development environment
+built on an open-source Linux kernel. Hardware access is available to all applications through a series
+of API libraries, and application interaction, while carefully controlled, is fully supported.
+
+
+\subsection{Why Android?}
+\paragraph{}
+Android has the potential for removing the barriers to success in the development and
+sale of a new generation of mobile phone application software. Just as the the standardized 
+PC and Macintosh platforms created markets for desktop and server software,
+Android, by providing a standard mobile phone application environment, will create
+a market for mobile applications and the opportunity for applications developers to
+profit from those applications.
+
+For the purpose of this project, we have the constraint of using the Java language, which is the main
+development language for android. The free availability of the SDK and simulator and easy integration 
+with the eclipse framework make android the perfect choice for our case.
+
+\section{Introduction to Eclipse RCP}
+\subsection{Eclipse framework}
+
+\paragraph{}
+The Eclipse philosophy is simple and has been critical to its success. The Eclipse Platform
+was designed from the ground up as an integration framework for development tools. Eclipse
+also enables developers to easily extend products built on it with the latest object-oriented
+technologies.
+\paragraph{}
+Although Eclipse was designed to serve as an open development platform, it is architected
+so that its components can be used to build just about any client application. The minimal set
+of modules needed to build a rich client is collectively known as the Rich Client Platform (RCP).
+
+\subsection{Why RCP ?}
+\paragraph{}
+The Standard Widget Toolkit (SWT) is the graphical widget toolkit used by eclipse. Originally developed by
+IBM, it was created to overcome the limitation if the Swing graphical user interface (GUI) toolkit introduced
+bt Sun. Swing is 100\% Java and employs a lowest common denominator to draw its components by using Java 2D to call low level operating system primitives. SWT, on the other hand, implements a common widget layer with fast native acces to multiple platforms.
+
+\paragraph{}
+SWT's goal is to provide a common API,but avoid the lowest common denominator problem typical of the other portable GUI toolkits. SWT was designed for the following:
+\begin{itemize}
+\item Performance: SWT claims higher performance and responsiveness, and lower system resource usage than Swing.
+
+\item Native look and feel: Because SWT is a wrapper around native window systems such as GTK+ and Motif, SWT widgets have the exact same look and feel as native ones. This is in contrast to the Swing toolkit, where
+widgets are close copies of native ones. This is clearly evident just by looking at Swing application.
+
+\item Extensibility: Critics of SWT may claim that the use of native code does not allow for easy inheritance and hurts extensibility. However, both Swing and SWT support for writing new widgets using Java code only.
+\end{itemize}
+
+\section{Introduction to GlassFish}
+
+\subsection{Whats a java application server?}
+\paragraph{}
+A web application is a dynamic extension of a web or application server. Web applications are of the following types:
+\begin{itemize}
+\item Presentation-oriented: A presentation-oriented web application generates interactive web pages containing various types of 
+markup language (HTML, XHTML, XML, and so on) and dynamic content in response to requests. Development of presentation-oriented web 
+applications is covered in Chapter 4, JavaServer Faces Technology through Chapter 9, Developing with JavaServer Faces Technology.
+
+\item Service-oriented: A service-oriented web application implements the endpoint of a web service. Presentation-oriented applications
+are often clients of service-oriented web applications. 
+\end{itemize}
+
+\paragraph{}
+Web services are client and server applications that communicate over the World Wide Web’s (WWW) HyperText Transfer Protocol (HTTP). As described by the World Wide Web Consortium (W3C), web services provide a standard means of interoperating between software applications running on a variety of platforms and frameworks. Web services are characterized by their great interoperability and extensibility, as well as their machine-processable descriptions, thanks to the use of XML. Web services can be combined in a loosely coupled way to achieve complex operations. Programs providing simple services can interact with each other to deliver sophisticated added-value services.
+
+\subsection{Why GlashFish}
+
+
+
+\section{Introduction to BIRT}
+\subsection{Introduction to business intelligence}
+
+\paragraph{}
+To give it a formal definition I would say that business intelligence is any tool or method 
+that allows developers to take data or information, process it, manipulate it, and associate 
+it with related information and present it to decision makers. As for a simplified definition, 
+it's presenting information to decision makers in a way that helps them make informed decisions.
+
+\subsection{The Current State of the BI Market}
+\paragraph{}
+you can divide the major players in this field into two categories: commercial offerings 
+and open-source offerings. Each category has its own benefits and drawbacks. With the 
+commercial offerings, typically you have familiar names such as Actuate and Business Objects,
+offering various tools aimed at different levels of business. Some of these tools
+are large and enterprise reporting platforms that have the ability to process,
+analyze, and reformat large quantities of data. One of the drawbacks of commercial offerings is 
+the large price associated with them, both in terms of purchasing and in terms of running them. 
+
+\paragraph{}
+Then, you have your open-source offerings. Currently there are three big names in
+the open-source reporting realm: JasperReport, Pentaho, and BIRT. Two of these
+projects, JasperReports and BIRT, are run by commercial companies who make their
+money by doing professional services for these offerings to small scale and private
+projects. Again, there are a number of pros and cons associated with open-source
+solutions. With open-source, you have full access to the source code of the platform
+you choose. This allows you to add in functionality, embed it with your existing
+applications, and actively participate in a development community that is oftentimes
+very large and around the world. There is little initial cost to open-source software in
+terms of purchasing, as open-source is free. The cons are that there is typically a cost
+associated with finding individuals who are knowledgeable in open-source.
+
+\subsection{What is BIRT ?}
+\paragraph{}
+BIRT (which stands for Business Intelligence and Reporting Tools) is actually a development 
+framework. Adding the word "Tools" to the title acronym is appropriate; BIRT is in fact a 
+collection of development tools and technologies, used for report development, utilizing the 
+BIRT framework. BIRT isn't necessarily a product, but a series of core technologies that 
+products and solutions are built on top of, similar in fashion to the Eclipse framework.
+
+\subsection{Why BIRT?}
+\paragraph{}
+As mentioned before, there are other open-source reporting platforms out there.
+So what makes BIRT stand out over JasperReports or Pentaho? With JasperReports,
+in reality, it comes down to tastes. I prefer the "What You See Is What You Get"
+(WYSIWYG) designer of BIRT over JasperReports. I also like the fact that it does
+not require compiling of reports to run, and that it is an official Eclipse project.
+However, that is not to say Jasper is not without strengths of its own. Jasper does do
+pixel-perfect rendering of reports, which is something that BIRT does not do. Later
+versions of Jasper also support the Hibernate HQL language.
+
+
+\chapter{Architecture}
+\section{Application Server}
+
+\end{document}
