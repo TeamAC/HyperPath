@@ -1,3 +1,9 @@
 *.jar
 *.class
 HyperPathServer/HyperPathServer-ejb/build/
+/HyperPathServer/nbproject/private/
+/HyperPathServer/HyperPathServer-ejb/nbproject/private/
+/HyperPathServer/dist/
+/HyperPathServer/build/
+/HyperPathServer/HyperPathServer-ejb/dist/
+/HyperPathServerTest/nbproject/private/*.jar
