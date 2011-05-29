@@ -80,7 +80,7 @@ public class Address implements Serializable {
     public Address(Integer id) {
         this.id = id;
     }
-
+    
     public Address(Integer id, String street, String zip, String city, String department, String country) {
         this.id = id;
         this.street = street;
