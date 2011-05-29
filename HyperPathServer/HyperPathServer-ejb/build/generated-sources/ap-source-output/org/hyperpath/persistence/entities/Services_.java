@@ -12,14 +12,14 @@ import org.hyperpath.persistence.entities.Gpslocation;
 import org.hyperpath.persistence.entities.OpeningHours;
 import org.hyperpath.persistence.entities.Reviews;
 
-@Generated(value="EclipseLink-2.2.0.v20110202-r8913", date="2011-05-29T12:23:16")
+@Generated(value="EclipseLink-2.2.0.v20110202-r8913", date="2011-05-29T17:36:51")
 @StaticMetamodel(Services.class)
 public class Services_ { 
 
+    public static volatile SingularAttribute<Services, Gpslocation> gpslocation;
     public static volatile ListAttribute<Services, Ads> adsList;
     public static volatile SingularAttribute<Services, OpeningHours> openingHours;
     public static volatile SingularAttribute<Services, String> description;
-    public static volatile SingularAttribute<Services, Gpslocation> gpsLocation;
     public static volatile SingularAttribute<Services, Categories> categories;
     public static volatile SingularAttribute<Services, Integer> Id;
     public static volatile SingularAttribute<Services, String> label;
