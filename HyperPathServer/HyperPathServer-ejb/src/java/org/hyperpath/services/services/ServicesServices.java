@@ -4,6 +4,7 @@
  */
 package org.hyperpath.services.services;
 
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.jws.WebService;
@@ -17,6 +18,7 @@ import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Categories;
 import org.hyperpath.persistence.entities.Clients;
 import org.hyperpath.persistence.entities.Gpslocation;
+import org.hyperpath.persistence.entities.OpeningHours;
 import org.hyperpath.persistence.entities.Services;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
@@ -147,6 +149,90 @@ public class ServicesServices {
     @WebMethod(operationName = "findServicesByMail")
     public List<Services> findServicesByMail(@WebParam(name = "mail")
     String mail) throws Exception, NonexistentEntityException, RollbackFailureException {
+        //TODO write your implementation code here:
+        return null;
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "findServicesByOpeningTime")
+    public List<Services> findServicesByOpeningTime(@WebParam(name = "category")
+    Categories category, @WebParam(name = "startTime")
+    Date startTime) {
+        //TODO write your implementation code here:
+        return null;
+    }
+    
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "findServicesByClosingTime")
+    public List<Services> findServicesByClosingTime(@WebParam(name = "category")
+    Categories category, @WebParam(name = "endTime")
+    Date endTime) {
+        //TODO write your implementation code here:
+        return null;
+    }
+    
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "findServicesByTimeRange")
+    public List<Services> findServicesByTimeRange(@WebParam(name = "category")
+    Categories category, @WebParam(name = "startTime")
+    Date startTime, @WebParam(name = "endTime") Date endTime) {
+        //TODO write your implementation code here:
+        return null;
+    }
+    
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "findServicesByOpeningTimeAndDays")
+    public List<Services> findServicesByOpeningTimeAndDays(@WebParam(name = "category")
+    Categories category, @WebParam(name = "startTime")
+    Date startTime) {
+        //TODO write your implementation code here:
+        return null;
+    }
+    
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "findServicesByClosingTimeAndDays")
+    public List<Services> findServicesByClosingTimeAndDays(@WebParam(name = "category")
+    Categories category, @WebParam(name = "endTime")
+    Date endTime) {
+        //TODO write your implementation code here:
+        return null;
+    }
+    
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "findServicesByTimeRangeAndDays")
+    public List<Services> findServicesByTimeRangeAndDays(@WebParam(name = "category")
+    Categories category, @WebParam(name = "startTime")
+    Date startTime, @WebParam(name = "endTime") Date endTime) {
+        //TODO write your implementation code here:
+        return null;
+    }
+    
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "findServicesByDays")
+    public List<Services> findServicesByDays(@WebParam(name = "category")
+    Categories category, @WebParam(name = "startTime")
+    Date startTime, @WebParam(name = "endTime") Date endTime) {
+        //TODO write your implementation code here:
+        return null;
+    }
+    
+    @WebMethod(operationName = "findServicesByOpeningHours")
+    public List<Services> findServicesByOpeningHours(@WebParam(name = "category")
+    Categories category, @WebParam(name = "openingHours") OpeningHours openingHours) {
         //TODO write your implementation code here:
         return null;
     }

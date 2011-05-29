@@ -5,6 +5,7 @@
 package org.hyperpath.services.openinghours;
 
 import javax.annotation.Resource;
+import javax.jws.Oneway;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -12,6 +13,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
+import org.hyperpath.persistence.entities.OpeningHours;
+import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
+import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 /**
  *
@@ -25,9 +29,29 @@ public class OpeningHoursServices {
 
     @PersistenceUnit
     EntityManagerFactory emf;
-    /** This is a sample web service operation */
-    @WebMethod(operationName = "hello")
-    public String hello(@WebParam(name = "name") String txt) {
-        return "Hello " + txt + " !";
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "addOpeningHours")
+    public void addOpeningHours(@WebParam(name = "openingHours")
+    OpeningHours openingHours) throws Exception, NonexistentEntityException, RollbackFailureException {
     }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "deleteOpeningHours")
+    public void deleteOpeningHours(@WebParam(name = "openingHoursId")
+    Integer openingHoursId) throws Exception, NonexistentEntityException, RollbackFailureException {
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "updateOpeningHours")
+    public void updateOpeningHours(@WebParam(name = "openingHoursId")
+    Integer openingHoursId) throws Exception, NonexistentEntityException, RollbackFailureException {
+    }
+
 }
