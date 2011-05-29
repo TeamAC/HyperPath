@@ -6,10 +6,14 @@ package org.hyperpath.services.ads;
 
 import java.util.Date;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
+import javax.transaction.UserTransaction;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import org.hyperpath.persistence.entities.Ads;
@@ -26,7 +30,12 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 @WebService(serviceName = "AdsServices")
 @Stateless()
 public class AdsServices {
+     @Resource
+    private UserTransaction utx;
 
+    @PersistenceUnit
+    EntityManagerFactory emf;
+    
     /**
      * Web service operation
      */
