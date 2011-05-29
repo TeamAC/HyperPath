@@ -83,8 +83,8 @@ public class Services implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "services")
     private List<Ads> adsList;
     @JoinColumn(name = "gpslocation_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private Gpslocation gpsLocation;
+    @ManyToOne(optional = false)
+    private Gpslocation gpslocation;
     
     public Services() {
     }
@@ -93,11 +93,11 @@ public class Services implements Serializable {
         this.Id = Id;
     }
 
-    public Services(Integer Id, String label, String description, Gpslocation gpsLocation, String usersReview, int rating) {
+    public Services(Integer Id, String label, String description, Gpslocation gpslocation, String usersReview, int rating) {
         this.Id = Id;
         this.label = label;
         this.description = description;
-        this.gpsLocation = gpsLocation;
+        this.gpslocation = gpslocation;
         this.usersReview = usersReview;
         this.rating = rating;
     }
@@ -143,11 +143,11 @@ public class Services implements Serializable {
     }
 
     public Gpslocation getLocation(){
-        return this.gpsLocation;
+        return this.gpslocation;
     }
     
-    public void setLocation(Gpslocation gpsLocation) {
-        this.gpsLocation = gpsLocation;
+    public void setLocation(Gpslocation gpslocation) {
+        this.gpslocation = gpslocation;
     }
     
     
