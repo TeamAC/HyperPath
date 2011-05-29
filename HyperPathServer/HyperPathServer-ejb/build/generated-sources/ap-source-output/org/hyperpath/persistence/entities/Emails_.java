@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import org.hyperpath.persistence.entities.Entities;
 
-@Generated(value="EclipseLink-2.2.0.v20110202-r8913", date="2011-05-29T04:42:21")
+@Generated(value="EclipseLink-2.2.0.v20110202-r8913", date="2011-05-29T12:23:16")
 @StaticMetamodel(Emails.class)
 public class Emails_ { 
 
