@@ -12,9 +12,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
-import org.hyperpath.persistence.entities.Categories;
-import org.hyperpath.persistence.jpa.AddressJpaController;
-import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
+import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
+import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
+import org.jboss.weld.logging.Category;
 
 /**
  *
@@ -29,5 +29,8 @@ public class CategoriesServices {
     @PersistenceUnit
     EntityManagerFactory emf;
     
-
+    @WebMethod(operationName = "addCategory")
+    public void addService(@WebParam(name = "category")
+    Category service) throws Exception, PreexistingEntityException, RollbackFailureException {
+    }
 }
