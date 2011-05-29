@@ -60,8 +60,8 @@ public class Clients implements Serializable {
     private String login;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "password", nullable = false, length = 45)
+    @Size(min = 1, max = 64)
+    @Column(name = "password", nullable = false, length = 64)
     private String password;
     @Basic(optional = false)
     @NotNull
