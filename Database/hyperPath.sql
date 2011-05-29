@@ -2,15 +2,12 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-DROP SCHEMA IF EXISTS `hyperPath` ;
 CREATE SCHEMA IF NOT EXISTS `hyperPath` DEFAULT CHARACTER SET latin1 ;
 USE `hyperPath` ;
 
 -- -----------------------------------------------------
 -- Table `hyperPath`.`categories`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`categories` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`categories` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `label` VARCHAR(45) NOT NULL ,
@@ -24,8 +21,6 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`entities`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`entities` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`entities` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   PRIMARY KEY (`id`) )
@@ -35,8 +30,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`openingHours`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`openingHours` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`openingHours` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `openTime` TIME NOT NULL ,
@@ -49,8 +42,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`gpslocation`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`gpslocation` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`gpslocation` (
   `id` INT NOT NULL ,
   `time` TIME NOT NULL ,
@@ -64,8 +55,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`services`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`services` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`services` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `label` VARCHAR(45) NOT NULL ,
@@ -107,13 +96,11 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`clients`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`clients` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`clients` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(45) NOT NULL ,
   `lastName` VARCHAR(45) NOT NULL ,
-  `login` VARCHAR(45) NOT NULL ,
+  `login` VARCHAR(64) NOT NULL ,
   `password` VARCHAR(45) NOT NULL ,
   `gender` ENUM('Male','Female') NOT NULL ,
   `birthdate` DATE NOT NULL ,
@@ -132,8 +119,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`advertisers`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`advertisers` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`advertisers` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(45) NOT NULL ,
@@ -153,8 +138,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`phones`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`phones` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`phones` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `number` VARCHAR(45) NOT NULL ,
@@ -166,8 +149,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`faxes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`faxes` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`faxes` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `number` VARCHAR(45) NOT NULL ,
@@ -179,8 +160,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`emails`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`emails` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`emails` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `address` VARCHAR(100) NOT NULL ,
@@ -192,8 +171,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`entities_has_faxes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`entities_has_faxes` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`entities_has_faxes` (
   `entities_id` INT NOT NULL ,
   `faxes_id` INT NOT NULL ,
@@ -216,8 +193,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`entities_has_emails`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`entities_has_emails` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`entities_has_emails` (
   `entities_id` INT NOT NULL ,
   `emails_id` INT NOT NULL ,
@@ -240,8 +215,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`entities_has_phones`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`entities_has_phones` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`entities_has_phones` (
   `entities_id` INT NOT NULL ,
   `phones_id` INT NOT NULL ,
@@ -264,8 +237,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`address`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`address` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`address` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `street` VARCHAR(45) NOT NULL ,
@@ -282,8 +253,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`entities_has_address`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`entities_has_address` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`entities_has_address` (
   `entities_id` INT NOT NULL ,
   `address_id` INT NOT NULL ,
@@ -306,8 +275,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`reviews`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`reviews` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`reviews` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `rating` INT NOT NULL ,
@@ -319,8 +286,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`services_has_reviews`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`services_has_reviews` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`services_has_reviews` (
   `services_id` INT(11) NOT NULL ,
   `reviews_id` INT NOT NULL ,
@@ -344,8 +309,6 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`clients_reviews`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`clients_reviews` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`clients_reviews` (
   `clients_id` INT NOT NULL ,
   `reviews_id` INT NOT NULL ,
@@ -368,8 +331,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`clients_bookmarked_services`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`clients_bookmarked_services` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`clients_bookmarked_services` (
   `clients_id` INT NOT NULL ,
   `services_id` INT(11) NOT NULL ,
@@ -392,8 +353,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `hyperPath`.`ads`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `hyperPath`.`ads` ;
-
 CREATE  TABLE IF NOT EXISTS `hyperPath`.`ads` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `description` TEXT NOT NULL ,
