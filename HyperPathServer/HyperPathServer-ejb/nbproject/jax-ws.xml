@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jax-ws xmlns="http://www.netbeans.org/ns/jax-ws/1">
+  <services>
+    <service name="CategoriesServices">
+      <implementation-class>org.hyperpath.services.categories.CategoriesServices</implementation-class>
+    </service>
+    <service name="ServicesServices">
+      <implementation-class>org.hyperpath.services.services.ServicesServices</implementation-class>
+    </service>
+    <service name="AddressesServices">
+      <implementation-class>org.hyperpath.services.addresses.AddressesServices</implementation-class>
+    </service>
+    <service name="AdsServices">
+      <implementation-class>org.hyperpath.services.ads.AdsServices</implementation-class>
+    </service>
+    <service name="AdvertisersServices">
+      <implementation-class>org.hyperpath.services.advertisers.AdvertisersServices</implementation-class>
+    </service>
+    <service name="ClientsServices">
+      <implementation-class>org.hyperpath.services.clients.ClientsServices</implementation-class>
+    </service>
+    <service name="EmailsServices">
+      <implementation-class>org.hyperpath.services.emails.EmailsServices</implementation-class>
+    </service>
+    <service name="EntetiesServices">
+      <implementation-class>org.hyperpath.services.entities.EntetiesServices</implementation-class>
+    </service>
+    <service name="FaxesServices">
+      <implementation-class>org.hyperpath.services.faxes.FaxesServices</implementation-class>
+    </service>
+    <service name="OpeningHoursServices">
+      <implementation-class>org.hyperpath.services.openinghours.OpeningHoursServices</implementation-class>
+    </service>
+    <service name="PhonesServices">
+      <implementation-class>org.hyperpath.services.phones.PhonesServices</implementation-class>
+    </service>
+    <service name="ReviewsServices">
+      <implementation-class>org.hyperpath.services.reviews.ReviewsServices</implementation-class>
+    </service>
+  </services>
+  <clients/>
+</jax-ws>
