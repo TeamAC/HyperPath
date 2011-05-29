@@ -6,8 +6,8 @@ HyperPathServer/HyperPathServer-ejb/build/
 /HyperPathServer/dist/
 /HyperPathServer/build/
 /HyperPathServer/HyperPathServer-ejb/dist/
-/HyperPathServerTest/nbproject/private/*.jar
-/HyperPathServerTest/nbproject/private/*.aux
+/HyperPathServerTest/nbproject/private/
+*.aux
 *.dvi
 *.log
 *.pdf
