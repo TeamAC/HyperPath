@@ -1,537 +1,424 @@
--- MySQL dump 10.13  Distrib 5.5.12, for Linux (i686)
---
--- Host: localhost    Database: hyperPath
--- ------------------------------------------------------
--- Server version	5.5.12
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `address`
---
-
-DROP TABLE IF EXISTS `address`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `address` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `street` varchar(45) NOT NULL,
-  `zip` varchar(45) NOT NULL,
-  `city` varchar(45) NOT NULL,
-  `state` varchar(45) NOT NULL,
-  `country` varchar(45) NOT NULL,
-  `ext` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `address`
---
-
-LOCK TABLES `address` WRITE;
-/*!40000 ALTER TABLE `address` DISABLE KEYS */;
-/*!40000 ALTER TABLE `address` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `ads`
---
-
-DROP TABLE IF EXISTS `ads`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ads` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `description` text NOT NULL,
-  `shortDescription` varchar(45) NOT NULL,
-  `startDate` datetime NOT NULL,
-  `endDate` datetime NOT NULL,
-  `services_id` int(11) NOT NULL,
-  `advertisers_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`services_id`,`advertisers_id`),
-  KEY `fk_ads_services1` (`services_id`),
-  KEY `fk_ads_advertisers1` (`advertisers_id`),
-  CONSTRAINT `fk_ads_services1` FOREIGN KEY (`services_id`) REFERENCES `services` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ads_advertisers1` FOREIGN KEY (`advertisers_id`) REFERENCES `advertisers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `ads`
---
-
-LOCK TABLES `ads` WRITE;
-/*!40000 ALTER TABLE `ads` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ads` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `advertisers`
---
-
-DROP TABLE IF EXISTS `advertisers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `advertisers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `description` varchar(45) DEFAULT NULL COMMENT '	',
-  `entities_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`entities_id`),
-  KEY `fk_advertisers_entities1` (`entities_id`),
-  CONSTRAINT `fk_advertisers_entities1` FOREIGN KEY (`entities_id`) REFERENCES `entities` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `advertisers`
---
-
-LOCK TABLES `advertisers` WRITE;
-/*!40000 ALTER TABLE `advertisers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `advertisers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `categories`
---
-
-DROP TABLE IF EXISTS `categories`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `categories` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `label` varchar(45) NOT NULL,
-  `description` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `categories`
---
-
-LOCK TABLES `categories` WRITE;
-/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `clients`
---
-
-DROP TABLE IF EXISTS `clients`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `clients` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `lastName` varchar(45) NOT NULL,
-  `login` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
-  `gender` enum('Male','Female') NOT NULL,
-  `birthdate` date NOT NULL,
-  `entities_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`entities_id`),
-  KEY `fk_clients_entities1` (`entities_id`),
-  CONSTRAINT `fk_clients_entities1` FOREIGN KEY (`entities_id`) REFERENCES `entities` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `clients`
---
-
-LOCK TABLES `clients` WRITE;
-/*!40000 ALTER TABLE `clients` DISABLE KEYS */;
-/*!40000 ALTER TABLE `clients` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `clients_bookmarked_services`
---
-
-DROP TABLE IF EXISTS `clients_bookmarked_services`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `clients_bookmarked_services` (
-  `clients_id` int(11) NOT NULL,
-  `services_id` int(11) NOT NULL,
-  PRIMARY KEY (`clients_id`,`services_id`),
-  KEY `fk_clients_has_services_services1` (`services_id`),
-  KEY `fk_clients_has_services_clients1` (`clients_id`),
-  CONSTRAINT `fk_clients_has_services_clients1` FOREIGN KEY (`clients_id`) REFERENCES `clients` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_clients_has_services_services1` FOREIGN KEY (`services_id`) REFERENCES `services` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `clients_bookmarked_services`
---
-
-LOCK TABLES `clients_bookmarked_services` WRITE;
-/*!40000 ALTER TABLE `clients_bookmarked_services` DISABLE KEYS */;
-/*!40000 ALTER TABLE `clients_bookmarked_services` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `clients_reviews`
---
-
-DROP TABLE IF EXISTS `clients_reviews`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `clients_reviews` (
-  `clients_id` int(11) NOT NULL,
-  `reviews_id` int(11) NOT NULL,
-  PRIMARY KEY (`clients_id`,`reviews_id`),
-  KEY `fk_clients_has_reviews_reviews1` (`reviews_id`),
-  KEY `fk_clients_has_reviews_clients1` (`clients_id`),
-  CONSTRAINT `fk_clients_has_reviews_clients1` FOREIGN KEY (`clients_id`) REFERENCES `clients` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_clients_has_reviews_reviews1` FOREIGN KEY (`reviews_id`) REFERENCES `reviews` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `clients_reviews`
---
-
-LOCK TABLES `clients_reviews` WRITE;
-/*!40000 ALTER TABLE `clients_reviews` DISABLE KEYS */;
-/*!40000 ALTER TABLE `clients_reviews` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `emails`
---
-
-DROP TABLE IF EXISTS `emails`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `emails` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `address` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `address_UNIQUE` (`address`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `emails`
---
-
-LOCK TABLES `emails` WRITE;
-/*!40000 ALTER TABLE `emails` DISABLE KEYS */;
-/*!40000 ALTER TABLE `emails` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `entities`
---
-
-DROP TABLE IF EXISTS `entities`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `entities` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `entities`
---
-
-LOCK TABLES `entities` WRITE;
-/*!40000 ALTER TABLE `entities` DISABLE KEYS */;
-/*!40000 ALTER TABLE `entities` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `entities_has_address`
---
-
-DROP TABLE IF EXISTS `entities_has_address`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `entities_has_address` (
-  `entities_id` int(11) NOT NULL,
-  `address_id` int(11) NOT NULL,
-  PRIMARY KEY (`entities_id`,`address_id`),
-  KEY `fk_entities_has_address_address1` (`address_id`),
-  KEY `fk_entities_has_address_entities1` (`entities_id`),
-  CONSTRAINT `fk_entities_has_address_entities1` FOREIGN KEY (`entities_id`) REFERENCES `entities` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_entities_has_address_address1` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `entities_has_address`
---
-
-LOCK TABLES `entities_has_address` WRITE;
-/*!40000 ALTER TABLE `entities_has_address` DISABLE KEYS */;
-/*!40000 ALTER TABLE `entities_has_address` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `entities_has_emails`
---
-
-DROP TABLE IF EXISTS `entities_has_emails`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `entities_has_emails` (
-  `entities_id` int(11) NOT NULL,
-  `emails_id` int(11) NOT NULL,
-  PRIMARY KEY (`entities_id`,`emails_id`),
-  KEY `fk_entities_has_emails_emails1` (`emails_id`),
-  KEY `fk_entities_has_emails_entities1` (`entities_id`),
-  CONSTRAINT `fk_entities_has_emails_entities1` FOREIGN KEY (`entities_id`) REFERENCES `entities` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_entities_has_emails_emails1` FOREIGN KEY (`emails_id`) REFERENCES `emails` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `entities_has_emails`
---
-
-LOCK TABLES `entities_has_emails` WRITE;
-/*!40000 ALTER TABLE `entities_has_emails` DISABLE KEYS */;
-/*!40000 ALTER TABLE `entities_has_emails` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `entities_has_faxes`
---
-
-DROP TABLE IF EXISTS `entities_has_faxes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `entities_has_faxes` (
-  `entities_id` int(11) NOT NULL,
-  `faxes_id` int(11) NOT NULL,
-  PRIMARY KEY (`entities_id`,`faxes_id`),
-  KEY `fk_entities_has_faxes_faxes1` (`faxes_id`),
-  KEY `fk_entities_has_faxes_entities1` (`entities_id`),
-  CONSTRAINT `fk_entities_has_faxes_entities1` FOREIGN KEY (`entities_id`) REFERENCES `entities` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_entities_has_faxes_faxes1` FOREIGN KEY (`faxes_id`) REFERENCES `faxes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `entities_has_faxes`
---
-
-LOCK TABLES `entities_has_faxes` WRITE;
-/*!40000 ALTER TABLE `entities_has_faxes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `entities_has_faxes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `entities_has_phones`
---
-
-DROP TABLE IF EXISTS `entities_has_phones`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `entities_has_phones` (
-  `entities_id` int(11) NOT NULL,
-  `phones_id` int(11) NOT NULL,
-  PRIMARY KEY (`entities_id`,`phones_id`),
-  KEY `fk_entities_has_phones_phones1` (`phones_id`),
-  KEY `fk_entities_has_phones_entities1` (`entities_id`),
-  CONSTRAINT `fk_entities_has_phones_entities1` FOREIGN KEY (`entities_id`) REFERENCES `entities` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_entities_has_phones_phones1` FOREIGN KEY (`phones_id`) REFERENCES `phones` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `entities_has_phones`
---
-
-LOCK TABLES `entities_has_phones` WRITE;
-/*!40000 ALTER TABLE `entities_has_phones` DISABLE KEYS */;
-/*!40000 ALTER TABLE `entities_has_phones` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `faxes`
---
-
-DROP TABLE IF EXISTS `faxes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `faxes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `number` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `number_UNIQUE` (`number`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `faxes`
---
-
-LOCK TABLES `faxes` WRITE;
-/*!40000 ALTER TABLE `faxes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `faxes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `openingHours`
---
-
-DROP TABLE IF EXISTS `openingHours`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `openingHours` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `openTime` time NOT NULL,
-  `closeTime` time NOT NULL,
-  `days` int(11) NOT NULL DEFAULT '127',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `openingHours`
---
-
-LOCK TABLES `openingHours` WRITE;
-/*!40000 ALTER TABLE `openingHours` DISABLE KEYS */;
-/*!40000 ALTER TABLE `openingHours` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `phones`
---
-
-DROP TABLE IF EXISTS `phones`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `phones` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `number` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `number_UNIQUE` (`number`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `phones`
---
-
-LOCK TABLES `phones` WRITE;
-/*!40000 ALTER TABLE `phones` DISABLE KEYS */;
-/*!40000 ALTER TABLE `phones` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `reviews`
---
-
-DROP TABLE IF EXISTS `reviews`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `reviews` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rating` int(11) NOT NULL,
-  `description` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `reviews`
---
-
-LOCK TABLES `reviews` WRITE;
-/*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `services`
---
-
-DROP TABLE IF EXISTS `services`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `services` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `label` varchar(45) NOT NULL,
-  `description` varchar(45) NOT NULL,
-  `categories_id` int(11) NOT NULL,
-  `location` varchar(45) NOT NULL,
-  `usersReview` varchar(45) NOT NULL,
-  `entities_id` int(11) NOT NULL,
-  `openingHours_id` int(11) NOT NULL,
-  `rating` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`,`categories_id`,`entities_id`,`openingHours_id`),
-  KEY `fk_services_categories` (`categories_id`),
-  KEY `fk_services_entities1` (`entities_id`),
-  KEY `fk_services_openingHours1` (`openingHours_id`),
-  CONSTRAINT `fk_services_categories` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_services_entities1` FOREIGN KEY (`entities_id`) REFERENCES `entities` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_services_openingHours1` FOREIGN KEY (`openingHours_id`) REFERENCES `openingHours` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `services`
---
-
-LOCK TABLES `services` WRITE;
-/*!40000 ALTER TABLE `services` DISABLE KEYS */;
-/*!40000 ALTER TABLE `services` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `services_has_reviews`
---
-
-DROP TABLE IF EXISTS `services_has_reviews`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `services_has_reviews` (
-  `services_id` int(11) NOT NULL,
-  `reviews_id` int(11) NOT NULL,
-  PRIMARY KEY (`services_id`,`reviews_id`),
-  KEY `fk_services_has_reviews_reviews1` (`reviews_id`),
-  KEY `fk_services_has_reviews_services1` (`services_id`),
-  CONSTRAINT `fk_services_has_reviews_services1` FOREIGN KEY (`services_id`) REFERENCES `services` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_services_has_reviews_reviews1` FOREIGN KEY (`reviews_id`) REFERENCES `reviews` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `services_has_reviews`
---
-
-LOCK TABLES `services_has_reviews` WRITE;
-/*!40000 ALTER TABLE `services_has_reviews` DISABLE KEYS */;
-/*!40000 ALTER TABLE `services_has_reviews` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2011-05-28 23:00:26
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+
+DROP SCHEMA IF EXISTS `hyperPath` ;
+CREATE SCHEMA IF NOT EXISTS `hyperPath` DEFAULT CHARACTER SET latin1 ;
+USE `hyperPath` ;
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`categories`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`categories` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`categories` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `label` VARCHAR(45) NOT NULL ,
+  `description` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `label_UNIQUE` (`label` ASC) )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`entities`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`entities` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`entities` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`openingHours`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`openingHours` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`openingHours` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `openTime` TIME NOT NULL ,
+  `closeTime` TIME NOT NULL ,
+  `days` INT NOT NULL DEFAULT 127 ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`gpslocation`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`gpslocation` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`gpslocation` (
+  `id` INT NOT NULL ,
+  `time` TIME NOT NULL ,
+  `latitude` VARCHAR(45) NOT NULL ,
+  `longitude` VARCHAR(45) NOT NULL ,
+  `altitude` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`services`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`services` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`services` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `label` VARCHAR(45) NOT NULL ,
+  `description` VARCHAR(45) NOT NULL ,
+  `rating` INT NOT NULL DEFAULT 0 ,
+  `categories_id` INT(11) NOT NULL ,
+  `entities_id` INT NOT NULL ,
+  `openingHours_id` INT NOT NULL ,
+  `gpslocation_id` INT NOT NULL ,
+  PRIMARY KEY (`id`, `categories_id`, `entities_id`, `openingHours_id`, `gpslocation_id`) ,
+  INDEX `fk_services_categories` (`categories_id` ASC) ,
+  INDEX `fk_services_entities1` (`entities_id` ASC) ,
+  INDEX `fk_services_openingHours1` (`openingHours_id` ASC) ,
+  INDEX `fk_services_gpslocation1` (`gpslocation_id` ASC) ,
+  CONSTRAINT `fk_services_categories`
+    FOREIGN KEY (`categories_id` )
+    REFERENCES `hyperPath`.`categories` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_services_entities1`
+    FOREIGN KEY (`entities_id` )
+    REFERENCES `hyperPath`.`entities` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_services_openingHours1`
+    FOREIGN KEY (`openingHours_id` )
+    REFERENCES `hyperPath`.`openingHours` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_services_gpslocation1`
+    FOREIGN KEY (`gpslocation_id` )
+    REFERENCES `hyperPath`.`gpslocation` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`clients`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`clients` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`clients` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(45) NOT NULL ,
+  `lastName` VARCHAR(45) NOT NULL ,
+  `login` VARCHAR(45) NOT NULL ,
+  `password` VARCHAR(45) NOT NULL ,
+  `gender` ENUM('Male','Female') NOT NULL ,
+  `birthdate` DATE NOT NULL ,
+  `entities_id` INT NOT NULL ,
+  PRIMARY KEY (`id`, `entities_id`) ,
+  INDEX `fk_clients_entities1` (`entities_id` ASC) ,
+  UNIQUE INDEX `login_UNIQUE` (`login` ASC) ,
+  CONSTRAINT `fk_clients_entities1`
+    FOREIGN KEY (`entities_id` )
+    REFERENCES `hyperPath`.`entities` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`advertisers`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`advertisers` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`advertisers` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(45) NOT NULL ,
+  `description` VARCHAR(45) NULL COMMENT '	' ,
+  `entities_id` INT NOT NULL ,
+  PRIMARY KEY (`id`, `entities_id`) ,
+  INDEX `fk_advertisers_entities1` (`entities_id` ASC) ,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) ,
+  CONSTRAINT `fk_advertisers_entities1`
+    FOREIGN KEY (`entities_id` )
+    REFERENCES `hyperPath`.`entities` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`phones`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`phones` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`phones` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `number` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `number_UNIQUE` (`number` ASC) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`faxes`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`faxes` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`faxes` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `number` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `number_UNIQUE` (`number` ASC) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`emails`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`emails` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`emails` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `address` VARCHAR(100) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `address_UNIQUE` (`address` ASC) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`entities_has_faxes`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`entities_has_faxes` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`entities_has_faxes` (
+  `entities_id` INT NOT NULL ,
+  `faxes_id` INT NOT NULL ,
+  PRIMARY KEY (`entities_id`, `faxes_id`) ,
+  INDEX `fk_entities_has_faxes_faxes1` (`faxes_id` ASC) ,
+  INDEX `fk_entities_has_faxes_entities1` (`entities_id` ASC) ,
+  CONSTRAINT `fk_entities_has_faxes_entities1`
+    FOREIGN KEY (`entities_id` )
+    REFERENCES `hyperPath`.`entities` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_entities_has_faxes_faxes1`
+    FOREIGN KEY (`faxes_id` )
+    REFERENCES `hyperPath`.`faxes` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`entities_has_emails`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`entities_has_emails` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`entities_has_emails` (
+  `entities_id` INT NOT NULL ,
+  `emails_id` INT NOT NULL ,
+  PRIMARY KEY (`entities_id`, `emails_id`) ,
+  INDEX `fk_entities_has_emails_emails1` (`emails_id` ASC) ,
+  INDEX `fk_entities_has_emails_entities1` (`entities_id` ASC) ,
+  CONSTRAINT `fk_entities_has_emails_entities1`
+    FOREIGN KEY (`entities_id` )
+    REFERENCES `hyperPath`.`entities` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_entities_has_emails_emails1`
+    FOREIGN KEY (`emails_id` )
+    REFERENCES `hyperPath`.`emails` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`entities_has_phones`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`entities_has_phones` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`entities_has_phones` (
+  `entities_id` INT NOT NULL ,
+  `phones_id` INT NOT NULL ,
+  PRIMARY KEY (`entities_id`, `phones_id`) ,
+  INDEX `fk_entities_has_phones_phones1` (`phones_id` ASC) ,
+  INDEX `fk_entities_has_phones_entities1` (`entities_id` ASC) ,
+  CONSTRAINT `fk_entities_has_phones_entities1`
+    FOREIGN KEY (`entities_id` )
+    REFERENCES `hyperPath`.`entities` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_entities_has_phones_phones1`
+    FOREIGN KEY (`phones_id` )
+    REFERENCES `hyperPath`.`phones` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`address`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`address` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`address` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `street` VARCHAR(45) NOT NULL ,
+  `zip` VARCHAR(45) NOT NULL ,
+  `city` VARCHAR(45) NOT NULL ,
+  `department` VARCHAR(45) NOT NULL ,
+  `country` VARCHAR(45) NOT NULL ,
+  `ext` VARCHAR(45) NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `uq_address` (`street` ASC, `zip` ASC, `city` ASC, `department` ASC, `country` ASC, `ext` ASC) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`entities_has_address`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`entities_has_address` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`entities_has_address` (
+  `entities_id` INT NOT NULL ,
+  `address_id` INT NOT NULL ,
+  PRIMARY KEY (`entities_id`, `address_id`) ,
+  INDEX `fk_entities_has_address_address1` (`address_id` ASC) ,
+  INDEX `fk_entities_has_address_entities1` (`entities_id` ASC) ,
+  CONSTRAINT `fk_entities_has_address_entities1`
+    FOREIGN KEY (`entities_id` )
+    REFERENCES `hyperPath`.`entities` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_entities_has_address_address1`
+    FOREIGN KEY (`address_id` )
+    REFERENCES `hyperPath`.`address` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`reviews`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`reviews` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`reviews` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `rating` INT NOT NULL ,
+  `description` TEXT NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`services_has_reviews`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`services_has_reviews` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`services_has_reviews` (
+  `services_id` INT(11) NOT NULL ,
+  `reviews_id` INT NOT NULL ,
+  PRIMARY KEY (`services_id`, `reviews_id`) ,
+  INDEX `fk_services_has_reviews_reviews1` (`reviews_id` ASC) ,
+  INDEX `fk_services_has_reviews_services1` (`services_id` ASC) ,
+  CONSTRAINT `fk_services_has_reviews_services1`
+    FOREIGN KEY (`services_id` )
+    REFERENCES `hyperPath`.`services` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_services_has_reviews_reviews1`
+    FOREIGN KEY (`reviews_id` )
+    REFERENCES `hyperPath`.`reviews` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`clients_reviews`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`clients_reviews` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`clients_reviews` (
+  `clients_id` INT NOT NULL ,
+  `reviews_id` INT NOT NULL ,
+  PRIMARY KEY (`clients_id`, `reviews_id`) ,
+  INDEX `fk_clients_has_reviews_reviews1` (`reviews_id` ASC) ,
+  INDEX `fk_clients_has_reviews_clients1` (`clients_id` ASC) ,
+  CONSTRAINT `fk_clients_has_reviews_clients1`
+    FOREIGN KEY (`clients_id` )
+    REFERENCES `hyperPath`.`clients` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_clients_has_reviews_reviews1`
+    FOREIGN KEY (`reviews_id` )
+    REFERENCES `hyperPath`.`reviews` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`clients_bookmarked_services`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`clients_bookmarked_services` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`clients_bookmarked_services` (
+  `clients_id` INT NOT NULL ,
+  `services_id` INT(11) NOT NULL ,
+  PRIMARY KEY (`clients_id`, `services_id`) ,
+  INDEX `fk_clients_has_services_services1` (`services_id` ASC) ,
+  INDEX `fk_clients_has_services_clients1` (`clients_id` ASC) ,
+  CONSTRAINT `fk_clients_has_services_clients1`
+    FOREIGN KEY (`clients_id` )
+    REFERENCES `hyperPath`.`clients` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_clients_has_services_services1`
+    FOREIGN KEY (`services_id` )
+    REFERENCES `hyperPath`.`services` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hyperPath`.`ads`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hyperPath`.`ads` ;
+
+CREATE  TABLE IF NOT EXISTS `hyperPath`.`ads` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `description` TEXT NOT NULL ,
+  `shortDescription` VARCHAR(45) NOT NULL ,
+  `startDate` DATETIME NOT NULL ,
+  `endDate` DATETIME NOT NULL ,
+  `services_id` INT(11) NOT NULL ,
+  `advertisers_id` INT NOT NULL ,
+  PRIMARY KEY (`id`, `services_id`, `advertisers_id`) ,
+  INDEX `fk_ads_services1` (`services_id` ASC) ,
+  INDEX `fk_ads_advertisers1` (`advertisers_id` ASC) ,
+  CONSTRAINT `fk_ads_services1`
+    FOREIGN KEY (`services_id` )
+    REFERENCES `hyperPath`.`services` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ads_advertisers1`
+    FOREIGN KEY (`advertisers_id` )
+    REFERENCES `hyperPath`.`advertisers` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
