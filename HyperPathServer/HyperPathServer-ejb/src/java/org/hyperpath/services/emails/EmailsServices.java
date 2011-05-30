@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.hyperpath.services.emails;
 
 import java.util.List;
@@ -18,10 +14,6 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-/**
- *
- * @author adel
- */
 @WebService(serviceName = "EmailsServices")
 @Stateless()
 public class EmailsServices {
@@ -32,36 +24,35 @@ public class EmailsServices {
     EntityManagerFactory emf;
 
     /**
-     * Web service operation
+     * Add new email address
      */
     @WebMethod(operationName = "addEmail")
-    public void addEmail(@WebParam(name = "email")
-    Emails email) throws Exception, PreexistingEntityException, RollbackFailureException {
+    public void addEmail(@WebParam(name = "email")Emails email) 
+    throws Exception, PreexistingEntityException, RollbackFailureException {
     }
 
     /**
-     * Web service operation
+     * Update email address
      */
     @WebMethod(operationName = "updateEmail")
-    public void updateEmail(@WebParam(name = "email")
-    Emails email) throws Exception, NonexistentEntityException, RollbackFailureException {
+    public void updateEmail(@WebParam(name = "email")Emails email) 
+    throws Exception, NonexistentEntityException, RollbackFailureException {
     }
 
     /**
-     * Web service operation
+     * Delete emacs address
      */
     @WebMethod(operationName = "deleteEmail")
-    public void deleteEmail(@WebParam(name = "emailId")
-    Integer emailId) throws Exception, NonexistentEntityException, RollbackFailureException {
+    public void deleteEmail(@WebParam(name = "emailId")Integer emailId)
+    throws Exception, NonexistentEntityException, RollbackFailureException {
     }
 
     /**
-     * Web service operation
+     * Find email address by aproximation
      */
     @WebMethod(operationName = "findEmail")
     public List<Emails> findEmail(@WebParam(name = "email")
     String email) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
         return null;
     }
 }
