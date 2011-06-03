@@ -1,6 +1,6 @@
 \documentclass[12pt]{report}
 \usepackage[utf8x]{inputenc}
-\usepackage{ucs}
+%\usepackage{ucs}
 \usepackage{url}
 \usepackage{graphics}
 \usepackage{graphicx}
@@ -8,22 +8,31 @@
 \usepackage{color}
 \usepackage{xcolor}
 \usepackage{caption}
-\usepackage{upquote}
-\usepackage{beramono}
 \usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+\renewcommand\familydefault{\ttdefault}
 
-\author{Adel Attia}
-\author{Chedi Toueiti}
+\author{
+	Adel Attia
+	\and
+	Chedi Toueiti
+}
 
 \DeclareCaptionFont{white}{\color{white}}
 \DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
 \captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
 
+\definecolor{Brown}{cmyk}{0,0.81,1,0.60}
+\definecolor{OliveGreen}{cmyk}{0.64,0,0.95,0.40}
+\definecolor{CadetBlue}{cmyk}{0.62,0.57,0.23,0}
+\definecolor{lightlightgray}{gray}{0.9}
+
 \lstset{
 language=Java,
+basicstyle=\ttfamily,
 captionpos=t,
 tabsize=2,
-keywordstyle=\color{blue},
+keywordstyle=\color{OliveGreen},
 commentstyle=\color{gray},
 stringstyle=\color{red},
 numbers=left,
@@ -32,7 +41,9 @@ numbersep=5pt,
 breaklines=false,
 showstringspaces=false,
 basicstyle=\footnotesize,
-emph={label}
+emph={label},
+frame=none,
+backgroundcolor=\color{lightlightgray}
 }
 
 \begin{document}
