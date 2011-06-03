@@ -12,3 +12,5 @@ HyperPathServer/HyperPathServer-ejb/build/
 *.log
 *.pdf
 *.toc
+report.lof
+report.lot
