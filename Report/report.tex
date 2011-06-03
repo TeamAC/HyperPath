@@ -1,6 +1,5 @@
 \documentclass[12pt]{report}
 \usepackage[utf8x]{inputenc}
-%\usepackage{ucs}
 \usepackage{url}
 \usepackage{graphics}
 \usepackage{graphicx}
@@ -10,7 +9,8 @@
 \usepackage{caption}
 \usepackage[T1]{fontenc}
 \usepackage{inconsolata}
-\renewcommand\familydefault{\ttdefault}
+\usepackage{listbib}
+\usepackage{makeidx}
 
 \author{
 	Adel Attia
@@ -32,9 +32,9 @@ language=Java,
 basicstyle=\ttfamily,
 captionpos=t,
 tabsize=2,
-keywordstyle=\color{OliveGreen},
+keywordstyle=\color{red},
 commentstyle=\color{gray},
-stringstyle=\color{red},
+stringstyle=\color{OliveGreen},
 numbers=left,
 numberstyle=\tiny,
 numbersep=5pt,
@@ -46,6 +46,7 @@ frame=none,
 backgroundcolor=\color{lightlightgray}
 }
 
+\makeindex
 \begin{document}
 	\include{Title}
 	\tableofcontents
@@ -67,6 +68,9 @@ backgroundcolor=\color{lightlightgray}
 	\pagebreak
 	\include{Conclusion}
 	\pagebreak
+	\bibliography{typography}
+	\pagebreak
+	\printindex
 \end{document}
 
 \include{Biblio}
