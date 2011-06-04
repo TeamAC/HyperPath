@@ -9,9 +9,8 @@
 \usepackage{caption}
 \renewcommand{\rmdefault}{ptm}
 \usepackage[T1]{fontenc}
-\usepackage{inconsolata}
-\usepackage{listbib}
 \usepackage{makeidx}
+\usepackage{hyperref}
 
 \author{
 	Adel Attia
@@ -48,7 +47,6 @@ emph={label},
 frame=none,
 backgroundcolor=\color{lightlightgray}
 }
-
 \makeindex
 \begin{document}
 	\include{Title}
@@ -80,7 +78,7 @@ backgroundcolor=\color{lightlightgray}
 	\pagebreak
 	\include{Conclusion}
 	\pagebreak
-
+	\nocite{*}
 	\bibliographystyle{plain}
 	\bibliography{Bibliography}
 	\pagebreak
