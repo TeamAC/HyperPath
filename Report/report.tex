@@ -7,6 +7,7 @@
 \usepackage{color}
 \usepackage{xcolor}
 \usepackage{caption}
+\renewcommand{\rmdefault}{ptm}
 \usepackage[T1]{fontenc}
 \usepackage{inconsolata}
 \usepackage{listbib}
@@ -27,9 +28,12 @@
 \definecolor{CadetBlue}{cmyk}{0.62,0.57,0.23,0}
 \definecolor{lightlightgray}{gray}{0.9}
 
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcommand{\code}{\scriptsize\fontfamily{phv}\selectfont}
+
 \lstset{
 language=Java,
-basicstyle=\ttfamily,
+basicstyle=\code,
 captionpos=t,
 tabsize=2,
 keywordstyle=\color{red},
@@ -40,7 +44,6 @@ numberstyle=\tiny,
 numbersep=5pt,
 breaklines=false,
 showstringspaces=false,
-basicstyle=\footnotesize,
 emph={label},
 frame=none,
 backgroundcolor=\color{lightlightgray}
@@ -49,13 +52,10 @@ backgroundcolor=\color{lightlightgray}
 \makeindex
 \begin{document}
 	\include{Title}
-
-	\tableofcontents
-
-	\listoffigures
-
 	\include{Abstract}
-	\pagebreak
+	\include{Thanks}
+	\tableofcontents
+	\listoffigures
 
 	\chapter{Introduction}
 		\include{Introduction_project_aim}
@@ -80,8 +80,11 @@ backgroundcolor=\color{lightlightgray}
 	\pagebreak
 	\include{Conclusion}
 	\pagebreak
-	\bibliography{typography}
+
+	\bibliographystyle{plain}
+	\bibliography{Bibliography}
 	\pagebreak
+	
 	\printindex
 \end{document}
 
