@@ -14,3 +14,8 @@ HyperPathServer/HyperPathServer-ejb/build/
 *.toc
 report.lof
 report.lot
+report.bbl
+report.blg
+report.idx
+report.ilg
+report.ind
