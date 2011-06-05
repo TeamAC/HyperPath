@@ -1,53 +1,35 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Project  : HyperPath                                                %
+% Project @: https://github.com/TeamAC/HyperPath                      %
+% Part     : Report master document                                   %
+% Author   : chedi (chedi.toueit@gmail.com)                           %
+% Comments :                                                          %
+%                                                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \documentclass[12pt]{report}
-\usepackage[utf8x]{inputenc}
+
+\author
+{
+  Adel Attia
+  \and
+  Chedi Toueiti
+}
+
 \usepackage{url}
-\usepackage{graphics}
-\usepackage{graphicx}
-\usepackage{listings}
 \usepackage{color}
 \usepackage{xcolor}
 \usepackage{caption}
-\renewcommand{\rmdefault}{ptm}
-\usepackage[T1]{fontenc}
 \usepackage{makeidx}
 \usepackage{hyperref}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[utf8x]{inputenc}
 
-\author{
-	Adel Attia
-	\and
-	Chedi Toueiti
-}
-
-\DeclareCaptionFont{white}{\color{white}}
-\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
-\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
-
-\definecolor{Brown}{cmyk}{0,0.81,1,0.60}
-\definecolor{OliveGreen}{cmyk}{0.64,0,0.95,0.40}
-\definecolor{CadetBlue}{cmyk}{0.62,0.57,0.23,0}
-\definecolor{lightlightgray}{gray}{0.9}
-
-\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
-\newcommand{\code}{\scriptsize\fontfamily{phv}\selectfont}
-
-\lstset{
-language=Java,
-basicstyle=\code,
-captionpos=t,
-tabsize=2,
-keywordstyle=\color{red},
-commentstyle=\color{gray},
-stringstyle=\color{OliveGreen},
-numbers=left,
-numberstyle=\tiny,
-numbersep=5pt,
-breaklines=false,
-showstringspaces=false,
-emph={label},
-frame=none,
-backgroundcolor=\color{lightlightgray}
-}
+\include{Customization}
 \makeindex
+
 \begin{document}
 	\include{Title}
 	\include{Abstract}
