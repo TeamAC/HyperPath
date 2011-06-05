@@ -1,0 +1,55 @@
+\definecolor{Brown}         {cmyk}{0.00,0.81,1.00,0.60}
+\definecolor{CadetBlue}     {cmyk}{0.62,0.57,0.23,0.00}
+\definecolor{OliveGreen}    {cmyk}{0.64,0.00,0.95,0.40}
+\definecolor{lightlightgray}{cmyk}{0.00,0.00,0.00,0.08}
+
+\renewcommand{\rmdefault}{ptm}
+
+\DeclareCaptionFont{white}
+{
+  \color{white}
+}
+
+\DeclareCaptionFormat{listing}
+{
+  \colorbox{gray}
+  {
+    \parbox{\textwidth}{#1#2#3}
+  }
+}
+
+\captionsetup[lstlisting]
+{
+  format    = listing,
+  textfont  = white,
+  labelfont = white
+}
+
+\newcommand{\HRule}
+{
+  \rule{\linewidth}{0.5mm}
+}
+
+\newcommand{\Code}
+{
+  \scriptsize\fontfamily{phv}\selectfont
+}
+
+\lstset
+{
+  emph             ={label},
+  frame            =none,
+  numbers          =left,
+  tabsize          =2,
+  language         =Java,
+  numbersep        =5pt,
+  breaklines       =false, 
+  basicstyle       =\Code,
+  captionpos       =t,
+  stringstyle      =\color{OliveGreen},
+  numberstyle      =\tiny,
+  keywordstyle     =\color{red},
+  commentstyle     =\color{gray},
+  backgroundcolor  =\color{lightlightgray},
+  showstringspaces =false
+}
