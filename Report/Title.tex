@@ -1,35 +1,96 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Project  : HyperPath                                                %
+% Project @: https://github.com/TeamAC/HyperPath                      %
+% Part     : Title page                                               %
+% Author   : chedi (chedi.toueit@gmail.com)                           %
+% Comments :                                                          %
+% * This is mainly inspired by LaTeX/Title Creation howto at          %
+%   http://en.wikibooks.org/wiki/LaTeX/Title_Creation                 %
+%                                                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{titlepage}
-\begin{center}
-\includegraphics[scale=0.6]{Figures/Esprit_logo}\\[1cm]    
+  \begin{center}
+    \includegraphics[scale=0.6]{Figures/Esprit_logo}
+    \\[1cm]
 
-\textsc{\LARGE Ecole Supérieure privée d'ingénierie et de technologies}\\[1.5cm]
-\textsc{\Large Mini Java Project}\\[0.5cm]
+    \textsc
+    {
+      \LARGE
+      {
+        Ecole Supérieure privée d'ingénierie et de technologies
+      }
+    }
+    \\[1cm]
 
+    \textsc
+    {
+      \Large
+      {
+        Mini Java Project
+      }
+    }
+    \\[0.5cm]
+    \HRule
+    \\[0.5cm]
 
-\HRule \\[0.4cm]
-{ \huge \bfseries HyperPath GPS based service discovery}\\[0.4cm]
-\HRule \\[1.5cm]
+    {
+      \huge\bfseries
+      {
+        HyperPath GPS based service discovery
+      }
+    }
+    \\[0.5cm]
+    \HRule
+    \\[1.5cm]
 
-\begin{minipage}{0.4\textwidth}
-\begin{flushleft} \large
-\textbf{\emph{Authors:}}\\
-Adel \textsc{Attia}   \\
-Chedi \textsc{Toueiti}\\
-\end{flushleft}
-\end{minipage}
-\begin{minipage}{0.4\textwidth}
-\begin{flushright} \large
-\begin{flushleft}
-\textbf{\emph{Supervisor:}}\\
-Mr : \\
-???? \textsc{????}\\
-\end{flushleft}
-\end{flushright}
-\end{minipage}
-\vfill
-{\large \today}
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushleft}
+        \large
+        \makebox
+        {
+          \textbf
+          {
+            \emph{Authors:}
+          }
+        }
+        \\
+        {
+          \addtolength{\leftskip}{3mm}
+          \makebox{Adel  \textsc{Attia  }}\\
+          \makebox{Chedi \textsc{Toueiti}}\\
+        }
+      \end{flushleft}
+    \end{minipage}
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushright} \large
+        \begin{flushleft}
+          \makebox{\textbf{\emph{Supervisor:}}}    \\
+          {
+            \addtolength{\leftskip}{3mm}
+            \makebox{Mr :}                         \\
+            \makebox{Mohamed Ali \textsc{Bettaieb}}\\
+          }
+        \end{flushleft}
+      \end{flushright}
+    \end{minipage}
 
-\end{center}
+    \vfill
+    \begin{flushright}
+    {
+      \begin{small}
+        \textit
+        {
+          \textbf
+          {
+            \today
+          }
+        }
+      \end{small}
+    }
+    \end{flushright}
+
+  \end{center}
 \end{titlepage}
 
 
