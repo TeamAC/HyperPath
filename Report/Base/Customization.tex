@@ -1,3 +1,12 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Project Name : HyperPath                                            %
+% Project Home : https://github.com/TeamAC/HyperPath                  %
+% Part         : Project formating customizations                     %
+% Author       : chedi                                                %
+% Comments     :                                                      %
+%                                                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \definecolor{Brown}         {cmyk}{0.00,0.81,1.00,0.60}
 \definecolor{CadetBlue}     {cmyk}{0.62,0.57,0.23,0.00}
 \definecolor{OliveGreen}    {cmyk}{0.64,0.00,0.95,0.40}
@@ -35,6 +44,22 @@
   \scriptsize\fontfamily{phv}\selectfont
 }
 
+\newcommand{\Link}
+{
+  \fontfamily{fi4}\selectfont
+}
+
+\newcommand{\Console}
+{
+  \fontfamily{yes}\fontseries{b}\fontsize{10}{0}\selectfont
+}
+
+\makeatletter
+\renewcommand{\verbatim@font}{
+  \Console\catcode`\<=\active\catcode`\>=\active
+}
+\makeatother
+
 \lstset
 {
   emph             ={label},
@@ -43,7 +68,7 @@
   tabsize          =2,
   language         =Java,
   numbersep        =5pt,
-  breaklines       =false, 
+  breaklines       =false,
   basicstyle       =\Code,
   captionpos       =t,
   stringstyle      =\color{OliveGreen},
@@ -52,4 +77,12 @@
   commentstyle     =\color{gray},
   backgroundcolor  =\color{lightlightgray},
   showstringspaces =false
+}
+
+\hypersetup
+{
+  citecolor   = red,
+  linkcolor   = black,
+  colorlinks  = true,
+  anchorcolor = black
 }
