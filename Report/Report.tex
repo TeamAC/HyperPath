@@ -25,47 +25,56 @@
 \usepackage{graphics}
 \usepackage{graphicx}
 \usepackage{listings}
+\usepackage{epstopdf}
+\usepackage[T1]{fontenc}
 \usepackage[utf8x]{inputenc}
 
-\include{Customization}
+\include{Base/Customization}
 \makeindex
 
 \begin{document}
-	\include{Title}
-	\include{Abstract}
-	\include{Thanks}
-	\tableofcontents
-	\listoffigures
+  \include{Base/Title}
+  \include{Base/Abstract}
+  \include{Base/Thanks}
+  \tableofcontents
+  \listoffigures
 
-	\chapter{Introduction}
-		\include{Introduction_project_aim}
-		\include{Introduction_state_of_the_art}
-		\include{Introduction_android}
-		\include{Introduction_eclipse}
-		\include{Introduction_glassfish}
-		\include{Introduction_birt}
-		\include{Introduction_mysql}
-	\pagebreak
-	
-	\include{Architecture}
-	\pagebreak
-	\chapter{Development process}
-		\include{Java_server_application_setup}
-		\include{Database_setup}
-		\include{Eclipse_ide_setup}
-		\pagebreak
-	\include{Implementation}
-	\pagebreak
-	\include{Further_work}
-	\pagebreak
-	\include{Conclusion}
-	\pagebreak
-	\nocite{*}
-	\bibliographystyle{plain}
-	\bibliography{Bibliography}
-	\pagebreak
-	
-	\printindex
+  \chapter{Introduction}
+    \include{Introduction/Introduction_project_aim}
+    \include{Introduction/Introduction_state_of_the_art}
+    \include{Introduction/Introduction_android}
+    \include{Introduction/Introduction_eclipse}
+    \include{Introduction/Introduction_glassfish}
+    \include{Introduction/Introduction_birt}
+    \include{Introduction/Introduction_mysql}
+  \pagebreak
+
+  \chapter{Architecture}
+    \include{Architecture/Architecture}
+  \pagebreak
+
+  \chapter{Development process}
+    \include{Setup/Java_server_application_setup}
+    \include{Setup/Database_setup}
+    \include{Setup/Eclipse_ide_setup}
+  \pagebreak
+
+  \chapter{Implementation}
+    \include{Implementation/Implementation}
+  \pagebreak
+
+  \chapter{Further work}
+    \include{Base/Further_work}
+  \pagebreak
+
+  \chapter{Conclusion}
+    \include{Base/Conclusion}
+  \pagebreak
+
+  \nocite{*}
+  \bibliographystyle{plain}
+  \bibliography{Bibliography}
+  \pagebreak
+
+  \printindex
 \end{document}
-
-\include{Biblio}
