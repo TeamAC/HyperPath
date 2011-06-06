@@ -1,12 +1,26 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Project Name : HyperPath                                            %
+% Project Home : https://github.com/TeamAC/HyperPath                  %
+% Part         : Java server application setup                        %
+% Author       : chedi (chedi.toueit@gmail.com)                       %
+% Comments     :                                                      %
+%                                                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Java application server setup}
 \subsection{Getting Glassfish}
-GlassFish can be downloaded from https://glassfish.dev.java.net. To download GlassFish, simply click on the link for your platform—the file should start downloading immediately. After the file finishes downloading, we should have a file called something such as glassfish-v3-unix.sh, glassfish-v3-windows.exe, or glassfish-v3.zip. The exact filename will depend on the exact GlassFish version and platform.
+GlassFish can be downloaded from \href{http://glassfish.dev.java.net}{GlassFish
+home}. To download it, simply click on the link for your platform, The file should start downloading immediately. After the file finishes downloading, we should have a file
+called something such as glassfish-v3-unix.sh, glassfish-v3-windows.exe, or glassfish-v3.zip.
+The exact filename will depend on the exact GlassFish version and platform.
 
 \subsection{Installing Glassfish server}
 Installing GlassFish is an easy process. However, GlassFish assumes some dependencies are present on your system.
 
 \subsubsection{GlassFish dependencies}
-In order to install GlassFish 3, a recent version of the Java Development Kit (JDK) must be installed on your workstation (JDK 1.6 or a newer version required), and the Java executable must be in your system path. The latest JDK can be downloaded from \url{http://java.sun.com/}. Please refer to the JDK installation instructions for your particular platform at \url{http://java.sun.com/javase/6/webnotes/install/index.html}.
+In order to install GlassFish 3, a recent version of the Java Development Kit (JDK) must be installed on your workstation (JDK 1.6 or a newer version required), and the Java executable must be in your system path. The latest JDK can be downloaded from \url{http://java.sun.com/}. Please refer to the JDK installation instructions for your particular platform at:
+\\
+\url{http://java.sun.com/javase/6/webnotes/install/index.html}.
 
 \subsubsection{Performing the installation}
 Once the JDK has been installed, installation can begin by simply executing the downloaded file (permissions may have to be modified to make it executable):\\
@@ -22,7 +36,7 @@ The actual filename will depend on the version of GlassFish downloaded. The foll
 \item The next page in the installer allows us to customize Glassfish's administration and HTTP ports. Additionally, it allows us to provide a username and password for the administrative user. By default, no username and password combination is required to log into the admin console. This
 default behavior is appropriate for development boxes. We can override this behavior by choosing to provide a username and password in this step in the installation wizard.
 
-%\item At this point in the installation, we need to indicate if we would like to install the GlassFish update tool. The update tool allows us to easily install additional GlassFish modules. Therefore, unless disk space is a concern, it is recommended to install it. If we access the internet through a proxy server, we can enter its host name or IP address and port at this point in the installation.
+\item At this point in the installation, we need to indicate if we would like to install the GlassFish update tool. The update tool allows us to easily install additional GlassFish modules. Therefore, unless disk space is a concern, it is recommended to install it. If we access the internet through a proxy server, we can enter its host name or IP address and port at this point in the installation.
 
 \item Now, we are prompted to either select an automatically detected Java SDK or type in the location of the SDK. By default, the Java SDK matching the value of the JAVA\_HOME environment variable is selected.
 
@@ -31,7 +45,9 @@ default behavior is appropriate for development boxes. We can override this beha
 
 \subsubsection{Verifying the installation}
 To start GlassFish, change the directory to [glassfish installation directory]/glassfishv3/bin and execute the following command: \\
-\emph{./asadmin start-domain domain1}\\
+\begin{verbatim}
+./asadmin start-domain domain1
+\end{verbatim}
 
 A few seconds after executing the previous command, we should see a message similar to the following at the bottom of the terminal: \\
 \begin{verbatim}
@@ -41,7 +57,6 @@ Admin port for the domain: [4848].
 We can then open a browser window and type the following URL in the browser's
 location text field: http://localhost:8080.
 \end{verbatim}
-
 
 \subsection{Installing MySql Database JDBC connector}
 \subsection{Adding the JDBC resources}
