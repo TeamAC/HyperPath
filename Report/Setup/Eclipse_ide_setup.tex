@@ -1,9 +1,17 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Project Name : HyperPath                                            %
+% Project Home : https://github.com/TeamAC/HyperPath                  %
+% Part         : Setting up the Eclipse IDE                           %
+% Author       : chedi                                                %
+% Comments     :                                                      %
+%                                                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Eclipse IDE setup}
 Eclipse is a popular open source Integrated Development Environment (IDE) that is widely
 adopted in the developer community.
 
 \subsection{Installing Eclipse}
-\paragraph{}
 Because we are both using Fedora Linux operating system, we do not require external resources to install the Eclipse IDE as it came bundled in the install DVD. Nevertheless, you need to select the following package in ordre to get it up and running:
 \footnote{Some extra packages will be detected by the install system, but those listed here are the must have to compile and run this project}
 
@@ -18,11 +26,12 @@ Because we are both using Fedora Linux operating system, we do not require exter
 \item eclipse-swt
 \end{enumerate}
 
-\paragraph{}
-You can install them by using the command: \textit{\textbf{yum install [package name]}} or via the graphic interface for adding packages. In the case, you are not using Fedora or any other Linux variant you could always download the Eclipse application from the eclipse.org site. 
-
-Exactly you need to download the \textbf{"Eclipse IDE for Java EE Developers"} available at this url:
-\url{http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/heliossr2}
+You can install them by using the command:
+\begin{verbatim}
+yum install [package name]
+\end{verbatim}
+Or via the graphic interface for adding packages. In the case, you are not using \href{http://fedoraproject.org}{Fedora} or any other Linux variant you could
+always download the Eclipse application from the eclipse.org site. Exactly you need to download the \textbf{"Eclipse IDE for Java EE Developers"} available at this url:\\ {\url{http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/heliossr2}}
 \footnote{This URL is relative to the current version of eclipse as, so make sure to go to the correct URL if it get updated}
 \footnote{This version include almost all the plugins needed to compile and run the application, we recommend you to add the git plugin to be able to download the code from GitHub}
 
@@ -34,8 +43,10 @@ and deploying them to GlassFish Server.
 
 To Install on Linux Platform:
 \begin{enumerate}
-\item Go to \textbf{\textit{Help → Install}} new software 
-\item Add new repository \url{http://dlc.sun.com.edgesuite.net/glassfish/eclipse/helios} to the Available software sites and name it GlassFish or any convenient name. \footnote{don't forget to change the last part of the url to your version of eclipse}
+\item Go to \textbf{\textit{Help → Install}} new software
+\item Add new repository :\\
+{\Link http://dlc.sun.com.edgesuite.net/glassfish/eclipse/helios }\\
+to the Available software sites and name it GlassFish or any convenient name. \footnote{don't forget to change the last part of the url to your version of eclipse}
 \item Select the newly created site from the "Work with" combobox. You should see them the GlassFish bundle.
 \item Select the GlassFish plugin and continue to the end of the installation using next to the end.
 \item Restart the IDE.
@@ -91,7 +102,9 @@ GlassFish Sever offers many administrative features that are not accessible from
 These features are available from GlassFish Server Administration Console which is accessible
 from Eclipse IDE. The following procedure describes the process of accessing GlassFish Server
 Administration Console, from Eclipse IDE.
+
 \footnote{The administration console could be accessed via any navigator using the url http://localhost:4848 (assuming that your GlassFish server is installed on the local machine, you could change it to the adequate server name if accessing from an outside location)}
+
 \begin{enumerate}
 \item Select Servers view.
 \item Select Server popup menu → GlassFish Enterprise Server →GlassFish Administration Console.
