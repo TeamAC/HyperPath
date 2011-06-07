@@ -8,19 +8,46 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{abstract}
-    Motivation:
-    Why do we care about the problem and the results? If the problem isn't obviously "interesting" it might be better to put motivation first; but if your work is incremental progress on a problem that is widely recognized as important, then it is probably better to put the problem statement first to indicate which piece of the larger problem you are breaking off to work on. This section should include the importance of your work, the difficulty of the area, and the impact it might have if successful.
-
-    Problem statement:
-    What problem are you trying to solve? What is the scope of your work (a generalized approach, or for a specific situation)? Be careful not to use too much jargon. In some cases it is appropriate to put the problem statement before the motivation, but usually this only works if most readers already understand why the problem is important.
-
-    Approach:
-    How did you go about solving or making progress on the problem? Did you use simulation, analytic models, prototype construction, or analysis of field data for an actual product? What was the extent of your work (did you look at one application program or a hundred programs in twenty different programming languages?) What important variables did you control, ignore, or measure?
-
-    Results:
-    What's the answer? Specifically, most good computer architecture papers conclude that something is so many percent faster, cheaper, smaller, or otherwise better than something else. Put the result there, in numbers. Avoid vague, hand-waving results such as "very", "small", or "significant." If you must be vague, you are only given license to do so when you can talk about orders-of-magnitude improvement. There is a tension here in that you should not provide numbers that can be easily misinterpreted, but on the other hand you don't have room for all the caveats.
-
-    Conclusions:
-    What are the implications of your answer? Is it going to change the world (unlikely), be a significant "win", be a nice hack, or simply serve as a road sign indicating that this path is a waste of time (all of the previous results are useful). Are your results general, potentially generalizable, or specific to a particular case?
-
+\emph
+{
+  ``Computers have traditionally lacked the ability to influence and be
+  influenced by the surrounding environment. With the growth of location sensitive
+  services and applications, the physical and the virtual are merging. Location
+  based computing is becoming real thanks to advances in mobile devices, wireless
+  connectivity and location detection technologies''
+}\cite{geolocation:edventure}
+\\
+\\
+A city offers thousands of social events and service promotions a day, and it is
+difficult to make choices or even to be aware of all of them. The combination of
+mobile phones and recommender systems can change the way one deals with such
+abundance. Mobile phones with positioning technology are now widely available,
+making it easy for service to broadcast their whereabouts. Recommender systems
+can now identify patterns in people’s movements in order to, for example,
+recommend events.
+\\
+\\
+To answer this question, we try to build a mini management platform arround
+varrious buisness services and social events in a large metropolitan area. We
+sample location estimations and combine the sample with services in the same
+area. Upon this data, we extract statistics and reports displaying consumers
+behavious.
+\\
+\\
+\emph
+{
+  ``Basically, all the world around you is going to be in geocoded databases,
+  and you’re going to be walking through these electronic yellow pages.''
+}\cite{geolocation:edventure}
+\\
+\\
+To achive these goals and with the main constraint being the usage of the Java
+programming we decided to use a complete Open Source software development stack
+composed from:
+\begin{itemize}[topsep=0pt, partopsep=0pt, itemsep=1pt, parsep=1pt]
+\item MySQL database
+\item GlassFish java application server
+\item Eclipse RCP for the front end application
+\item Google Android for the mobile client
+\end{itemize}
 \end{abstract}
