@@ -8,34 +8,40 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Project purpose}
-\subsection{Project definition}
-This project aims to address the work-flow surrounding the acquisition, analysis and reporting of GPS data collected via a mobile device and exposing these data to the final user using a custom back office interface.
+The ability for mobile devices to provide connectivity and access to information
+place them amongst the most rapidly growing technologies in the world. The
+increase of mobile phones equipped with location sensing technology and enabled
+to elicit user experiences presents a valuable opportunity.
+\\
+\\
+Mobile web portals already allow users to tag, rate, and describe locations as
+they visit them, in order to aide the discovery of unknown locations of
+interest. Similarly, users location history can be mined in order to provide
+personalized recommendations for social events as they occur in the surrounding areas.
+\\
+\\
+tacking the fact that several inexorable trends are driving the development of
+location based computing in account, we proposed the creation of a complete
+set of tools to manage and consume data flows arround services and geolocation
+data using a set of Open Source technologies as part of our journey in the Java
+world.
 
-The finality of the process is to provide a complete solution for monitoring mobile target and acquiring instant knowledge of their current position and past movements history.
+\subsection{Project definition}
+This project aims to address the work-flow surrounding the acquisition, analysis
+and reporting of GPS data collected via a mobile device and exposing these data
+to the final user using a custom back office interface for the administration
+side and an android client for the customers one.
+\\
+\\
+The consumer or client will get a mobile application enabling him to define
+various services preferences and to subscribe to notification flows. The same
+application will play the role of tracking device and will synchronise with the
+central database.
+\\
+\\
+For the administration part, a heavy client using the RCP technology will expose
+an interface for adding new services and categories, managing them and creating
+reports about the users activities and the buisiness popularity. Such reports
+will be generated using the BIRT framework.
 
 \subsection{Challenges}
-In the current days geo-localization have became a key feature for many industries, as it provide ways to track targets and by extension collect valuable data about their behaviors. Such data are used for logistics management and optimization and large amounts are spent every year in improving such technologies and investing in new one (such as the Galileo Stellite system).
-
-\subsubsection{Location-based service}
-A location-based service (LBS) is an information or entertainment service, accessible with mobile devices through the mobile network and utilizing the ability to make use of the geographical position of the mobile device.
-
-LBS can be used in a variety of contexts, such as health, indoor object search, entertainment, work, personal life, etc...\cite{geolocation:wikipidea:geomarketing}
-
-LBS include services to identify a location of a person or object, such as discovering the nearest banking cash machine or the whereabouts of a friend or employee. LBS include parcel tracking and vehicle tracking services. LBS can include mobile commerce when taking the form of coupons or advertising directed at customers based on their current location. They include personalized weather services and even location-based games. They are an example of telecommunication convergence.\cite{geolocation:wikipidea:lbs}
-
-\paragraph{}
-In the recent past, price (especially the hardware cost) have been the main constraint for many small companies and individuals and the field had not retained the due attention and publicity. But, with the tsunami of mobile devices and smart phones equipped with GPS sensor and network connectivity on the market, the geo-localistion is back and the applications are more proliferous than ever. That's where the first challenge reside:
-\begin{itemize}
-\item using a mobile device, acquire GPS data and send them to the main server for storage and analysis.
-\item store the GPS data in the device in case of missing network connectivity and send them back to the server when restored.
-\item receive GPS data from the server and use them to guide the target through a specific path
-\end{itemize}
-
-\paragraph{}
-Because data without interpretation is merely obscure sequence of numbers, any decent geo-localization system must have a complete set of tool for the reception, storage, analysis and custom business logic. That's why the proposed system will be provided with back office for managing the following tasks:
-\begin{itemize}
-\item Receive and save the GPS data send by the mobile target in a persisting storage system (database, file...)
-\item Using third party map data, render a graphical representation of the current target position and the past movements history of one or more target.
-\item Based on the user data, compute paths and send them as GPS coordinate to the mobile target.
-\item Provide complete reporting schema using the data acquired via the mobile target.
-\end{itemize}
