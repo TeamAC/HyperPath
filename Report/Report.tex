@@ -1,9 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Project  : HyperPath                                                %
-% Project @: https://github.com/TeamAC/HyperPath                      %
-% Part     : Report master document                                   %
-% Author   : chedi (chedi.toueit@gmail.com)                           %
-% Comments :                                                          %
+% Project Name : HyperPath                                            %
+% Project Home : https://github.com/TeamAC/HyperPath                  %
+% Part         : Report master document                               %
+% Author       : chedi                                                %
+% Comments     :                                                      %
 %                                                                     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -16,30 +16,49 @@
   Chedi Toueiti
 }
 
+\date{\today}
+
 \usepackage{url}
 \usepackage{color}
 \usepackage{xcolor}
 \usepackage{caption}
 \usepackage{makeidx}
-\usepackage{hyperref}
 \usepackage{graphics}
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{epstopdf}
 \usepackage{enumitem}
+\usepackage{hyperref}
 \usepackage[T1]{fontenc}
 \usepackage[utf8x]{inputenc}
+\usepackage[kerning,spacing]{microtype}
 
-\include{Base/Customization}
+\include{Preamble/Customization}
+
 \makeindex
-
 \begin{document}
+  \pagenumbering{Roman}
+  \addtocontents{toc}{\contentsline {chapter}{Title}{}{}}
   \include{Base/Title}
-  \include{Base/Abstract}
-  \include{Base/Thanks}
-  \tableofcontents
-  \listoffigures
+  \pagebreak
 
+  \pagestyle{empty}
+  \addtocontents{toc}{\contentsline {chapter}{Thanks}{}{}}
+  \include{Base/Thanks}
+  \pagebreak
+
+  \addtocontents{toc}{\contentsline {chapter}{Abstract}{}{}}
+  \include{Base/Abstract}
+  \pagebreak
+
+  \pagestyle{plain}
+  \tableofcontents
+  \pagebreak
+
+  \listoffigures
+  \pagebreak
+
+  \pagenumbering{arabic}
   \chapter{Introduction}
     \include{Introduction/Introduction_project_aim}
     \include{Introduction/Introduction_state_of_the_art}
@@ -49,34 +68,40 @@
     \include{Introduction/Introduction_glassfish}
     \include{Introduction/Introduction_birt}
     \include{Introduction/Introduction_mysql}
-  \pagebreak
 
   \chapter{Architecture}
     \include{Architecture/Architecture}
-  \pagebreak
 
   \chapter{Development process}
     \include{Setup/Java_server_application_setup}
     \include{Setup/Database_setup}
     \include{Setup/Eclipse_ide_setup}
-  \pagebreak
 
   \chapter{Implementation}
     \include{Implementation/Implementation}
-  \pagebreak
 
   \chapter{Further work}
     \include{Base/Further_work}
-  \pagebreak
 
   \chapter{Conclusion}
     \include{Base/Conclusion}
-  \pagebreak
 
+  \appendix
+    \chapter{Team collaboration workflow}
+
+    \chapter{Android simulator}
+
+    \chapter{Eclipse RCP to RAR}
+
+  \pagebreak
   \nocite{*}
   \bibliographystyle{plain}
-  \bibliography{Bibliography}
-  \pagebreak
+  \phantomsection
+  \addcontentsline{toc}{chapter}{Bibliography}
+  \bibliography{Preamble/Bibliography}
 
+  \pagebreak
+  \phantomsection
+  \addcontentsline{toc}{chapter}{Index}
   \printindex
 \end{document}
