@@ -21,16 +21,17 @@ On Fedora the MySQL database installation is an easy process, you just have to:
   'new-password'}\footnote{The quotes around the new password are required.}
 \end{itemize}
 
-Additionnaly you can install the mysql-workbench which is a graphical tool used
-to design, query and administer MySQL database\footnote{You will need the
-workbench if you would like to open the database diagram in the code
+Additionnaly you can install the \url{http://wb.mysql.com/}{mysql-workbench}
+which is a visual database design tool developed by MySQL and the highly
+anticipated successor application of the DBDesigner4 project.\footnote{You will
+need the workbench if you would like to open the database diagram in the code
 repository}:
 \\\\
 {\Console yum install mysql-workbench}
 \\\\
 \textbf{Note:} If you plan not using both the database and the GlassFish server
-on the same machine, please adjuste the firewall rules of the database machine
-so the 3306 port is enabled. In most cases, just issuing the command:
+on the same machine, please adjuste the firewall rules of the database machine so
+the 3306 port is enabled. In most cases, just issuing the command:
 \\\\
 {\Console iptables -A INPUT -i eth0 -p tcp -m tcp --dport 3306 -j ACCEPT}
 \\\\
