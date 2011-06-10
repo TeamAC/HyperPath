@@ -10,18 +10,45 @@
 \section{Introduction to Eclipse RCP}\index{Eclipse!RCP!Introduction}
 \subsection{Eclipse framework}
 
-The Eclipse philosophy is simple and has been critical to its success. The Eclipse Platform was designed from the ground up as an integration framework for development tools. Eclipse also enables developers to easily extend products built on it with the latest object-oriented technologies.
+The Eclipse philosophy is simple and has been critical to its success. The
+Eclipse Platform was designed from the ground up as an integration framework for
+development tools. Eclipse also enables developers to easily extend products
+built on it with the latest object-oriented technologies.
 
-Although Eclipse was designed to serve as an open development platform, it is architected so that its components can be used to build just about any client application. The minimal set of modules needed to build a rich client is collectively known as the Rich Client Platform (RCP).
+Although Eclipse was designed to serve as an open development platform, it is
+architected so that its components can be used to build just about any client
+application. The minimal set of modules needed to build a rich client is
+collectively known as the Rich Client Platform (RCP).
 
 \subsection{Why RCP ?}
 \index{Eclipse!SWT!History}
-The Standard Widget Toolkit (SWT) is the graphical widget toolkit used by eclipse. Originally developed by IBM, it was created to overcome the limitation if the Swing graphical user interface (GUI) toolkit introduced by Sun. Swing is 100\% Java and employs a lowest common denominator to draw its components by using Java 2D to call low level operating system primitives. SWT, on the other hand, implements a common widget layer with fast native access to multiple platforms.
+The Standard Widget Toolkit (SWT) is the graphical widget toolkit used by
+eclipse. Originally developed by IBM, it was created to overcome the limitation
+if the Swing graphical user interface (GUI) toolkit introduced by Sun. Swing is
+100\% Java and employs a lowest common denominator to draw its components by
+using Java 2D to call low level operating system primitives. SWT, on the other
+hand, implements a common widget layer with fast native access to multiple
+platforms.
 
-SWT's goal is to provide a common API,but avoid the lowest common denominator problem typical of the other portable GUI toolkits. SWT was designed for the following:
+SWT's goal is to provide a common API,but avoid the lowest common denominator
+problem typical of the other portable GUI toolkits. SWT was designed for the
+following:
 
 \begin{description}
-\item[Performance :] SWT claims higher performance and responsiveness, and lower system resource usage than Swing.
-\item[Native look and feel :] Because SWT is a wrapper around native window systems such as GTK+ and Motif, SWT widgets have the exact same look and feel as native ones. This is in contrast to the Swing toolkit, where widgets are close copies of native ones. This is clearly evident just by looking at Swing application.
-\item[Extensibility :] Critics of SWT may claim that the use of native code does not allow for easy inheritance and hurts extensibility. However, both Swing and SWT support for writing new widgets using Java code only.
+  \item[Performance :] SWT claims higher performance and responsiveness, and
+lower system resource usage than Swing.
+  \item[Native look and feel :] Because SWT is a wrapper around native window
+systems such as GTK+ and Motif, SWT widgets hqave the exact same look and feel
+as native ones. This is in contrast to the Swing toolkit, where widgets are
+close copies of native ones. This is clearly evident just by looking at Swing
+application.
+  \item[Extensibility :] Critics of SWT may claim that the use of native code
+does not allow for easy inheritance and hurts extensibility. However, both
+Swing and SWT support for writing new widgets using Java code only.
 \end{description}
+
+Besides, the RCP technology is fully compatible with both \textbf{BIRT}
+\footnote{See Section \ref{sec:BIRT_intro} on page~\pageref{sec:BIRT_intro}} and
+\textbf{RAP} \footnote{See RAP Appendix \ref{chap:RAP} on
+page~\pageref{chap:RAP}}, wich make it the perfect candidate to the backoffice
+application wether it's deployed in full client mode or web.
