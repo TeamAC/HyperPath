@@ -10,37 +10,59 @@
 \section{Java application server setup}
 \subsection{Getting Glassfish}
 GlassFish can be downloaded from \href{http://glassfish.dev.java.net}{GlassFish
-home}. To download it, simply click on the link for your platform, The file should start downloading immediately. After the file finishes downloading, we should have a file
-called something such as glassfish-v3-unix.sh, glassfish-v3-windows.exe, or glassfish-v3.zip.
-The exact filename will depend on the exact GlassFish version and platform.
+home}. To download it, simply click on the link for your platform, The file
+should start downloading immediately. After the file finishes downloading, we
+should have a file called something such as glassfish-v3-unix.sh,
+glassfish-v3-windows.exe, or glassfish-v3.zip. The exact filename will depend on
+the exact GlassFish version and platform.
 
 \subsection{Installing Glassfish server}
-Installing GlassFish is an easy process. However, GlassFish assumes some dependencies are present on your system.
+Installing GlassFish is an easyq process. However, GlassFish assumes some
+dependencies are present on your system.
 
 \subsubsection{GlassFish dependencies}
-In order to install GlassFish 3, a recent version of the Java Development Kit (JDK) must be installed on your workstation (JDK 1.6 or a newer version required), and the Java executable must be in your system path. The latest JDK can be downloaded from \url{http://java.sun.com/}. Please refer to the JDK installation instructions for your particular platform at:
+In order to install GlassFish 3, a recent version of the Java Development Kit
+(JDK) must be installed on your workstation (JDK 1.6 or a newer version
+required), and the Java executable must be in your system path. The latest JDK
+can be downloaded from \url{http://java.sun.com/}. Please refer to the JDK
+installation instructions for your particular platform at:
 \\
 \url{http://java.sun.com/javase/6/webnotes/install/index.html}.
 
 \subsubsection{Performing the installation}
 Once the JDK has been installed, installation can begin by simply executing the downloaded file (permissions may have to be modified to make it executable):\\
 \emph{./glassfish-v3-unix.sh}\\
-The actual filename will depend on the version of GlassFish downloaded. The following steps need to be performed in order to successfully install GlassFish:
+The actual filename will depend on the version of GlassFish downloaded. The
+following steps need to be performed in order to successfully install GlassFish:
 \begin{enumerate}
 \item After running the previous command, the GlassFish installer will start initializing.
 
 \item After clicking Next, we are prompted to accept the license terms.
 
-\item The next screen in the installer prompts us for an installation directory. The installation directory defaults to a directory called glassfishv3 under our home directory. It is a reasonable default, but we are free to change it.
+\item The next screen in the installer prompts us for an installation directory.
+The installation directory defaults to a directory called glassfishv3 under our
+home directory. It is a reasonable default, but we are free to change it.
 
-\item The next page in the installer allows us to customize Glassfish's administration and HTTP ports. Additionally, it allows us to provide a username and password for the administrative user. By default, no username and password combination is required to log into the admin console. This
-default behavior is appropriate for development boxes. We can override this behavior by choosing to provide a username and password in this step in the installation wizard.
+\item The next page in the installer allows us to customize Glassfish's
+administration and HTTP ports. Additionally, it allows us to provide a username
+and password for the administrative user. By default, no username and password
+combination is required to log into the admin console. This default behavior is
+appropriate for development boxes. We can override this behavior by choosing to
+provide a username and password in this step in the installation wizard.
 
-\item At this point in the installation, we need to indicate if we would like to install the GlassFish update tool. The update tool allows us to easily install additional GlassFish modules. Therefore, unless disk space is a concern, it is recommended to install it. If we access the internet through a proxy server, we can enter its host name or IP address and port at this point in the installation.
+\item At this point in the installation, we need to indicate if we would like to
+install the GlassFish update tool. The update tool allows us to easily install
+additional GlassFish modules. Therefore, unless disk space is a concern, it is
+recommended to install it. If we access the internet through a proxy server, we
+can enter its host name or IP address and port at this point in the installation.
 
-\item Now, we are prompted to either select an automatically detected Java SDK or type in the location of the SDK. By default, the Java SDK matching the value of the JAVA\_HOME environment variable is selected.
+\item Now, we are prompted to either select an automatically detected Java SDK or
+type in the location of the SDK. By default, the Java SDK matching the value of
+the JAVA\_HOME environment variable is selected.
 
-\item After installation finishes, we are asked to register our copy of GlassFish. At this point, we can link our GlassFish installation to an existing Sun Online Account, create a new Sun Online Account or skip installation.
+\item After installation finishes, we are asked to register our copy of
+GlassFish. At this point, we can link our GlassFish installation to an existing
+Sun Online Account, create a new Sun Online Account or skip installation.
 \end{enumerate}
 
 \subsubsection{Verifying the installation}
@@ -59,5 +81,69 @@ location text field: http://localhost:8080.
 \end{verbatim}
 
 \subsection{Installing MySql Database JDBC connector}
+Download MySQL JDBC driver from
+\url{http://dev.mysql.com/downloads/connector/j/3.1.html} once Glassfish is
+installed you will need to make sure it can access MySQL Connector/J. To do this
+copy the MySQL Connector/J JAR file to the directory
+\begin{verbatim}GLASSFISH_INSTALL/glassfish/lib\end{verbatim} and Restart the
+Glassfish Application Server.
+
+You are now ready to create JDBC Connection Pools and JDBC Resources.
 \subsection{Adding the JDBC resources}
+\subsubsection{Creating a Connection Pool}
+\begin{itemize}
+  \item In the Glassfish Administration Console, using the navigation tree
+  navigate to Resources, JDBC, Connection Pools.
+  \item In the JDBC Connection Pools frame click New. You will enter a two step
+  wizard.
+  \item In the Name field under General Settings enter the name for the
+  connection pool, for example enter MySQLConnPool.
+  \item In the Resource Type field, select javax.sql.DataSource from the
+  drop-down listbox.
+  \item In the Database Vendor field, select MySQL from the drop-down listbox.
+  Click Next to go to the next page of the wizard.
+  \item You can accept the default settings for General Settings, Pool Settings
+  and Transactions for this example. Scroll down to Additional Properties.
+  \item In Additional Properties you will need to ensure the following
+  properties are set:
+  \begin{description}
+    \item[ServerName] The server you wish to connect to. For local testing this
+    will be localhost.
+    \item[User] The user name with which to connect to MySQL.
+    \item[Password] The corresponding password for the user.
+    \item[DatabaseName] The database you wish to connect to.
+  \end{description}
+  \item Click Finish to exit the wizard. You will be taken to the JDBC
+  Connection Pools page where all current connection pools, including the one
+  you just created, will be displayed.
+  \item In the JDBC Connection Pools frame click on the connection pool you just
+  created. Here you can review and edit information about the connection pool.
+  \item To test your connection pool click the Ping button at the top of the
+  frame. A message will be displayed confirming correct operation or otherwise.
+  If an error message is received recheck the previous steps, and ensure that
+  MySQL Connector/J has been correctly copied into the previously specified location.
+\end{itemize}
+
+Now that you have created a connection pool you will also need to create a JDBC
+Resource (data source) for use by your application.
+
+\subsubsection{Creating a JDBC Resource}
+Your Java application will usually reference a data source object to establish a
+connection with the database. This needs to be created first using the following procedure.
+
+\begin{itemize}
+  \item Using the navigation tree in the Glassfish Administration Console,
+  navigate to Resources, JDBC, JDBC Resources. A list of resources will be
+  displayed in the JDBC Resources frame.
+  \item Click New. The New JDBC Resource frame will be displayed.
+  \item In the JNDI Name field, enter the JNDI name that will be used to access
+  this resource, for example enter jdbc/MySQLDataSource.
+  \item In the Pool Name field, select a connection pool you want this resource
+  to use from the drop-down listbox.
+  \item Optionally, you can enter a description into the Description field.
+  \item Additional properties can be added if required.
+  \item Click OK to create the new JDBC resource. The JDBC Resources frame will
+  list all available JDBC Resources.
+
+\end{itemize}
 \subsection{Tuning security}
