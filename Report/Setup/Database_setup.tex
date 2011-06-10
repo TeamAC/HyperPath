@@ -8,6 +8,31 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Database setup}
-The MySQL database has become the world's most popular open source database because of its high performance, high reliability and ease of use.
+The MySQL database has become the world's most popular open source database
+because of its high performance, high reliability and ease of use.
 \subsection{Installing the MySql server}
+On Fedora the MySQL database installation is an easy process, you just have to:
+\begin{itemize}
+  \item Use yum to install both mysql command line tool and the server:
+  {\Console yum install mysql mysql-server}
+  \item Enable the MySQL: {\Console service:/sbin/chkconfig mysqld on}
+  \item Start the MySQL server:{\Console /sbin/service mysqld start}
+  \item Set the MySQL root password:{\Console mysqladmin -u root password
+  'new-password'}\footnote{The quotes around the new password are required.}
+\end{itemize}
+
+Additionnaly you can install the mysql-workbench which is a graphical tool used
+to design, query and administer MySQL database\footnote{You will need the
+workbench if you would like to open the database diagram in the code
+repository}:
+\\\\
+{\Console yum install mysql-workbench}
+\\\\
+\textbf{Note:} If you plan not using both the database and the GlassFish server
+on the same machine, please adjuste the firewall rules of the database machine
+so the 3306 port is enabled. In most cases, just issuing the command:
+\\\\
+{\Console iptables -A INPUT -i eth0 -p tcp -m tcp --dport 3306 -j ACCEPT}
+\\\\
+will do the tric, if notn you have to check the firewall rules.
 \subsection{Creating the database schema}
