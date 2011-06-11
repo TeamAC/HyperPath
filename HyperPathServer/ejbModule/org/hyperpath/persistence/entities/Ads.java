@@ -23,14 +23,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "ads", catalog = "hyperPath", schema = "")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Ads.findAll"               , query = "SELECT a FROM Ads a"),
-    @NamedQuery(name = "Ads.findById"              , query = "SELECT a FROM Ads a WHERE a.adsPK.id = :id"),
-    //@NamedQuery(name = "Ads.findByShortDescription", query = "SELECT a FROM Ads a WHERE a.shortDescription = :shortDescription"),
-    @NamedQuery(name = "Ads.findByStartDate"       , query = "SELECT a FROM Ads a WHERE a.startDate = :startDate"),
-    @NamedQuery(name = "Ads.findByEndDate"         , query = "SELECT a FROM Ads a WHERE a.endDate = :endDate"),
-    @NamedQuery(name = "Ads.findByServicesId"      , query = "SELECT a FROM Ads a WHERE a.adsPK.servicesId = :servicesId"),
-    @NamedQuery(name = "Ads.findByAdvertisersId"   , query = "SELECT a FROM Ads a WHERE a.adsPK.advertisersId = :advertisersId")})
 public class Ads implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

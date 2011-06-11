@@ -22,10 +22,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "emails", catalog = "hyperPath", schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"address"})})
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Emails.findAll"      , query = "SELECT e FROM Emails e"),
-    @NamedQuery(name = "Emails.findById"     , query = "SELECT e FROM Emails e WHERE e.id = :id"),
-    @NamedQuery(name = "Emails.findByAddress", query = "SELECT e FROM Emails e WHERE e.address = :address")})
 public class Emails implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

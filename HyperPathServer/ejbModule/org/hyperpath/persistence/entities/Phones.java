@@ -23,10 +23,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "phones", catalog = "hyperPath", schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"number"})})
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Phones.findAll"     , query = "SELECT p FROM Phones p"),
-    @NamedQuery(name = "Phones.findById"    , query = "SELECT p FROM Phones p WHERE p.id = :id"),
-    @NamedQuery(name = "Phones.findByNumber", query = "SELECT p FROM Phones p WHERE p.number = :number")})
 public class Phones implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

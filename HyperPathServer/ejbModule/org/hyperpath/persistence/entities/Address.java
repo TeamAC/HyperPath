@@ -22,19 +22,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "address", catalog = "hyperPath", schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"street", "zip", "city", "department", "country", "ext"})})
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Address.findAll"            , query = "SELECT a FROM Address a"),
-    @NamedQuery(name = "Address.findById"           , query = "SELECT a FROM Address a WHERE a.id = :id"),
-    @NamedQuery(name = "Address.findByStreet"       , query = "SELECT a FROM Address a WHERE a.street = :street"),
-    @NamedQuery(name = "Address.findByZip"          , query = "SELECT a FROM Address a WHERE a.zip = :zip"),
-    @NamedQuery(name = "Address.findByCity"         , query = "SELECT a FROM Address a WHERE a.city = :city"),
-    @NamedQuery(name = "Address.findByDepartment"   , query = "SELECT a FROM Address a WHERE a.department = :department"),
-    @NamedQuery(name = "Address.findByCountry"      , query = "SELECT a FROM Address a WHERE a.country = :country"),
-    @NamedQuery(name = "Address.findByExt"          , query = "SELECT a FROM Address a WHERE a.ext = :ext"),
-    @NamedQuery(name = "Address.findByAll"          , query = "SELECT a FROM Address a WHERE a.street = :street and a.zip = :zip and a.city = :city and a.department = :department and a.coutry = :country and a.ext = :ext"),
-    @NamedQuery(name = "Address.findAdvertiserByAddress" , query = "select c.* from hyperPath.advertisers c inner join hyperPath.entities_has_address e on c.entities_id = e.entities_id where e.address_id :addressId)"),
-    @NamedQuery(name = "Address.findClientByAddress"     , query = "select c.* from hyperPath.clients c inner join hyperPath.entities_has_address e on c.entities_id = e.entities_id where e.address_id = :addressId)")
-})
 public class Address implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

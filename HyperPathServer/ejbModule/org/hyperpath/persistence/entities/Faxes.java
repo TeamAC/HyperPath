@@ -22,10 +22,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "faxes", catalog = "hyperPath", schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"number"})})
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Faxes.findAll"     , query = "SELECT f FROM Faxes f"),
-    @NamedQuery(name = "Faxes.findById"    , query = "SELECT f FROM Faxes f WHERE f.id = :id"),
-    @NamedQuery(name = "Faxes.findByNumber", query = "SELECT f FROM Faxes f WHERE f.number = :number")})
 public class Faxes implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

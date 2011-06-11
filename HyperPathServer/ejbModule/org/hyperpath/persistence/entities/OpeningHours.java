@@ -23,12 +23,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "openingHours", catalog = "hyperPath", schema = "")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "OpeningHours.findAll"        , query = "SELECT o FROM OpeningHours o"),
-    @NamedQuery(name = "OpeningHours.findById"       , query = "SELECT o FROM OpeningHours o WHERE o.id = :id"),
-    @NamedQuery(name = "OpeningHours.findByOpenTime" , query = "SELECT o FROM OpeningHours o WHERE o.openTime = :openTime"),
-    @NamedQuery(name = "OpeningHours.findByCloseTime", query = "SELECT o FROM OpeningHours o WHERE o.closeTime = :closeTime"),
-    @NamedQuery(name = "OpeningHours.findByDays"     , query = "SELECT o FROM OpeningHours o WHERE o.days = :days")})
 public class OpeningHours implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

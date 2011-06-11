@@ -21,11 +21,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "categories", catalog = "hyperPath", schema = "")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Categories.findAll"          , query = "SELECT c FROM Categories c"),
-    @NamedQuery(name = "Categories.findById"         , query = "SELECT c FROM Categories c WHERE c.id = :id"),
-    @NamedQuery(name = "Categories.findByLabel"      , query = "SELECT c FROM Categories c WHERE c.label = :label"),
-    @NamedQuery(name = "Categories.findByDescription", query = "SELECT c FROM Categories c WHERE c.description = :description")})
 public class Categories implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

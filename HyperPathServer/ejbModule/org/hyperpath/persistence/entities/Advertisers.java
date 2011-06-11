@@ -23,12 +23,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "advertisers", catalog = "hyperPath", schema = "")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Advertisers.findAll"          , query = "SELECT a FROM Advertisers a"),
-    @NamedQuery(name = "Advertisers.findById"         , query = "SELECT a FROM Advertisers a WHERE a.Id.id = :id"),
-    @NamedQuery(name = "Advertisers.findByName"       , query = "SELECT a FROM Advertisers a WHERE a.name = :name"),
-    @NamedQuery(name = "Advertisers.findByDescription", query = "SELECT a FROM Advertisers a WHERE a.description = :description"),
-    @NamedQuery(name = "Advertisers.findByEntitiesId" , query = "SELECT a FROM Advertisers a WHERE a.Id.entitiesId = :entitiesId")})
 public class Advertisers implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

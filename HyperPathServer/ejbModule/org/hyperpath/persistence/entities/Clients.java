@@ -26,16 +26,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "clients", catalog = "hyperPath", schema = "")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Clients.findAll"         , query = "SELECT c FROM Clients c"),
-    @NamedQuery(name = "Clients.findById"        , query = "SELECT c FROM Clients c WHERE c.clientsPK.id = :id"),
-    @NamedQuery(name = "Clients.findByName"      , query = "SELECT c FROM Clients c WHERE c.name = :name"),
-    @NamedQuery(name = "Clients.findByLastName"  , query = "SELECT c FROM Clients c WHERE c.lastName = :lastName"),
-    @NamedQuery(name = "Clients.findByLogin"     , query = "SELECT c FROM Clients c WHERE c.login = :login"),
-    @NamedQuery(name = "Clients.findByPassword"  , query = "SELECT c FROM Clients c WHERE c.password = :password"),
-    @NamedQuery(name = "Clients.findByGender"    , query = "SELECT c FROM Clients c WHERE c.gender = :gender"),
-    @NamedQuery(name = "Clients.findByBirthdate" , query = "SELECT c FROM Clients c WHERE c.birthdate = :birthdate"),
-    @NamedQuery(name = "Clients.findByEntitiesId", query = "SELECT c FROM Clients c WHERE c.clientsPK.entitiesId = :entitiesId")})
 public class Clients implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

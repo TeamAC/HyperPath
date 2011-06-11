@@ -30,13 +30,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "gpslocation", catalog = "hyperPath", schema = "")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Gpslocation.findAll", query = "SELECT g FROM Gpslocation g"),
-    @NamedQuery(name = "Gpslocation.findById", query = "SELECT g FROM Gpslocation g WHERE g.id = :id"),
-    @NamedQuery(name = "Gpslocation.findByTime", query = "SELECT g FROM Gpslocation g WHERE g.time = :time"),
-    @NamedQuery(name = "Gpslocation.findByLatitude", query = "SELECT g FROM Gpslocation g WHERE g.latitude = :latitude"),
-    @NamedQuery(name = "Gpslocation.findByLongitude", query = "SELECT g FROM Gpslocation g WHERE g.longitude = :longitude"),
-    @NamedQuery(name = "Gpslocation.findByAltitude", query = "SELECT g FROM Gpslocation g WHERE g.altitude = :altitude")})
 public class Gpslocation implements Serializable {
     @Basic(optional = false)
     @NotNull

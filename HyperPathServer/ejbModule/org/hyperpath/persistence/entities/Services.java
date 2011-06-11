@@ -26,17 +26,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "services", catalog = "hyperPath", schema = "")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Services.findAll"             , query = "SELECT s FROM Services s"),
-    @NamedQuery(name = "Services.findById"            , query = "SELECT s FROM Services s WHERE s.Id.id = :id"),
-    @NamedQuery(name = "Services.findByLabel"         , query = "SELECT s FROM Services s WHERE s.label = :label"),
-    @NamedQuery(name = "Services.findByDescription"   , query = "SELECT s FROM Services s WHERE s.description = :description"),
-    @NamedQuery(name = "Services.findByCategoriesId"  , query = "SELECT s FROM Services s WHERE s.Id.categoriesId = :categoriesId"),
-    @NamedQuery(name = "Services.findByLocation"      , query = "SELECT s FROM Services s WHERE s.location = :location"),
-    @NamedQuery(name = "Services.findByUsersReview"   , query = "SELECT s FROM Services s WHERE s.usersReview = :usersReview"),
-    @NamedQuery(name = "Services.findByEntitiesId"    , query = "SELECT s FROM Services s WHERE s.Id.entitiesId = :entitiesId"),
-    @NamedQuery(name = "Services.findByOpeningHoursid", query = "SELECT s FROM Services s WHERE s.Id.openingHoursid = :openingHoursid"),
-    @NamedQuery(name = "Services.findByRating"        , query = "SELECT s FROM Services s WHERE s.rating = :rating")})
 public class Services implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
