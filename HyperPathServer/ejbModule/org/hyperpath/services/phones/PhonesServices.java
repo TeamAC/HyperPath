@@ -11,9 +11,12 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
+
 import org.hyperpath.persistence.entities.Phones;
+import org.hyperpath.persistence.jpa.PhonesJpaController;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
@@ -29,6 +32,8 @@ public class PhonesServices {
   private UserTransaction utx;
   @PersistenceUnit
   EntityManagerFactory    emf;
+
+  PhonesJpaController     controller;
 
   /**
    * Web service operation
@@ -66,5 +71,40 @@ public class PhonesServices {
       RollbackFailureException {
     // TODO write your implementation code here:
     return null;
+  }
+
+  /**
+   * Find phone by exact phone number
+   */
+  @WebMethod(operationName = "findExactPhones")
+  public List<Phones> findExactPhone(@WebParam(name = "phoneNumber") String phoneNumber)
+    throws Exception, NonexistentEntityException,
+    RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new PhonesJpaController(utx, emf);
+    return controller.findExactPhone(phoneNumber);
+  }
+
+  /**
+   * Find phones by phone number approximation
+   */
+  @WebMethod(operationName = "findAppoximatePhones")
+  public List<Phones> findAppoximatePhones(@WebParam(name = "phoneNumber") String phoneNumber)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new PhonesJpaController(utx, emf);
+    return controller.findApproximatePhones(phoneNumber);
+  }
+
+  /**
+   * Find total phone numbers
+   */
+  @WebMethod(operationName = "countPhones")
+  public Integer countPhones() throws Exception, RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new PhonesJpaController(utx, emf);
+    return controller.getPhonesCount();
   }
 }
