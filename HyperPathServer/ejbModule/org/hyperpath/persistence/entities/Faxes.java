@@ -19,85 +19,86 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
-@Table(name = "faxes", catalog = "hyperPath", schema = "", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"number"})})
+@Table(name = "faxes", catalog = "hyperPath", schema = "", uniqueConstraints = { @UniqueConstraint(columnNames = { "number" }) })
 @XmlRootElement
 public class Faxes implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id", nullable = false)
-    private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "number", nullable = false, length = 45)
-    private String number;
-    @ManyToMany(mappedBy = "faxesList")
-    private List<Entities> entitiesList;
+  private static final long serialVersionUID = 1L;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "id", nullable = false)
+  private Integer           id;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 45)
+  @Column(name = "number", nullable = false, length = 45)
+  private String            number;
+  @ManyToMany(mappedBy = "faxesList")
+  private List<Entities>    entitiesList;
 
-    public Faxes() {
-    }
+  public Faxes() {
+  }
 
-    public Faxes(Integer id) {
-        this.id = id;
-    }
+  public Faxes(Integer id) {
+    this.id = id;
+  }
 
-    public Faxes(Integer id, String number) {
-        this.id = id;
-        this.number = number;
-    }
+  public Faxes(Integer id, String number) {
+    this.id = id;
+    this.number = number;
+  }
 
-    public Integer getId() {
-        return id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public String getNumber() {
-        return number;
-    }
+  public String getNumber() {
+    return number;
+  }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
+  public void setNumber(String number) {
+    this.number = number;
+  }
 
-    @XmlTransient
-    public List<Entities> getEntitiesList() {
-        return entitiesList;
-    }
+  @XmlTransient
+  public List<Entities> getEntitiesList() {
+    return entitiesList;
+  }
 
-    public void setEntitiesList(List<Entities> entitiesList) {
-        this.entitiesList = entitiesList;
-    }
+  public void setEntitiesList(List<Entities> entitiesList) {
+    this.entitiesList = entitiesList;
+  }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (id != null ? id.hashCode() : 0);
+    return hash;
+  }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Faxes)) {
-            return false;
-        }
-        Faxes other = (Faxes) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+  @Override
+  public boolean equals(Object object) {
+    // TODO: Warning - this method won't work in the case the id fields are
+    // not set
+    if (!(object instanceof Faxes)) {
+      return false;
     }
+    Faxes other = (Faxes) object;
+    if ((this.id == null && other.id != null)
+        || (this.id != null && !this.id.equals(other.id))) {
+      return false;
+    }
+    return true;
+  }
 
-    @Override
-    public String toString() {
-        return "org.hyperpath.persistence.entities.Faxes[ id=" + id + " ]";
-    }
-    
+  @Override
+  public String toString() {
+    return "org.hyperpath.persistence.entities.Faxes[ id=" + id + " ]";
+  }
+
 }

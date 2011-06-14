@@ -27,193 +27,193 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "services", catalog = "hyperPath", schema = "")
 @XmlRootElement
 public class Services implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id", nullable = false)
-    protected Integer Id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "label", nullable = false, length = 45)
-    private String label;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "description", nullable = false, length = 45)
-    private String description;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "usersReview", nullable = false, length = 45)
-    private String usersReview;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "rating", nullable = false)
-    private int rating;
-    @ManyToMany(mappedBy = "servicesList")
-    private List<Clients> clientsList;
-    @JoinTable(name = "services_has_reviews", 
-        joinColumns        = {@JoinColumn(name = "services_id", referencedColumnName = "id", nullable = false)}, 
-        inverseJoinColumns = {@JoinColumn(name = "reviews_id" , referencedColumnName = "id", nullable = false)})
-    @ManyToMany
-    private List<Reviews> reviewsList;
-    @JoinColumn(name = "openingHours_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private OpeningHours openingHours;
-    @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Entities entities;
-    @JoinColumn(name = "categories_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Categories categories;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "services")
-    private List<Ads> adsList;
-    @JoinColumn(name = "gpslocation_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Gpslocation gpslocation;
-    
-    public Services() {
-    }
+  private static final long serialVersionUID = 1L;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "id", nullable = false)
+  protected Integer         Id;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 45)
+  @Column(name = "label", nullable = false, length = 45)
+  private String            label;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 45)
+  @Column(name = "description", nullable = false, length = 45)
+  private String            description;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 45)
+  @Column(name = "usersReview", nullable = false, length = 45)
+  private String            usersReview;
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "rating", nullable = false)
+  private int               rating;
+  @ManyToMany(mappedBy = "servicesList")
+  private List<Clients>     clientsList;
+  @JoinTable(name = "services_has_reviews", joinColumns = { @JoinColumn(name = "services_id", referencedColumnName = "id", nullable = false) }, inverseJoinColumns = { @JoinColumn(name = "reviews_id", referencedColumnName = "id", nullable = false) })
+  @ManyToMany
+  private List<Reviews>     reviewsList;
+  @JoinColumn(name = "openingHours_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+  @ManyToOne(optional = false)
+  private OpeningHours      openingHours;
+  @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+  @ManyToOne(optional = false)
+  private Entities          entities;
+  @JoinColumn(name = "categories_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+  @ManyToOne(optional = false)
+  private Categories        categories;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "services")
+  private List<Ads>         adsList;
+  @JoinColumn(name = "gpslocation_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+  @ManyToOne(optional = false)
+  private Gpslocation       gpslocation;
 
-    public Services(Integer Id) {
-        this.Id = Id;
-    }
+  public Services() {
+  }
 
-    public Services(Integer Id, String label, String description, Gpslocation gpslocation, String usersReview, int rating) {
-        this.Id = Id;
-        this.label = label;
-        this.description = description;
-        this.gpslocation = gpslocation;
-        this.usersReview = usersReview;
-        this.rating = rating;
-    }
+  public Services(Integer Id) {
+    this.Id = Id;
+  }
 
-    public Integer getServicesPK() {
-        return Id;
-    }
+  public Services(Integer Id, String label, String description,
+      Gpslocation gpslocation, String usersReview, int rating) {
+    this.Id = Id;
+    this.label = label;
+    this.description = description;
+    this.gpslocation = gpslocation;
+    this.usersReview = usersReview;
+    this.rating = rating;
+  }
 
-    public void setServicesPK(Integer Id) {
-        this.Id = Id;
-    }
+  public Integer getServicesPK() {
+    return Id;
+  }
 
-    public String getLabel() {
-        return label;
-    }
+  public void setServicesPK(Integer Id) {
+    this.Id = Id;
+  }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+  public String getLabel() {
+    return label;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public void setLabel(String label) {
+    this.label = label;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public String getUsersReview() {
-        return usersReview;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setUsersReview(String usersReview) {
-        this.usersReview = usersReview;
-    }
+  public String getUsersReview() {
+    return usersReview;
+  }
 
-    public int getRating() {
-        return rating;
-    }
+  public void setUsersReview(String usersReview) {
+    this.usersReview = usersReview;
+  }
 
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
+  public int getRating() {
+    return rating;
+  }
 
-    public Gpslocation getLocation(){
-        return this.gpslocation;
-    }
-    
-    public void setLocation(Gpslocation gpslocation) {
-        this.gpslocation = gpslocation;
-    }
-    
-    
-    @XmlTransient
-    public List<Clients> getClientsList() {
-        return clientsList;
-    }
+  public void setRating(int rating) {
+    this.rating = rating;
+  }
 
-    public void setClientsList(List<Clients> clientsList) {
-        this.clientsList = clientsList;
-    }
+  public Gpslocation getLocation() {
+    return this.gpslocation;
+  }
 
-    @XmlTransient
-    public List<Reviews> getReviewsList() {
-        return reviewsList;
-    }
+  public void setLocation(Gpslocation gpslocation) {
+    this.gpslocation = gpslocation;
+  }
 
-    public void setReviewsList(List<Reviews> reviewsList) {
-        this.reviewsList = reviewsList;
-    }
+  @XmlTransient
+  public List<Clients> getClientsList() {
+    return clientsList;
+  }
 
-    public OpeningHours getOpeningHours() {
-        return openingHours;
-    }
+  public void setClientsList(List<Clients> clientsList) {
+    this.clientsList = clientsList;
+  }
 
-    public void setOpeningHours(OpeningHours openingHours) {
-        this.openingHours = openingHours;
-    }
+  @XmlTransient
+  public List<Reviews> getReviewsList() {
+    return reviewsList;
+  }
 
-    public Entities getEntities() {
-        return entities;
-    }
+  public void setReviewsList(List<Reviews> reviewsList) {
+    this.reviewsList = reviewsList;
+  }
 
-    public void setEntities(Entities entities) {
-        this.entities = entities;
-    }
+  public OpeningHours getOpeningHours() {
+    return openingHours;
+  }
 
-    public Categories getCategories() {
-        return categories;
-    }
+  public void setOpeningHours(OpeningHours openingHours) {
+    this.openingHours = openingHours;
+  }
 
-    public void setCategories(Categories categories) {
-        this.categories = categories;
-    }
+  public Entities getEntities() {
+    return entities;
+  }
 
-    @XmlTransient
-    public List<Ads> getAdsList() {
-        return adsList;
-    }
+  public void setEntities(Entities entities) {
+    this.entities = entities;
+  }
 
-    public void setAdsList(List<Ads> adsList) {
-        this.adsList = adsList;
-    }
+  public Categories getCategories() {
+    return categories;
+  }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (Id != null ? Id.hashCode() : 0);
-        return hash;
-    }
+  public void setCategories(Categories categories) {
+    this.categories = categories;
+  }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Services)) {
-            return false;
-        }
-        Services other = (Services) object;
-        if ((this.Id == null && other.Id != null) || (this.Id != null && !this.Id.equals(other.Id))) {
-            return false;
-        }
-        return true;
-    }
+  @XmlTransient
+  public List<Ads> getAdsList() {
+    return adsList;
+  }
 
-    @Override
-    public String toString() {
-        return "org.hyperpath.persistence.entities.Services[ Id=" + Id + " ]";
+  public void setAdsList(List<Ads> adsList) {
+    this.adsList = adsList;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (Id != null ? Id.hashCode() : 0);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    // TODO: Warning - this method won't work in the case the id fields are
+    // not set
+    if (!(object instanceof Services)) {
+      return false;
     }
-    
+    Services other = (Services) object;
+    if ((this.Id == null && other.Id != null)
+        || (this.Id != null && !this.Id.equals(other.Id))) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public String toString() {
+    return "org.hyperpath.persistence.entities.Services[ Id=" + Id + " ]";
+  }
+
 }

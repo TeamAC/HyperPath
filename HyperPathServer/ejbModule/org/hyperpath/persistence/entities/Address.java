@@ -19,152 +19,155 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
-@Table(name = "address", catalog = "hyperPath", schema = "", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"street", "zip", "city", "department", "country", "ext"})})
+@Table(name = "address", catalog = "hyperPath", schema = "", uniqueConstraints = { @UniqueConstraint(columnNames = {
+    "street", "zip", "city", "department", "country", "ext" }) })
 @XmlRootElement
 public class Address implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id", nullable = false)
-    private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "street", nullable = false, length = 45)
-    private String street;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "zip", nullable = false, length = 45)
-    private String zip;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "city", nullable = false, length = 45)
-    private String city;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "department", nullable = false, length = 45)
-    private String department;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "country", nullable = false, length = 45)
-    private String country;
-    @Size(max = 45)
-    @Column(name = "ext", length = 45)
-    private String ext;
-    @ManyToMany(mappedBy = "addressList")
-    private List<Entities> entitiesList;
+  private static final long serialVersionUID = 1L;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "id", nullable = false)
+  private Integer           id;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 45)
+  @Column(name = "street", nullable = false, length = 45)
+  private String            street;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 45)
+  @Column(name = "zip", nullable = false, length = 45)
+  private String            zip;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 45)
+  @Column(name = "city", nullable = false, length = 45)
+  private String            city;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 45)
+  @Column(name = "department", nullable = false, length = 45)
+  private String            department;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 45)
+  @Column(name = "country", nullable = false, length = 45)
+  private String            country;
+  @Size(max = 45)
+  @Column(name = "ext", length = 45)
+  private String            ext;
+  @ManyToMany(mappedBy = "addressList")
+  private List<Entities>    entitiesList;
 
-    public Address() {
-    }
+  public Address() {
+  }
 
-    public Address(Integer id) {
-        this.id = id;
-    }
-    
-    public Address(Integer id, String street, String zip, String city, String department, String country) {
-        this.id = id;
-        this.street = street;
-        this.zip = zip;
-        this.city = city;
-        this.department = department;
-        this.country = country;
-    }
+  public Address(Integer id) {
+    this.id = id;
+  }
 
-    public Integer getId() {
-        return id;
-    }
+  public Address(Integer id, String street, String zip, String city,
+      String department, String country) {
+    this.id = id;
+    this.street = street;
+    this.zip = zip;
+    this.city = city;
+    this.department = department;
+    this.country = country;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public String getStreet() {
-        return street;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
+  public String getStreet() {
+    return street;
+  }
 
-    public String getZip() {
-        return zip;
-    }
+  public void setStreet(String street) {
+    this.street = street;
+  }
 
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
+  public String getZip() {
+    return zip;
+  }
 
-    public String getCity() {
-        return city;
-    }
+  public void setZip(String zip) {
+    this.zip = zip;
+  }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+  public String getCity() {
+    return city;
+  }
 
-    public String getDepartment() {
-        return department;
-    }
+  public void setCity(String city) {
+    this.city = city;
+  }
 
-    public void setDepartment(String department) {
-        this.department = department;
-    }
+  public String getDepartment() {
+    return department;
+  }
 
-    public String getCountry() {
-        return country;
-    }
+  public void setDepartment(String department) {
+    this.department = department;
+  }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+  public String getCountry() {
+    return country;
+  }
 
-    public String getExt() {
-        return ext;
-    }
+  public void setCountry(String country) {
+    this.country = country;
+  }
 
-    public void setExt(String ext) {
-        this.ext = ext;
-    }
+  public String getExt() {
+    return ext;
+  }
 
-    @XmlTransient
-    public List<Entities> getEntitiesList() {
-        return entitiesList;
-    }
+  public void setExt(String ext) {
+    this.ext = ext;
+  }
 
-    public void setEntitiesList(List<Entities> entitiesList) {
-        this.entitiesList = entitiesList;
-    }
+  @XmlTransient
+  public List<Entities> getEntitiesList() {
+    return entitiesList;
+  }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
+  public void setEntitiesList(List<Entities> entitiesList) {
+    this.entitiesList = entitiesList;
+  }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Address)) {
-            return false;
-        }
-        Address other = (Address) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (id != null ? id.hashCode() : 0);
+    return hash;
+  }
 
-    @Override
-    public String toString() {
-        return "org.hyperpath.persistence.entities.Address[ id=" + id + " ]";
+  @Override
+  public boolean equals(Object object) {
+    // TODO: Warning - this method won't work in the case the id fields are
+    // not set
+    if (!(object instanceof Address)) {
+      return false;
     }
-    
+    Address other = (Address) object;
+    if ((this.id == null && other.id != null)
+        || (this.id != null && !this.id.equals(other.id))) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public String toString() {
+    return "org.hyperpath.persistence.entities.Address[ id=" + id + " ]";
+  }
+
 }

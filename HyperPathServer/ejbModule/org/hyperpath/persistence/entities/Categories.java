@@ -22,95 +22,97 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "categories", catalog = "hyperPath", schema = "")
 @XmlRootElement
 public class Categories implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id", nullable = false)
-    private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "label", nullable = false, length = 45)
-    private String label;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "description", nullable = false, length = 45)
-    private String description;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categories")
-    private List<Services> servicesList;
+  private static final long serialVersionUID = 1L;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "id", nullable = false)
+  private Integer           id;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 45)
+  @Column(name = "label", nullable = false, length = 45)
+  private String            label;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 45)
+  @Column(name = "description", nullable = false, length = 45)
+  private String            description;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "categories")
+  private List<Services>    servicesList;
 
-    public Categories() {
-    }
+  public Categories() {
+  }
 
-    public Categories(Integer id) {
-        this.id = id;
-    }
+  public Categories(Integer id) {
+    this.id = id;
+  }
 
-    public Categories(Integer id, String label, String description) {
-        this.id = id;
-        this.label = label;
-        this.description = description;
-    }
+  public Categories(Integer id, String label, String description) {
+    this.id = id;
+    this.label = label;
+    this.description = description;
+  }
 
-    public Integer getId() {
-        return id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public String getLabel() {
-        return label;
-    }
+  public String getLabel() {
+    return label;
+  }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+  public void setLabel(String label) {
+    this.label = label;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    @XmlTransient
-    public List<Services> getServicesList() {
-        return servicesList;
-    }
+  @XmlTransient
+  public List<Services> getServicesList() {
+    return servicesList;
+  }
 
-    public void setServicesList(List<Services> servicesList) {
-        this.servicesList = servicesList;
-    }
+  public void setServicesList(List<Services> servicesList) {
+    this.servicesList = servicesList;
+  }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (id != null ? id.hashCode() : 0);
+    return hash;
+  }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Categories)) {
-            return false;
-        }
-        Categories other = (Categories) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+  @Override
+  public boolean equals(Object object) {
+    // TODO: Warning - this method won't work in the case the id fields are
+    // not set
+    if (!(object instanceof Categories)) {
+      return false;
     }
+    Categories other = (Categories) object;
+    if ((this.id == null && other.id != null)
+        || (this.id != null && !this.id.equals(other.id))) {
+      return false;
+    }
+    return true;
+  }
 
-    @Override
-    public String toString() {
-        return "org.hyperpath.persistence.entities.Categories[ id=" + id + " ]";
-    }
-    
+  @Override
+  public String toString() {
+    return "org.hyperpath.persistence.entities.Categories[ id=" + id + " ]";
+  }
+
 }
