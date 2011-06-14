@@ -73,7 +73,7 @@ public class CategoriesServices {
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
     controller = new CategoriesJpaController(utx, emf);
-    return controller.findCategoriesByExacLabel(categoryLabel);
+    return controller.findCategoriesByExactLabel(categoryLabel);
   }
 
   /**

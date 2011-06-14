@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
@@ -17,6 +18,7 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class CategoriesJpaController implements Serializable {
+  private static final long serialVersionUID = 8448103872273399270L;
 
   public CategoriesJpaController(UserTransaction utx, EntityManagerFactory emf) {
     this.utx = utx;
@@ -214,19 +216,80 @@ public class CategoriesJpaController implements Serializable {
     return findCategoriesEntities(false, maxResults, firstResult);
   }
 
+  @SuppressWarnings("unchecked")
   private List<Categories> findCategoriesEntities(boolean all,
                                                   int maxResults,
                                                   int firstResult) {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      cq.select(cq.from(Categories.class));
-      Query q = em.createQuery(cq);
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Categories> criteriaQuery = criteriaBuilder.createQuery(Categories.class);
+      Query query = em.createQuery(criteriaQuery);
       if (!all) {
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        query.setFirstResult(firstResult);
       }
-      return q.getResultList();
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Categories> findCategoriesByExactLabel(String categoryLabel) {
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Categories> criteriaQuery = criteriaBuilder.createQuery(Categories.class);
+      Root<Categories> categoryRoot = criteriaQuery.from(Categories.class);
+      criteriaQuery.select(categoryRoot).where( criteriaBuilder.equal(categoryRoot.get("label"),categoryLabel));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Categories> findCategoriesByApproximateLabel(String categoryLabel) {
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Categories> criteriaQuery = criteriaBuilder.createQuery(Categories.class);
+      Root<Categories> categoryRoot = criteriaQuery.from(Categories.class);
+      criteriaQuery.select(categoryRoot).where(criteriaBuilder.like(categoryRoot.<String> get("label"),'%' + categoryLabel + '%'));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Categories> findCategoriesByExactDescription(String categoryDescription) {
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Categories> criteriaQuery = criteriaBuilder.createQuery(Categories.class);
+      Root<Categories> categoryRoot = criteriaQuery.from(Categories.class);
+      criteriaQuery.select(categoryRoot).where( criteriaBuilder.equal(categoryRoot.get("description"),categoryDescription));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Categories> findCategoriesByApproximateDescription(String categoryDescription) {
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Categories> criteriaQuery = criteriaBuilder.createQuery(Categories.class);
+      Root<Categories> categoryRoot = criteriaQuery.from(Categories.class);
+      criteriaQuery.select(categoryRoot).where(criteriaBuilder.like(categoryRoot.<String> get("description"),'%' + categoryDescription + '%'));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
     } finally {
       em.close();
     }
@@ -244,11 +307,12 @@ public class CategoriesJpaController implements Serializable {
   public int getCategoriesCount() {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<Categories> rt = cq.from(Categories.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+      Root<Categories> categoryRoot = criteriaQuery.from(Categories.class);
+      criteriaQuery.select(criteriaBuilder.count(categoryRoot));
+      Query query = em.createQuery(criteriaQuery);
+      return ((Long) query.getSingleResult()).intValue();
     } finally {
       em.close();
     }
