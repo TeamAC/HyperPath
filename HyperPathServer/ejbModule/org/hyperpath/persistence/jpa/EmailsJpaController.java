@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
+
 import org.hyperpath.persistence.entities.Emails;
 import org.hyperpath.persistence.entities.Entities;
 import java.util.ArrayList;
@@ -188,8 +189,7 @@ public class EmailsJpaController implements Serializable {
     EntityManager em = getEntityManager();
     try {
       CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-      CriteriaQuery<Emails> criteriaQuery = criteriaBuilder
-          .createQuery(Emails.class);
+      CriteriaQuery<Emails> criteriaQuery = criteriaBuilder.createQuery(Emails.class);
       Query query = em.createQuery(criteriaQuery);
       if (!all) {
         query.setMaxResults(maxResults);
@@ -206,12 +206,9 @@ public class EmailsJpaController implements Serializable {
     EntityManager em = getEntityManager();
     try {
       CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-      CriteriaQuery<Emails> criteriaQuery = criteriaBuilder
-          .createQuery(Emails.class);
+      CriteriaQuery<Emails> criteriaQuery = criteriaBuilder.createQuery(Emails.class);
       Root<Emails> emailRoot = criteriaQuery.from(Emails.class);
-      criteriaQuery.select(emailRoot).where(
-          criteriaBuilder.equal(emailRoot.get("address"),
-              emailAddress));
+      criteriaQuery.select(emailRoot).where( criteriaBuilder.equal(emailRoot.get("address"),emailAddress));
       Query query = em.createQuery(criteriaQuery);
       return query.getResultList();
     } finally {
@@ -224,12 +221,9 @@ public class EmailsJpaController implements Serializable {
     EntityManager em = getEntityManager();
     try {
       CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-      CriteriaQuery<Emails> criteriaQuery = criteriaBuilder
-          .createQuery(Emails.class);
+      CriteriaQuery<Emails> criteriaQuery = criteriaBuilder.createQuery(Emails.class);
       Root<Emails> emailRoot = criteriaQuery.from(Emails.class);
-      criteriaQuery.select(emailRoot).where(
-          criteriaBuilder.like(emailRoot.<String> get("address"),
-              '%' + emailAddress + '%'));
+      criteriaQuery.select(emailRoot).where(criteriaBuilder.like(emailRoot.<String> get("address"),'%' + emailAddress + '%'));
       Query query = em.createQuery(criteriaQuery);
       return query.getResultList();
     } finally {
@@ -250,12 +244,11 @@ public class EmailsJpaController implements Serializable {
     EntityManager em = getEntityManager();
     try {
       CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-      CriteriaQuery<Long> criteriaQuery = criteriaBuilder
-          .createQuery(Long.class);
+      CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
       Root<Emails> emailRoot = criteriaQuery.from(Emails.class);
       criteriaQuery.select(criteriaBuilder.count(emailRoot));
-      Query q = em.createQuery(criteriaQuery);
-      return ((Long) q.getSingleResult()).intValue();
+      Query query = em.createQuery(criteriaQuery);
+      return ((Long) query.getSingleResult()).intValue();
     } finally {
       em.close();
     }
