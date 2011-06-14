@@ -20,56 +20,64 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 import org.jboss.weld.logging.Category;
 
 /**
- *
+ * 
  * @author adel
  */
 @WebService(serviceName = "CategoriesServices")
 @Stateless()
 public class CategoriesServices {
-    @Resource
-    private UserTransaction utx;
+  @Resource
+  private UserTransaction utx;
 
-    @PersistenceUnit
-    EntityManagerFactory emf;
-    
-    @WebMethod(operationName = "addCategory")
-    public void addService(@WebParam(name = "category")
-    Category service) throws Exception, PreexistingEntityException, RollbackFailureException {
-    }
+  @PersistenceUnit
+  EntityManagerFactory    emf;
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "updateCategory")
-    public void updateCategory(@WebParam(name = "category")
-    Categories category) throws Exception, NonexistentEntityException, RollbackFailureException {
-    }
+  @WebMethod(operationName = "addCategory")
+  public void addService(@WebParam(name = "category") Category service)
+      throws Exception, PreexistingEntityException,
+      RollbackFailureException {
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "deleteCategory")
-    public void deleteCategory(@WebParam(name = "categoryId")
-    Integer categoryId) throws Exception, NonexistentEntityException, RollbackFailureException {
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "updateCategory")
+  public void updateCategory(@WebParam(name = "category") Categories category)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findCategoryByLabel")
-    public Categories findCategoryByLabel(@WebParam(name = "categoryLabel")
-    String categoryLabel) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "deleteCategory")
+  public void deleteCategory(@WebParam(name = "categoryId") Integer categoryId)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findCategoryByService")
-    public Categories findCategoryByService(@WebParam(name = "service")
-    Services service) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findCategoryByLabel")
+  public Categories findCategoryByLabel(
+                                        @WebParam(name = "categoryLabel") String categoryLabel)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
+
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findCategoryByService")
+  public Categories findCategoryByService(
+                                          @WebParam(name = "service") Services service)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
 }

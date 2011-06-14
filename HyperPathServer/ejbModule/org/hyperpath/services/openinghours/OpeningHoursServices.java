@@ -18,40 +18,46 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 /**
- *
+ * 
  * @author adel
  */
 @WebService(serviceName = "OpeningHoursServices")
 @Stateless()
 public class OpeningHoursServices {
-    @Resource
-    private UserTransaction utx;
+  @Resource
+  private UserTransaction utx;
 
-    @PersistenceUnit
-    EntityManagerFactory emf;
+  @PersistenceUnit
+  EntityManagerFactory    emf;
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "addOpeningHours")
-    public void addOpeningHours(@WebParam(name = "openingHours")
-    OpeningHours openingHours) throws Exception, NonexistentEntityException, RollbackFailureException {
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "addOpeningHours")
+  public void addOpeningHours(
+                              @WebParam(name = "openingHours") OpeningHours openingHours)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "deleteOpeningHours")
-    public void deleteOpeningHours(@WebParam(name = "openingHoursId")
-    Integer openingHoursId) throws Exception, NonexistentEntityException, RollbackFailureException {
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "deleteOpeningHours")
+  public void deleteOpeningHours(
+                                 @WebParam(name = "openingHoursId") Integer openingHoursId)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "updateOpeningHours")
-    public void updateOpeningHours(@WebParam(name = "openingHoursId")
-    Integer openingHoursId) throws Exception, NonexistentEntityException, RollbackFailureException {
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "updateOpeningHours")
+  public void updateOpeningHours(
+                                 @WebParam(name = "openingHoursId") Integer openingHoursId)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+  }
 
 }

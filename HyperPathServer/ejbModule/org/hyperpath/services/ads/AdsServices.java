@@ -24,105 +24,117 @@ import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 /**
- *
+ * 
  * @author adel
  */
 @WebService(serviceName = "AdsServices")
 @Stateless()
 public class AdsServices {
-     @Resource
-    private UserTransaction utx;
+  @Resource
+  private UserTransaction utx;
 
-    @PersistenceUnit
-    EntityManagerFactory emf;
-    
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findAdsById")
-    public List<Ads> findAds(@WebParam(name = "id")
-    Integer id) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  @PersistenceUnit
+  EntityManagerFactory    emf;
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findAdsByAdvertiser")
-    @RequestWrapper(className = "org.findAdsByAdvertiser")
-    @ResponseWrapper(className = "org.findAdsByAdvertiserResponse")
-    public List<Ads> findAds(@WebParam(name = "advertiser")
-    Advertisers advertiser) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findAdsById")
+  public List<Ads> findAds(@WebParam(name = "id") Integer id)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findAdsByService")
-    @RequestWrapper(className = "org.findAdsByService")
-    @ResponseWrapper(className = "org.findAdsByServiceResponse")
-    public List<Ads> findAds(@WebParam(name = "service")
-    Services service) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findAdsByAdvertiser")
+  @RequestWrapper(className = "org.findAdsByAdvertiser")
+  @ResponseWrapper(className = "org.findAdsByAdvertiserResponse")
+  public List<Ads> findAds(
+                           @WebParam(name = "advertiser") Advertisers advertiser)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "addAds")
-    public Void addAds(@WebParam(name = "ads")
-    Ads ads) throws Exception, RollbackFailureException, PreexistingEntityException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findAdsByService")
+  @RequestWrapper(className = "org.findAdsByService")
+  @ResponseWrapper(className = "org.findAdsByServiceResponse")
+  public List<Ads> findAds(@WebParam(name = "service") Services service)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "updateAds")
-    public void updateAds(@WebParam(name = "ads")
-    Ads ads) throws Exception, RollbackFailureException, NonexistentEntityException {
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "addAds")
+  public Void addAds(@WebParam(name = "ads") Ads ads) throws Exception,
+      RollbackFailureException, PreexistingEntityException {
+    // TODO write your implementation code here:
+    return null;
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "deleteAds")
-    public void deleteAds(@WebParam(name = "id")
-    Integer id) throws Exception, RollbackFailureException, NonexistentEntityException {
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "updateAds")
+  public void updateAds(@WebParam(name = "ads") Ads ads) throws Exception,
+      RollbackFailureException, NonexistentEntityException {
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findAdsByStartDate")
-    public List<Ads> findAdsByStartDate(@WebParam(name = "startDate")
-    Date startDate) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "deleteAds")
+  public void deleteAds(@WebParam(name = "id") Integer id) throws Exception,
+      RollbackFailureException, NonexistentEntityException {
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findAdsByEndDate")
-    public List<Ads> findAdsByEndDate(@WebParam(name = "endDate")
-    Date endDate) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findAdsByStartDate")
+  public List<Ads> findAdsByStartDate(
+                                      @WebParam(name = "startDate") Date startDate)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findAdsInBetween")
-    public List<Ads> findAdsInBetween(@WebParam(name = "startDate") Date startDate, @WebParam(name = "endDate")
-    Date endDate) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findAdsByEndDate")
+  public List<Ads> findAdsByEndDate(@WebParam(name = "endDate") Date endDate)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
+
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findAdsInBetween")
+  public List<Ads> findAdsInBetween(
+                                    @WebParam(name = "startDate") Date startDate,
+                                    @WebParam(name = "endDate") Date endDate)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
 }

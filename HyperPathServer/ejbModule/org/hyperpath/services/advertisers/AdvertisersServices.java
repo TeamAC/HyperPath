@@ -21,89 +21,105 @@ import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 /**
- *
+ * 
  * @author adel
  */
 @WebService(serviceName = "AdvertisersServices")
 @Stateless()
 public class AdvertisersServices {
-    @Resource
-    private UserTransaction utx;
+  @Resource
+  private UserTransaction utx;
 
-    @PersistenceUnit
-    EntityManagerFactory emf;
-    
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "addAdvertizer")
-    public void addService(@WebParam(name = "advertizer")
-    Advertisers service) throws Exception, PreexistingEntityException, RollbackFailureException {
-    }
-    
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findServicesByAddress")
-    public List<Services> findServicesByAddress(@WebParam(name = "address")
-    Address address) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  @PersistenceUnit
+  EntityManagerFactory    emf;
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findServicesPhone")
-    public List<Services> findServicesPhone(@WebParam(name = "phone")
-    String phone) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "addAdvertizer")
+  public void addService(@WebParam(name = "advertizer") Advertisers service)
+      throws Exception, PreexistingEntityException,
+      RollbackFailureException {
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findServicesByFax")
-    public List<Services> findServicesByFax(@WebParam(name = "fax")
-    String fax) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findServicesByAddress")
+  public List<Services> findServicesByAddress(
+                                              @WebParam(name = "address") Address address)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findServicesByMail")
-    public List<Services> findServicesByMail(@WebParam(name = "mail")
-    String mail) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findServicesPhone")
+  public List<Services> findServicesPhone(
+                                          @WebParam(name = "phone") String phone)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "updateAdvertiser")
-    public void updateAdvertiser(@WebParam(name = "advertiser")
-    Advertisers advertiser) throws Exception, NonexistentEntityException, RollbackFailureException {
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findServicesByFax")
+  public List<Services> findServicesByFax(@WebParam(name = "fax") String fax)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "deleteAdvertiser")
-    public void deleteAdvertiser(@WebParam(name = "advertiserId")
-    Integer advertiserId) throws Exception, NonexistentEntityException, RollbackFailureException {
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findServicesByMail")
+  public List<Services> findServicesByMail(
+                                           @WebParam(name = "mail") String mail)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findAdvertiserByAd")
-    public Advertisers findAdvertiserByAd(@WebParam(name = "ad")
-    Advertisers ad) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "updateAdvertiser")
+  public void updateAdvertiser(
+                               @WebParam(name = "advertiser") Advertisers advertiser)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+  }
+
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "deleteAdvertiser")
+  public void deleteAdvertiser(
+                               @WebParam(name = "advertiserId") Integer advertiserId)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+  }
+
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findAdvertiserByAd")
+  public Advertisers findAdvertiserByAd(@WebParam(name = "ad") Advertisers ad)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
 }

@@ -19,49 +19,52 @@ import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 /**
- *
+ * 
  * @author adel
  */
 @WebService(serviceName = "FaxesServices")
 @Stateless()
 public class FaxesServices {
-    @Resource
-    private UserTransaction utx;
+  @Resource
+  private UserTransaction utx;
 
-    @PersistenceUnit
-    EntityManagerFactory emf;
-    
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "addFaxes")
-    public void addFaxes(@WebParam(name = "faxe")
-    Faxes faxe) throws Exception, PreexistingEntityException, RollbackFailureException {
-    }
+  @PersistenceUnit
+  EntityManagerFactory    emf;
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "updateFaxes")
-    public void updateFaxes(@WebParam(name = "faxe")
-    Faxes faxe) throws Exception, NonexistentEntityException, RollbackFailureException {
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "addFaxes")
+  public void addFaxes(@WebParam(name = "faxe") Faxes faxe) throws Exception,
+      PreexistingEntityException, RollbackFailureException {
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "deleteFaxes")
-    public void deleteFaxes(@WebParam(name = "faxeId")
-    Integer faxeId) throws Exception, NonexistentEntityException, RollbackFailureException {
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "updateFaxes")
+  public void updateFaxes(@WebParam(name = "faxe") Faxes faxe)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findFaxes")
-    public List<Faxes> findFaxes(@WebParam(name = "faxe")
-    String faxe) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "deleteFaxes")
+  public void deleteFaxes(@WebParam(name = "faxeId") Integer faxeId)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+  }
+
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findFaxes")
+  public List<Faxes> findFaxes(@WebParam(name = "faxe") String faxe)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
 }

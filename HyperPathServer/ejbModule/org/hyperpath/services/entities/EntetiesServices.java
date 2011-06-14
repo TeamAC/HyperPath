@@ -14,20 +14,21 @@ import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
 
 /**
- *
+ * 
  * @author adel
  */
 @WebService(serviceName = "EntetiesServices")
 @Stateless()
 public class EntetiesServices {
-    @Resource
-    private UserTransaction utx;
+  @Resource
+  private UserTransaction utx;
 
-    @PersistenceUnit
-    EntityManagerFactory emf;
-    /** This is a sample web service operation */
-    @WebMethod(operationName = "hello")
-    public String hello(@WebParam(name = "name") String txt) {
-        return "Hello " + txt + " !";
-    }
+  @PersistenceUnit
+  EntityManagerFactory    emf;
+
+  /** This is a sample web service operation */
+  @WebMethod(operationName = "hello")
+  public String hello(@WebParam(name = "name") String txt) {
+    return "Hello " + txt + " !";
+  }
 }

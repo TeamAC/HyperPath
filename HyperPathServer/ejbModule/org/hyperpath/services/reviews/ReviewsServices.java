@@ -21,61 +21,69 @@ import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 /**
- *
+ * 
  * @author adel
  */
 @WebService(serviceName = "ReviewsServices")
 @Stateless()
 public class ReviewsServices {
-   @Resource
-    private UserTransaction utx;
+  @Resource
+  private UserTransaction utx;
 
-    @PersistenceUnit
-    EntityManagerFactory emf;
+  @PersistenceUnit
+  EntityManagerFactory    emf;
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "addReview")
-    public void addReview(@WebParam(name = "review")
-    Reviews review) throws Exception, PreexistingEntityException, RollbackFailureException {
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "addReview")
+  public void addReview(@WebParam(name = "review") Reviews review)
+      throws Exception, PreexistingEntityException,
+      RollbackFailureException {
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "updateReview")
-    public void updateReview(@WebParam(name = "review")
-    Reviews review) throws Exception, NonexistentEntityException, RollbackFailureException{
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "updateReview")
+  public void updateReview(@WebParam(name = "review") Reviews review)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "deleteReview")
-    public void deleteReview(@WebParam(name = "reviewId")
-    Integer reviewId) throws Exception, NonexistentEntityException, RollbackFailureException{
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "deleteReview")
+  public void deleteReview(@WebParam(name = "reviewId") Integer reviewId)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findReviewByService")
-    public List<Reviews> findReviewByService(@WebParam(name = "service")
-    Services service) throws Exception, NonexistentEntityException, RollbackFailureException {
-        //TODO write your implementation code here:
-        return null;
-    }
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findReviewByService")
+  public List<Reviews> findReviewByService(
+                                           @WebParam(name = "service") Services service)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "findReviewByClient")
-    public List<Reviews> findReviewByClient(@WebParam(name = "client")
-    Clients client) throws Exception, NonexistentEntityException, RollbackFailureException{
-        //TODO write your implementation code here:
-        return null;
-    }
-   
-    
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "findReviewByClient")
+  public List<Reviews> findReviewByClient(
+                                          @WebParam(name = "client") Clients client)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    // TODO write your implementation code here:
+    return null;
+  }
+
 }
