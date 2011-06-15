@@ -295,4 +295,64 @@ public class AdsJpaController implements Serializable {
     return query.getResultList();
   }
 
+  @SuppressWarnings("unchecked")
+  public List<Ads> findAdsByExactDescription(String adsDescription){
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+      Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+      criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("description"),adsDescription));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Ads> findAdsByExactShortDescription(String adsShortDescription){
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+      Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+      criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("shortDescription"),adsShortDescription));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Ads> findAdsByApproximateDescription(String adsDescription){
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+      Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+      criteriaQuery.select(adsRoot).where( criteriaBuilder.like(adsRoot.<String>get("description"),"%"+adsDescription+"%"));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Ads> findAdsByApproximateShortDescription(String adsShortDescription){
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+      Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+      criteriaQuery.select(adsRoot).where( criteriaBuilder.like(adsRoot.<String>get("shortDescription"),"%"+adsShortDescription+"%"));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
 }
