@@ -26,13 +26,19 @@ public PhonesJpaController(UserTransaction utx, EntityManagerFactory emf) {
     this.emf = emf;
   }
 
+public PhonesJpaController(EntityManager mockedEM) {
+  em = mockedEM;
+}
   private UserTransaction      utx = null;
   private EntityManagerFactory emf = null;
+  private EntityManager        em  = null;
 
   public EntityManager getEntityManager() {
+    if (em != null)
+      return em;
     return emf.createEntityManager();
   }
-
+  
   public void create(Phones phones) throws RollbackFailureException,
       Exception {
     if (phones.getEntitiesList() == null) {
@@ -248,7 +254,7 @@ public PhonesJpaController(UserTransaction utx, EntityManagerFactory emf) {
       Query q = em.createQuery(criteriaQuery);
       return ((Long) q.getSingleResult()).intValue();
     } finally {
-      em.close();
+      	em.close();
     }
   }
 }
