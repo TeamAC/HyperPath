@@ -9,9 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
-
 import org.hyperpath.persistence.entities.Categories;
-import org.hyperpath.persistence.entities.Emails;
 import org.hyperpath.persistence.entities.Services;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,27 +18,17 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class CategoriesJpaController implements Serializable {
-  private static final long serialVersionUID = 6296043157797032087L;
+  private static final long serialVersionUID = 8448103872273399270L;
 
   public CategoriesJpaController(UserTransaction utx, EntityManagerFactory emf) {
     this.utx = utx;
     this.emf = emf;
   }
 
-  /*
-   * This is used only in test mode for mocking the entity manager
-   */
-  private EntityManager        em               = null;
-  private UserTransaction      utx              = null;
-  private EntityManagerFactory emf              = null;
-
-  public CategoriesJpaController(EntityManager mockedEM) {
-    em = mockedEM;
-  }
+  private UserTransaction      utx = null;
+  private EntityManagerFactory emf = null;
 
   public EntityManager getEntityManager() {
-    if (em != null)
-      return em;
     return emf.createEntityManager();
   }
 
@@ -247,67 +235,71 @@ public class CategoriesJpaController implements Serializable {
     }
   }
 
-  public Categories findCategories(Integer id) {
+  @SuppressWarnings("unchecked")
+  public List<Categories> findCategoriesByExactLabel(String categoryLabel) {
     EntityManager em = getEntityManager();
     try {
-      return em.find(Categories.class, id);
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Categories> criteriaQuery = criteriaBuilder.createQuery(Categories.class);
+      Root<Categories> categoryRoot = criteriaQuery.from(Categories.class);
+      criteriaQuery.select(categoryRoot).where( criteriaBuilder.equal(categoryRoot.get("label"),categoryLabel));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
     } finally {
       em.close();
     }
   }
 
   @SuppressWarnings("unchecked")
-  public List<Categories> findCategoriesByExacLabel(String categoryName){
-    try{
+  public List<Categories> findCategoriesByApproximateLabel(String categoryLabel) {
+    EntityManager em = getEntityManager();
+    try {
       CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
       CriteriaQuery<Categories> criteriaQuery = criteriaBuilder.createQuery(Categories.class);
       Root<Categories> categoryRoot = criteriaQuery.from(Categories.class);
-      criteriaQuery.select(categoryRoot).where( criteriaBuilder.equal(categoryRoot.get("label"),categoryName));
+      criteriaQuery.select(categoryRoot).where(criteriaBuilder.like(categoryRoot.<String> get("label"),'%' + categoryLabel + '%'));
       Query query = em.createQuery(criteriaQuery);
       return query.getResultList();
-    }finally{
+    } finally {
       em.close();
     }
   }
 
   @SuppressWarnings("unchecked")
-  public List<Categories> findCategoriesByApproximateLabel(String categoryName){
-    try{
-      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-      CriteriaQuery<Categories> criteriaQuery = criteriaBuilder.createQuery(Categories.class);
-      Root<Categories> categoryRoot = criteriaQuery.from(Categories.class);
-      criteriaQuery.select(categoryRoot).where(criteriaBuilder.like(categoryRoot.<String> get("label"),"%"+categoryName+"%"));
-      Query query = em.createQuery(criteriaQuery);
-      return query.getResultList();
-    }finally{
-      em.close();
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  public List<Categories> findCategoriesByApproximateDescription(String categoryDescription){
-    try{
-      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-      CriteriaQuery<Categories> criteriaQuery = criteriaBuilder.createQuery(Categories.class);
-      Root<Categories> categoryRoot = criteriaQuery.from(Categories.class);
-      criteriaQuery.select(categoryRoot).where( criteriaBuilder.like(categoryRoot.<String> get("description"),"%"+categoryDescription+"%"));
-      Query query = em.createQuery(criteriaQuery);
-      return query.getResultList();
-    }finally{
-      em.close();
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  public List<Categories> findCategoriesByExactDescription(String categoryDescription){
-    try{
+  public List<Categories> findCategoriesByExactDescription(String categoryDescription) {
+    EntityManager em = getEntityManager();
+    try {
       CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
       CriteriaQuery<Categories> criteriaQuery = criteriaBuilder.createQuery(Categories.class);
       Root<Categories> categoryRoot = criteriaQuery.from(Categories.class);
       criteriaQuery.select(categoryRoot).where( criteriaBuilder.equal(categoryRoot.get("description"),categoryDescription));
       Query query = em.createQuery(criteriaQuery);
       return query.getResultList();
-    }finally{
+    } finally {
+      em.close();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Categories> findCategoriesByApproximateDescription(String categoryDescription) {
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Categories> criteriaQuery = criteriaBuilder.createQuery(Categories.class);
+      Root<Categories> categoryRoot = criteriaQuery.from(Categories.class);
+      criteriaQuery.select(categoryRoot).where(criteriaBuilder.like(categoryRoot.<String> get("description"),'%' + categoryDescription + '%'));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  public Categories findCategories(Integer id) {
+    EntityManager em = getEntityManager();
+    try {
+      return em.find(Categories.class, id);
+    } finally {
       em.close();
     }
   }

@@ -11,8 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -24,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "advertisers", catalog = "hyperPath", schema = "")
 @XmlRootElement
 public class Advertisers implements Serializable {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = -759891713591446299L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
@@ -107,8 +105,6 @@ public class Advertisers implements Serializable {
 
   @Override
   public boolean equals(Object object) {
-    // TODO: Warning - this method won't work in the case the id fields are
-    // not set
     if (!(object instanceof Advertisers)) {
       return false;
     }

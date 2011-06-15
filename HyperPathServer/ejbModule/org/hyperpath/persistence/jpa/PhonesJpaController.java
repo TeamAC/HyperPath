@@ -5,9 +5,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
+
 import org.hyperpath.persistence.entities.Entities;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +19,26 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class PhonesJpaController implements Serializable {
 
-  public PhonesJpaController(UserTransaction utx, EntityManagerFactory emf) {
+  private static final long serialVersionUID = -897430772120844618L;
+
+public PhonesJpaController(UserTransaction utx, EntityManagerFactory emf) {
     this.utx = utx;
     this.emf = emf;
   }
 
+public PhonesJpaController(EntityManager mockedEM) {
+  em = mockedEM;
+}
   private UserTransaction      utx = null;
   private EntityManagerFactory emf = null;
+  private EntityManager        em  = null;
 
   public EntityManager getEntityManager() {
+    if (em != null)
+      return em;
     return emf.createEntityManager();
   }
-
+  
   public void create(Phones phones) throws RollbackFailureException,
       Exception {
     if (phones.getEntitiesList() == null) {
@@ -196,17 +206,55 @@ public class PhonesJpaController implements Serializable {
     }
   }
 
-  public int getPhonesCount() {
+  
+  @SuppressWarnings("unchecked")
+  public List<Phones> findExactPhone(String phoneNumber) {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<Phones> rt = cq.from(Phones.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Phones> criteriaQuery = criteriaBuilder
+          .createQuery(Phones.class);
+      Root<Phones> phoneRoot = criteriaQuery.from(Phones.class);
+      criteriaQuery.select(phoneRoot).where(
+          criteriaBuilder.equal(phoneRoot.get("number"),
+              phoneNumber));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
     } finally {
       em.close();
     }
   }
 
+  @SuppressWarnings("unchecked")
+  public List<Phones> findApproximatePhones(String phoneNumber) {
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Phones> criteriaQuery = criteriaBuilder
+          .createQuery(Phones.class);
+      Root<Phones> phoneRoot = criteriaQuery.from(Phones.class);
+      criteriaQuery.select(phoneRoot).where(
+          criteriaBuilder.like(phoneRoot.<String> get("number"),
+              '%' + phoneNumber + '%'));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+  
+  public int getPhonesCount() throws Exception {
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Long> criteriaQuery = criteriaBuilder
+          .createQuery(Long.class);
+      Root<Phones> phoneRoot = criteriaQuery.from(Phones.class);
+      criteriaQuery.select(criteriaBuilder.count(phoneRoot));
+      Query q = em.createQuery(criteriaQuery);
+      return ((Long) q.getSingleResult()).intValue();
+    } finally {
+      	em.close();
+    }
+  }
 }
