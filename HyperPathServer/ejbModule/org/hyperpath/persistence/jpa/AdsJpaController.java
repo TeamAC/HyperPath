@@ -1,11 +1,13 @@
 package org.hyperpath.persistence.jpa;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
@@ -17,14 +19,23 @@ import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class AdsJpaController implements Serializable {
+  private static final long serialVersionUID = -3954156113997719506L;
 
   public AdsJpaController(UserTransaction utx, EntityManagerFactory emf) {
     this.utx = utx;
     this.emf = emf;
   }
 
+  /*
+   * This is used only in test mode for mocking the entity manager
+   */
+  private EntityManager        em  = null;
   private UserTransaction      utx = null;
   private EntityManagerFactory emf = null;
+
+  public AdsJpaController(EntityManager mockedEM) {
+    em = mockedEM;
+  }
 
   public EntityManager getEntityManager() {
     return emf.createEntityManager();
@@ -194,18 +205,18 @@ public class AdsJpaController implements Serializable {
     return findAdsEntities(false, maxResults, firstResult);
   }
 
-  private List<Ads> findAdsEntities(boolean all, int maxResults,
-                                    int firstResult) {
+  @SuppressWarnings("unchecked")
+  private List<Ads> findAdsEntities(boolean all, int maxResults, int firstResult) {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      cq.select(cq.from(Ads.class));
-      Query q = em.createQuery(cq);
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+      Query query = em.createQuery(criteriaQuery);
       if (!all) {
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        query.setFirstResult(firstResult);
       }
-      return q.getResultList();
+      return query.getResultList();
     } finally {
       em.close();
     }
@@ -223,14 +234,65 @@ public class AdsJpaController implements Serializable {
   public int getAdsCount() {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<Ads> rt = cq.from(Ads.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+      Root<Ads> AdsRoot = criteriaQuery.from(Ads.class);
+      criteriaQuery.select(criteriaBuilder.count(AdsRoot));
+      Query query = em.createQuery(criteriaQuery);
+      return ((Long) query.getSingleResult()).intValue();
     } finally {
       em.close();
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Ads> findAdsByAdvertiser(Advertisers advertiser) {
+    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("advertisers_id"),advertiser.getAdvertisersPK()));
+    Query query = em.createQuery(criteriaQuery);
+    return query.getResultList();
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Ads> findAdsByService(Services service) {
+    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("services_id"),service.getServicesPK()));
+    Query query = em.createQuery(criteriaQuery);
+    return query.getResultList();
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Ads> findAdsByStartDate(Date startDate) {
+    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("startDate"), startDate));
+    Query query = em.createQuery(criteriaQuery);
+    return query.getResultList();
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Ads> findAdsByEndDate(Date endDate) {
+    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("startDate"), endDate));
+    Query query = em.createQuery(criteriaQuery);
+    return query.getResultList();
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Ads> findAdsInBetween(Date startDate, Date endDate) {
+    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+    criteriaQuery.select(adsRoot).where( criteriaBuilder.between (adsRoot.<Date>get("startDate"), startDate, endDate));
+    Query query = em.createQuery(criteriaQuery);
+    return query.getResultList();
   }
 
 }
