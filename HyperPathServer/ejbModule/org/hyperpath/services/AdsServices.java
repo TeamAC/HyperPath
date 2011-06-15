@@ -171,4 +171,56 @@ public class AdsServices {
     return controller.getAdsCount();
   }
 
+  /**
+   * Find Ads by exact description
+   */
+  @WebMethod(operationName = "findAdsByExactDescription")
+  public List<Ads> findAdsByExactDescription(@WebParam(name = "adsDescription") String adsDescription)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new AdsJpaController(utx, emf);
+    return controller.findAdsByExactDescription(adsDescription);
+  }
+
+  /**
+   * Find Ads by exact short description
+   */
+  @WebMethod(operationName = "findAdsByExactShortDescription")
+  public List<Ads> findAdsByExactShortDescription(@WebParam(name = "adsDescription") String adsShortDescription)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new AdsJpaController(utx, emf);
+    return controller.findAdsByExactDescription(adsShortDescription);
+  }
+
+  /**
+   * Find Ads by approximate description
+   */
+  @WebMethod(operationName = "findAdsByApproximateDescription")
+  public List<Ads> findAdsByApproximateDescription(@WebParam(name = "adsDescription") String adsDescription)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new AdsJpaController(utx, emf);
+    return controller.findAdsByApproximateDescription(adsDescription);
+  }
+
+  /**
+   * Find Ads by approximate short description
+   */
+  @WebMethod(operationName = "findAdsByApproximateShortDescription")
+  public List<Ads> findAdsByApproximateShortDescription(@WebParam(name = "adsDescription") String adsShortDescription)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new AdsJpaController(utx, emf);
+    return controller.findAdsByApproximateShortDescription(adsShortDescription);
+  }
+
 }
