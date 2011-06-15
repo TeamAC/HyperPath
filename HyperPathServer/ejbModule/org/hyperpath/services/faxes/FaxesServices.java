@@ -11,17 +11,16 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
+
 import org.hyperpath.persistence.entities.Faxes;
+import org.hyperpath.persistence.jpa.FaxesJpaController;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-/**
- * 
- * @author adel
- */
 @WebService(serviceName = "FaxesServices")
 @Stateless()
 public class FaxesServices {
@@ -31,40 +30,87 @@ public class FaxesServices {
   @PersistenceUnit
   EntityManagerFactory    emf;
 
+  FaxesJpaController     controller;
+  
   /**
-   * Web service operation
+   * List all faxes
    */
-  @WebMethod(operationName = "addFaxes")
-  public void addFaxes(@WebParam(name = "faxe") Faxes faxe) throws Exception,
-      PreexistingEntityException, RollbackFailureException {
+  @WebMethod(operationName = "listAllFaxes")
+  public List<Faxes> listAllFaxes() throws Exception,
+      RollbackFailureException, NonexistentEntityException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new FaxesJpaController(utx, emf);
+    return controller.findFaxesEntities();
+  }
+  
+  /**
+   * Add new fax
+   */
+  @WebMethod(operationName = "addFax")
+  public void addFax(@WebParam(name = "fax") Faxes fax)
+      throws Exception, PreexistingEntityException,
+      RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new FaxesJpaController(utx, emf);
+    controller.create(fax);
   }
 
   /**
-   * Web service operation
+   * Update fax address
    */
-  @WebMethod(operationName = "updateFaxes")
-  public void updateFaxes(@WebParam(name = "faxe") Faxes faxe)
+  @WebMethod(operationName = "updateFax")
+  public void updateFax(@WebParam(name = "fax") Faxes fax)
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new FaxesJpaController(utx, emf);
+    controller.edit(fax);
   }
 
   /**
-   * Web service operation
+   * Delete emacs address
    */
-  @WebMethod(operationName = "deleteFaxes")
-  public void deleteFaxes(@WebParam(name = "faxeId") Integer faxeId)
+  @WebMethod(operationName = "deleteFax")
+  public void deleteFax(@WebParam(name = "faxId") Integer faxId)
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new FaxesJpaController(utx, emf);
+    controller.destroy(faxId);
   }
 
   /**
-   * Web service operation
+   * Find fax by exact fax number
    */
-  @WebMethod(operationName = "findFaxes")
-  public List<Faxes> findFaxes(@WebParam(name = "faxe") String faxe)
+  @WebMethod(operationName = "findExactFaxes")
+  public List<Faxes> findExactFax(@WebParam(name = "fax") String faxNumber)
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new FaxesJpaController(utx, emf);
+    return controller.findExactFaxes(faxNumber);
+  }
+
+  /**
+   * Find fax address by address approximation
+   */
+  @WebMethod(operationName = "findAppoximateFax")
+  public List<Faxes> findAppoximateFax(@WebParam(name = "fax") String faxNumber)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new FaxesJpaController(utx, emf);
+    return controller.findApproximateFaxes(faxNumber);
+  }
+
+  /**
+   * Find total fax number
+   */
+  @WebMethod(operationName = "countFaxes")
+  public Integer countFaxes() throws Exception, RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new FaxesJpaController(utx, emf);
+    return controller.getFaxesCount();
   }
 }
