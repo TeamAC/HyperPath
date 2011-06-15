@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.hyperpath.services.phones;
 
 import java.util.List;
@@ -21,10 +17,6 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-/**
- * 
- * @author adel
- */
 @WebService(serviceName = "PhonesServices")
 @Stateless()
 public class PhonesServices {
@@ -36,41 +28,39 @@ public class PhonesServices {
   PhonesJpaController     controller;
 
   /**
-   * Web service operation
+   * Add new Phone
    */
   @WebMethod(operationName = "addPhones")
   public void addPhones(@WebParam(name = "phone") Phones phone)
       throws Exception, PreexistingEntityException,
       RollbackFailureException {
+  	emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new PhonesJpaController(utx, emf);
+    controller.create(phone);
   }
 
   /**
-   * Web service operation
+   * Update an existing phone
    */
   @WebMethod(operationName = "updatePhones")
   public void updatePhones(@WebParam(name = "phone") Phones phone)
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
+  	emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new PhonesJpaController(utx, emf);
+    controller.edit(phone);
   }
 
   /**
-   * Web service operation
+   * Delete a phone by id
    */
   @WebMethod(operationName = "deletePhones")
   public void deletePhones(@WebParam(name = "phoneId") Integer phoneId)
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
-  }
-
-  /**
-   * Web service operation
-   */
-  @WebMethod(operationName = "findPhones")
-  public List<Phones> findPhones(@WebParam(name = "phone") String phone)
-      throws Exception, NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  	emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new PhonesJpaController(utx, emf);
+    controller.destroy(phoneId);
   }
 
   /**

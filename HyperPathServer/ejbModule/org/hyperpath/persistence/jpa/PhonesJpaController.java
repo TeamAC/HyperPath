@@ -180,18 +180,18 @@ public PhonesJpaController(EntityManager mockedEM) {
     return findPhonesEntities(false, maxResults, firstResult);
   }
 
-  private List<Phones> findPhonesEntities(boolean all, int maxResults,
-                                          int firstResult) {
+  @SuppressWarnings("unchecked")
+  private List<Phones> findPhonesEntities(boolean all, int maxResults, int firstResult) {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      cq.select(cq.from(Phones.class));
-      Query q = em.createQuery(cq);
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Phones> criteriaQuery = criteriaBuilder.createQuery(Phones.class);
+      Query query = em.createQuery(criteriaQuery);
       if (!all) {
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        query.setFirstResult(firstResult);
       }
-      return q.getResultList();
+      return query.getResultList();
     } finally {
       em.close();
     }
@@ -230,8 +230,7 @@ public PhonesJpaController(EntityManager mockedEM) {
     EntityManager em = getEntityManager();
     try {
       CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-      CriteriaQuery<Phones> criteriaQuery = criteriaBuilder
-          .createQuery(Phones.class);
+      CriteriaQuery<Phones> criteriaQuery = criteriaBuilder.createQuery(Phones.class);
       Root<Phones> phoneRoot = criteriaQuery.from(Phones.class);
       criteriaQuery.select(phoneRoot).where(
           criteriaBuilder.like(phoneRoot.<String> get("number"),
