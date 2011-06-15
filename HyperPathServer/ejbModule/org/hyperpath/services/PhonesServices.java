@@ -26,7 +26,18 @@ public class PhonesServices {
   EntityManagerFactory    emf;
 
   PhonesJpaController     controller;
-
+  
+  /**
+   * List all phones
+   */
+  @WebMethod(operationName = "listAllPhones")
+  public List<Phones> listAllPhones() throws Exception,
+      RollbackFailureException, NonexistentEntityException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new PhonesJpaController(utx, emf);
+    return controller.findPhonesEntities();
+  }
+  
   /**
    * Add new Phone
    */
