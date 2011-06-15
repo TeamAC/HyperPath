@@ -1,4 +1,4 @@
-package org.hyperpath.services.addresses;
+package org.hyperpath.services;
 
 import java.util.List;
 import javax.annotation.Resource;
