@@ -155,7 +155,7 @@ public class AdsServices {
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
     controller = new AdsJpaController(utx, emf);
-    return controller.listAllAds();
+    return controller.findAdsEntities();
   }
 
   /**
