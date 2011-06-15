@@ -5,9 +5,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
+
 import org.hyperpath.persistence.entities.Entities;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,19 +19,29 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class FaxesJpaController implements Serializable {
 
-  public FaxesJpaController(UserTransaction utx, EntityManagerFactory emf) {
+  private static final long serialVersionUID = -7155478827388953032L;
+  
+  private EntityManager        em               = null;
+  private UserTransaction      utx              = null;
+  private EntityManagerFactory emf              = null;
+
+  public FaxesJpaController(EntityManager mockedEM) {
+    em = mockedEM;
+  }
+  
+	public FaxesJpaController(UserTransaction utx, EntityManagerFactory emf) {
     this.utx = utx;
     this.emf = emf;
   }
 
-  private UserTransaction      utx = null;
-  private EntityManagerFactory emf = null;
-
   public EntityManager getEntityManager() {
+    if (em != null)
+      return em;
     return emf.createEntityManager();
   }
 
-  public void create(Faxes faxes) throws RollbackFailureException, Exception {
+  public void create(Faxes faxes) throws RollbackFailureException, 
+  Exception {
     if (faxes.getEntitiesList() == null) {
       faxes.setEntitiesList(new ArrayList<Entities>());
     }
@@ -169,18 +181,50 @@ public class FaxesJpaController implements Serializable {
     return findFaxesEntities(false, maxResults, firstResult);
   }
 
+  @SuppressWarnings("unchecked")
   private List<Faxes> findFaxesEntities(boolean all, int maxResults,
                                         int firstResult) {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      cq.select(cq.from(Faxes.class));
-      Query q = em.createQuery(cq);
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Faxes> criteriaQuery = criteriaBuilder.createQuery(Faxes.class);
+      Query query = em.createQuery(criteriaQuery);
       if (!all) {
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        query.setFirstResult(firstResult);
       }
-      return q.getResultList();
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  
+  @SuppressWarnings("unchecked")
+  public List<Faxes> findExactFaxes(String faxNumber) {
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Faxes> criteriaQuery = criteriaBuilder.createQuery(Faxes.class);
+      Root<Faxes> faxRoot = criteriaQuery.from(Faxes.class);
+      criteriaQuery.select(faxRoot).where( criteriaBuilder.equal(faxRoot.get("address"),faxNumber));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Faxes> findApproximateFaxes(String faxNumber) {
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Faxes> criteriaQuery = criteriaBuilder.createQuery(Faxes.class);
+      Root<Faxes> faxRoot = criteriaQuery.from(Faxes.class);
+      criteriaQuery.select(faxRoot).where(criteriaBuilder.like(faxRoot.<String> get("address"),'%' + faxNumber + '%'));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
     } finally {
       em.close();
     }
@@ -198,11 +242,12 @@ public class FaxesJpaController implements Serializable {
   public int getFaxesCount() {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<Faxes> rt = cq.from(Faxes.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+      Root<Faxes> faxRoot = criteriaQuery.from(Faxes.class);
+      criteriaQuery.select(criteriaBuilder.count(faxRoot));
+      Query query = em.createQuery(criteriaQuery);
+      return ((Long) query.getSingleResult()).intValue();
     } finally {
       em.close();
     }
