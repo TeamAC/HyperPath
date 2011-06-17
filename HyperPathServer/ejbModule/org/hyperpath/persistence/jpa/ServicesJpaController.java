@@ -440,9 +440,19 @@ public class ServicesJpaController implements Serializable {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public List<Services> findServicesByLabel(String serviceLabel) {
-    // TODO Auto-generated method stub
-    return null;
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Services> criteriaQuery = criteriaBuilder.createQuery(Services.class);
+      Root<Services> serviceRoot = criteriaQuery.from(Services.class);
+      criteriaQuery.select(serviceRoot).where( criteriaBuilder.equal(serviceRoot.get("label"),serviceLabel));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
   }
 
   public List<Services> findServicesByCategory(Categories category) {
