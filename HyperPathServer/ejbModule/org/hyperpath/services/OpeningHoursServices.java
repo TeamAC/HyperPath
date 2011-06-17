@@ -1,4 +1,4 @@
-package org.hyperpath.services.openinghours;
+package org.hyperpath.services;
 
 import javax.annotation.Resource;
 import javax.jws.WebService;
