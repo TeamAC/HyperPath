@@ -254,4 +254,14 @@ public class ReviewsJpaController implements Serializable {
     }
   }
 
+  public List<Reviews> findReviewsByService(Services service) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Reviews> findReviewsByClient(Clients client) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
 }
