@@ -5,11 +5,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.Address;
+import org.hyperpath.persistence.entities.Ads;
 import org.hyperpath.persistence.entities.Clients;
 import org.hyperpath.persistence.entities.Entities;
 import org.hyperpath.persistence.entities.Reviews;
@@ -315,25 +317,65 @@ public class ClientsJpaController implements Serializable {
     // TODO Auto-generated method stub
     return null;
   }
-
+  
+  @SuppressWarnings("unchecked")
   public List<Clients> findClientsByName(String clientName) {
-    // TODO Auto-generated method stub
-    return null;
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Clients> criteriaQuery = criteriaBuilder.createQuery(Clients.class);
+      Root<Clients> clientRoot = criteriaQuery.from(Clients.class);
+      criteriaQuery.select(clientRoot).where( criteriaBuilder.equal(clientRoot.<String>get("name"),clientName));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
   }
 
+  @SuppressWarnings("unchecked")
   public List<Clients> findClientsByLastName(String clientLastName) {
-    // TODO Auto-generated method stub
-    return null;
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Clients> criteriaQuery = criteriaBuilder.createQuery(Clients.class);
+      Root<Clients> clientRoot = criteriaQuery.from(Clients.class);
+      criteriaQuery.select(clientRoot).where( criteriaBuilder.equal(clientRoot.get("lastName"),clientLastName));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
   }
 
+  @SuppressWarnings("unchecked")
   public List<Clients> findClientsByLogin(String clientLogin) {
-    // TODO Auto-generated method stub
-    return null;
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Clients> criteriaQuery = criteriaBuilder.createQuery(Clients.class);
+      Root<Clients> clientRoot = criteriaQuery.from(Clients.class);
+      criteriaQuery.select(clientRoot).where( criteriaBuilder.equal(clientRoot.get("login"),clientLogin));
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
   }
 
+  @SuppressWarnings("unchecked")
   public List<Clients> findClientsByBirthDate(String clientBirthDate) {
-    // TODO Auto-generated method stub
-    return null;
+    EntityManager em = getEntityManager();
+    try {
+	    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+	    CriteriaQuery<Clients> criteriaQuery = criteriaBuilder.createQuery(Clients.class);
+	    Root<Clients> clientRoot = criteriaQuery.from(Clients.class);
+	    criteriaQuery.select(clientRoot).where( criteriaBuilder.equal(clientRoot.get("birthdate"), clientBirthDate));
+	    Query query = em.createQuery(criteriaQuery);
+	    return query.getResultList();
+    } finally {
+      em.close();
+    }
   }
 
   public List<Clients> findClientsByAge(int clientAge) {
