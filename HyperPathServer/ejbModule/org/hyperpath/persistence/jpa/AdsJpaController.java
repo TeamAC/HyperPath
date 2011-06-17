@@ -247,52 +247,77 @@ public class AdsJpaController implements Serializable {
 
   @SuppressWarnings("unchecked")
   public List<Ads> findAdsByAdvertiser(Advertisers advertiser) {
-    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
-    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
-    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("advertisers_id"),advertiser.getAdvertisersPK()));
-    Query query = em.createQuery(criteriaQuery);
-    return query.getResultList();
+    EntityManager em = getEntityManager();
+    try {
+	    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+	    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+	    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+	    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("advertisers_id"),advertiser.getAdvertisersPK()));
+	    Query query = em.createQuery(criteriaQuery);
+	    return query.getResultList();
+	  } finally {
+	    em.close();
+	  }
   }
 
   @SuppressWarnings("unchecked")
   public List<Ads> findAdsByService(Services service) {
-    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
-    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
-    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("services_id"),service.getServicesPK()));
-    Query query = em.createQuery(criteriaQuery);
-    return query.getResultList();
+    EntityManager em = getEntityManager();
+    try {
+	    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+	    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+	    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+	    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("services_id"),service.getServicesPK()));
+	    Query query = em.createQuery(criteriaQuery);
+	    return query.getResultList();
+	  } finally {
+	    em.close();
+	  }
   }
 
   @SuppressWarnings("unchecked")
   public List<Ads> findAdsByStartDate(Date startDate) {
-    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
-    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
-    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("startDate"), startDate));
-    Query query = em.createQuery(criteriaQuery);
-    return query.getResultList();
+    EntityManager em = getEntityManager();
+    try {
+	    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+	    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+	    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+	    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("startDate"), startDate));
+	    Query query = em.createQuery(criteriaQuery);
+	    return query.getResultList();
+	  } finally {
+	    em.close();
+	  }
   }
 
   @SuppressWarnings("unchecked")
   public List<Ads> findAdsByEndDate(Date endDate) {
-    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
-    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
-    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("startDate"), endDate));
-    Query query = em.createQuery(criteriaQuery);
-    return query.getResultList();
+    EntityManager em = getEntityManager();
+    try {
+	    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+	    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+	    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+	    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("startDate"), endDate));
+	    Query query = em.createQuery(criteriaQuery);
+	    return query.getResultList();
+	  } finally {
+	    em.close();
+	  }
   }
 
   @SuppressWarnings("unchecked")
   public List<Ads> findAdsInBetween(Date startDate, Date endDate) {
-    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
-    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
-    criteriaQuery.select(adsRoot).where( criteriaBuilder.between (adsRoot.<Date>get("startDate"), startDate, endDate));
-    Query query = em.createQuery(criteriaQuery);
-    return query.getResultList();
+    EntityManager em = getEntityManager();
+    try {
+	    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+	    CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
+	    Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
+	    criteriaQuery.select(adsRoot).where( criteriaBuilder.between (adsRoot.<Date>get("startDate"), startDate, endDate));
+	    Query query = em.createQuery(criteriaQuery);
+	    return query.getResultList();
+    } finally {
+      em.close();
+    }
   }
 
   @SuppressWarnings("unchecked")
