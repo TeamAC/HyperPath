@@ -5,17 +5,25 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Address;
+import org.hyperpath.persistence.entities.Advertisers;
+import org.hyperpath.persistence.entities.Categories;
+import org.hyperpath.persistence.entities.Clients;
+import org.hyperpath.persistence.entities.Emails;
 import org.hyperpath.persistence.entities.Entities;
+import org.hyperpath.persistence.entities.Services;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class AddressJpaController implements Serializable {
+  private static final long serialVersionUID = -7707097477154823435L;
 
   public AddressJpaController(UserTransaction utx, EntityManagerFactory emf) {
     this.utx = utx;
@@ -171,18 +179,19 @@ public class AddressJpaController implements Serializable {
     return findAddressEntities(false, maxResults, firstResult);
   }
 
+  @SuppressWarnings("unchecked")
   private List<Address> findAddressEntities(boolean all, int maxResults,
                                             int firstResult) {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      cq.select(cq.from(Address.class));
-      Query q = em.createQuery(cq);
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Emails> criteriaQuery = criteriaBuilder.createQuery(Emails.class);
+      Query query = em.createQuery(criteriaQuery);
       if (!all) {
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        query.setFirstResult(firstResult);
       }
-      return q.getResultList();
+      return query.getResultList();
     } finally {
       em.close();
     }
@@ -197,40 +206,45 @@ public class AddressJpaController implements Serializable {
     }
   }
 
-  public Address findAddress(Address address) {
+  public int getAddressCount() {
     EntityManager em = getEntityManager();
     try {
-      Query findAddressQuery = em.createNamedQuery("Address.findByAll");
-      findAddressQuery.setParameter("street", address.getStreet());
-      findAddressQuery.setParameter("zip", address.getZip());
-      findAddressQuery.setParameter("city", address.getCity());
-      findAddressQuery.setParameter("country", address.getCountry());
-      findAddressQuery.setParameter("ext", address.getExt());
-      List<Address> addresses = findAddressQuery.getResultList();
-      if (addresses.isEmpty()) {
-        return null;
-      } else {
-        address.setId(addresses.get(0).getId());
-        return address;
-      }
-    } catch (Exception E) {
-      return null;
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+      Root<Address> addressRoot = criteriaQuery.from(Address.class);
+      criteriaQuery.select(criteriaBuilder.count(addressRoot));
+      Query query = em.createQuery(criteriaQuery);
+      return ((Long) query.getSingleResult()).intValue();
     } finally {
       em.close();
     }
   }
 
-  public int getAddressCount() {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<Address> rt = cq.from(Address.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
-    } finally {
-      em.close();
-    }
+  public List<Address> findApproximateAddressesByCategory(Categories category, String address) {
+    // TODO Auto-generated method stub
+    return null;
   }
+
+  public List<Address> findAddressByRange(Categories category, String location, int range) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findServicesByAddress(Address address) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Advertisers> findAdvertizersByAddress(Address address) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Clients> findClientsByAddress(Address address) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+
 
 }
