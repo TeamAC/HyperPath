@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.hyperpath.persistence.jpa;
 
 import java.io.Serializable;
@@ -18,11 +14,8 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-/**
- * 
- * @author adel
- */
 public class GpslocationJpaController implements Serializable {
+  private static final long serialVersionUID = -8056592577113286641L;
 
   public GpslocationJpaController(UserTransaction utx,
       EntityManagerFactory emf) {

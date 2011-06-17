@@ -17,6 +17,7 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class OpeningHoursJpaController implements Serializable {
+  private static final long serialVersionUID = -2301993862953287459L;
 
   public OpeningHoursJpaController(UserTransaction utx,
       EntityManagerFactory emf) {

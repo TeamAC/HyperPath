@@ -17,6 +17,7 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class ReviewsJpaController implements Serializable {
+  private static final long serialVersionUID = 4270693784161684160L;
 
   public ReviewsJpaController(UserTransaction utx, EntityManagerFactory emf) {
     this.utx = utx;

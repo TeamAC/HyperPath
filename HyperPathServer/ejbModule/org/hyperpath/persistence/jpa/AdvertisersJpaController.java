@@ -23,6 +23,7 @@ import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class AdvertisersJpaController implements Serializable {
+  private static final long serialVersionUID = 5591474412841830570L;
 
   public AdvertisersJpaController(UserTransaction utx,
       EntityManagerFactory emf) {
