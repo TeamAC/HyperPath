@@ -31,14 +31,19 @@ public class AdvertisersJpaController implements Serializable {
     this.utx = utx;
     this.emf = emf;
   }
-
+  
+  /*
+   * This is used only in test mode for mocking the entity manager
+   */
+  private EntityManager        em  = null;
   private UserTransaction      utx = null;
   private EntityManagerFactory emf = null;
 
   public EntityManager getEntityManager() {
+    if (em != null)
+      return em;
     return emf.createEntityManager();
   }
-
   public void create(Advertisers advertisers)
       throws PreexistingEntityException, RollbackFailureException,
       Exception {
@@ -318,8 +323,7 @@ public class AdvertisersJpaController implements Serializable {
   }
 
   public Advertisers findAdvertiserByAd(Advertisers ad) {
-    // TODO Auto-generated method stub
-    return null;
+  	// TODO Auto-generated method stub
+  return null;
   }
-
 }
