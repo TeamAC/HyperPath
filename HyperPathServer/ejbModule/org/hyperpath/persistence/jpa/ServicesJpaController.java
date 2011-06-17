@@ -8,11 +8,15 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
+
+import org.hyperpath.persistence.entities.Address;
+import org.hyperpath.persistence.entities.Gpslocation;
 import org.hyperpath.persistence.entities.OpeningHours;
 import org.hyperpath.persistence.entities.Entities;
 import org.hyperpath.persistence.entities.Categories;
 import org.hyperpath.persistence.entities.Clients;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.hyperpath.persistence.entities.Reviews;
 import org.hyperpath.persistence.entities.Ads;
@@ -430,6 +434,66 @@ public class ServicesJpaController implements Serializable {
     } finally {
       em.close();
     }
+  }
+
+  public List<Services> findServicesByLabel(String serviceLabel) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findServicesByCategory(Categories category) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findServicesByGpsLocation(Gpslocation gpsLocation,
+                                                  int range) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findServiceByRating(int rating, Categories category) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findServicesByUser(Clients client) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findServicesByAddress(Address address) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findServicesPhone(String phone) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findServicesByFax(String fax) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findServicesByOpeningTime(Categories category,
+                                                  Date startTime) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findServicesByClosingTime(Categories category,
+                                                  Date endTime) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findServicesByTimeRange(Categories category,
+                                                  Date startTime,
+                                                  Date endTime) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }
