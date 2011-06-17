@@ -1,8 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.hyperpath.services.faxes;
+package org.hyperpath.services;
 
 import java.util.List;
 import javax.annotation.Resource;
@@ -31,7 +27,7 @@ public class FaxesServices {
   EntityManagerFactory    emf;
 
   FaxesJpaController     controller;
-  
+
   /**
    * List all faxes
    */
@@ -42,7 +38,7 @@ public class FaxesServices {
     controller = new FaxesJpaController(utx, emf);
     return controller.findFaxesEntities();
   }
-  
+
   /**
    * Add new fax
    */
