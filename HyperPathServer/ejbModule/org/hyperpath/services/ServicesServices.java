@@ -265,6 +265,6 @@ public class ServicesServices {
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
     controller = new ServicesJpaController(utx, emf);
-    return controller.findServicesByClosingTime(category, startTime, endTime);
+    return controller.findServicesByTimeRange(category, startTime, endTime);
   }
 }
