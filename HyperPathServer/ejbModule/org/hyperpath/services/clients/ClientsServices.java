@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.hyperpath.services.clients;
 
 import java.util.List;
@@ -11,17 +7,15 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Clients;
+import org.hyperpath.persistence.jpa.ClientsJpaController;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-/**
- * 
- * @author adel
- */
 @WebService(serviceName = "ClientsServices")
 @Stateless()
 public class ClientsServices {
@@ -31,111 +25,140 @@ public class ClientsServices {
   @PersistenceUnit
   EntityManagerFactory    emf;
 
+  ClientsJpaController controller;
+
   /**
-   * Web service operation
+   * Find clients by address
    */
-  @WebMethod(operationName = "findClientByAddress")
-  public List<Clients> findClientByAddress(
-                                           @WebParam(name = "address") Address address)
-    throws Exception,
-      NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findClientsByAddress")
+  public List<Clients> findClientsByAddress(@WebParam(name = "address") Address address)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ClientsJpaController(utx, emf);
+    return controller.findClientsByAddress(address);
   }
 
   /**
-   * Web service operation
+   * Find clients by phones
    */
-  @WebMethod(operationName = "findClientPhone")
-  public List<Clients> findClientPhone(@WebParam(name = "phone") String phone)
-      throws Exception, NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findClientsByPhone")
+  public List<Clients> findClientsByPhone(@WebParam(name = "phone") String phone)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ClientsJpaController(utx, emf);
+    return controller.findClientsByPhone(phone);
   }
 
   /**
-   * Web service operation
+   * Find clients by fax
    */
-  @WebMethod(operationName = "findClientByFax")
-  public List<Clients> findClientByFax(@WebParam(name = "fax") String fax)
-      throws Exception, NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findClientsByFax")
+  public List<Clients> findClientsByFax(@WebParam(name = "fax") String fax)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ClientsJpaController(utx, emf);
+    return controller.findClientsByFax(fax);
   }
 
   /**
-   * Web service operation
+   * Find clients by mail
    */
-  @WebMethod(operationName = "findClientByMail")
-  public List<Clients> findClientByMail(@WebParam(name = "mail") String mail)
-      throws Exception, NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findClientsByMail")
+  public List<Clients> findClientsByMail(@WebParam(name = "mail") String mail)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ClientsJpaController(utx, emf);
+    return controller.findClientsByMail(mail);
   }
 
   /**
-   * Web service operation
+   * find clients by name
    */
-  @WebMethod(operationName = "findClientByName")
-  public List<Clients> findClientByName(
-                                        @WebParam(name = "clientName") String clientName)
-    throws Exception,
-      NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findClientsByName")
+  public List<Clients> findClientsByName(@WebParam(name = "clientName") String clientName)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ClientsJpaController(utx, emf);
+    return controller.findClientsByName(clientName);
   }
 
   /**
-   * Web service operation
+   * find clients by last name
    */
-  @WebMethod(operationName = "findClientByLastName")
-  public List<Clients> findClientByLastName(
-                                            @WebParam(name = "clientLastName") String clientLastName)
-      throws Exception, NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findClientsByLastName")
+  public List<Clients> findClientByLastName(@WebParam(name = "clientLastName") String clientLastName)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ClientsJpaController(utx, emf);
+    return controller.findClientsByLastName(clientLastName);
   }
 
   /**
-   * Web service operation
+   * Find clients by login
    */
-  @WebMethod(operationName = "findClientByLogin")
-  public List<Clients> findClientByLogin(
-                                         @WebParam(name = "clientLogin") String clientLogin)
-      throws Exception, NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findClientsByLogin")
+  public List<Clients> findClientsByLogin(@WebParam(name = "clientLogin") String clientLogin)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ClientsJpaController(utx, emf);
+    return controller.findClientsByLogin(clientLogin);
   }
 
   /**
-   * Web service operation
+   * Find clients by birth date
    */
-  @WebMethod(operationName = "findClientByBirthDate")
-  public List<Clients> findClientByBirthDate(
-                                             @WebParam(name = "clientBirthDate") String clientBirthDate)
-      throws Exception, NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findClientsByBirthDate")
+  public List<Clients> findClientsByBirthDate(@WebParam(name = "clientBirthDate") String clientBirthDate)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ClientsJpaController(utx, emf);
+    return controller.findClientsByBirthDate(clientBirthDate);
   }
 
   /**
-   * Web service operation
+   * Find clients by Age
    */
-  @WebMethod(operationName = "findClientByAge")
-  public List<Clients> findClientByAge(
-                                       @WebParam(name = "clientAge") String clientAge)
-    throws Exception,
-      NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findClientsByAge")
+  public List<Clients> findClientsByAge(@WebParam(name = "clientAge") int clientAge)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ClientsJpaController(utx, emf);
+    return controller.findClientsByAge(clientAge);
   }
 }
