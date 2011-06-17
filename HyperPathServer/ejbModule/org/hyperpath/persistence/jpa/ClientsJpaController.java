@@ -8,6 +8,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
+
+import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Clients;
 import org.hyperpath.persistence.entities.Entities;
 import org.hyperpath.persistence.entities.Reviews;
@@ -291,6 +293,51 @@ public class ClientsJpaController implements Serializable {
     } finally {
       em.close();
     }
+  }
+
+  public List<Clients> findClientsByAddress(Address address) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Clients> findClientsByPhone(String phone) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Clients> findClientsByFax(String fax) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Clients> findClientsByMail(String mail) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Clients> findClientsByName(String clientName) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Clients> findClientsByLastName(String clientLastName) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Clients> findClientsByLogin(String clientLogin) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Clients> findClientsByBirthDate(String clientBirthDate) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Clients> findClientsByAge(int clientAge) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }
