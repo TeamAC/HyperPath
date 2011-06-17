@@ -8,9 +8,13 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
+
+import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Advertisers;
 import org.hyperpath.persistence.entities.Entities;
 import org.hyperpath.persistence.entities.Ads;
+import org.hyperpath.persistence.entities.Services;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.hyperpath.persistence.jpa.exceptions.IllegalOrphanException;
@@ -287,6 +291,31 @@ public class AdvertisersJpaController implements Serializable {
     } finally {
       em.close();
     }
+  }
+
+  public List<Services> findAdvertisersByPhone(String phone) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findAdvertisersByAddress(Address address) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findAdvertisersByFax(String fax) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Services> findAdvertisersByMail(String mail) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public Advertisers findAdvertiserByAd(Advertisers ad) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }
