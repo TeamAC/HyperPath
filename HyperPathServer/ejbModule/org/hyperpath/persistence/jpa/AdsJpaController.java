@@ -49,14 +49,12 @@ public class AdsJpaController implements Serializable {
       em = getEntityManager();
       Advertisers advertisers = ads.getAdvertisers();
       if (advertisers != null) {
-        advertisers = em.getReference(advertisers.getClass(),
-            advertisers.getAdvertisersPK());
+        advertisers = em.getReference(advertisers.getClass(), advertisers.getAdvertisersPK());
         ads.setAdvertisers(advertisers);
       }
       Services services = ads.getServices();
       if (services != null) {
-        services = em.getReference(services.getClass(),
-            services.getServicesPK());
+        services = em.getReference(services.getClass(), services.getServicesPK());
         ads.setServices(services);
       }
       em.persist(ads);
@@ -73,13 +71,10 @@ public class AdsJpaController implements Serializable {
       try {
         utx.rollback();
       } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
+        throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
       }
       if (findAds(ads.getAdsPK()) != null) {
-        throw new PreexistingEntityException("Ads " + ads
-            + " already exists.", ex);
+        throw new PreexistingEntityException("Ads " + ads + " already exists.", ex);
       }
       throw ex;
     } finally {
@@ -102,23 +97,19 @@ public class AdsJpaController implements Serializable {
       Services servicesOld = persistentAds.getServices();
       Services servicesNew = ads.getServices();
       if (advertisersNew != null) {
-        advertisersNew = em.getReference(advertisersNew.getClass(),
-            advertisersNew.getAdvertisersPK());
+        advertisersNew = em.getReference(advertisersNew.getClass(), advertisersNew.getAdvertisersPK());
         ads.setAdvertisers(advertisersNew);
       }
       if (servicesNew != null) {
-        servicesNew = em.getReference(servicesNew.getClass(),
-            servicesNew.getServicesPK());
+        servicesNew = em.getReference(servicesNew.getClass(), servicesNew.getServicesPK());
         ads.setServices(servicesNew);
       }
       ads = em.merge(ads);
-      if (advertisersOld != null
-          && !advertisersOld.equals(advertisersNew)) {
+      if (advertisersOld != null && !advertisersOld.equals(advertisersNew)) {
         advertisersOld.getAdsList().remove(ads);
         advertisersOld = em.merge(advertisersOld);
       }
-      if (advertisersNew != null
-          && !advertisersNew.equals(advertisersOld)) {
+      if (advertisersNew != null && !advertisersNew.equals(advertisersOld)) {
         advertisersNew.getAdsList().add(ads);
         advertisersNew = em.merge(advertisersNew);
       }
@@ -135,16 +126,13 @@ public class AdsJpaController implements Serializable {
       try {
         utx.rollback();
       } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
+        throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
       }
       String msg = ex.getLocalizedMessage();
       if (msg == null || msg.length() == 0) {
         Integer id = ads.getAdsPK();
         if (findAds(id) == null) {
-          throw new NonexistentEntityException("The ads with id "
-              + id + " no longer exists.");
+          throw new NonexistentEntityException("The ads with id " + id + " no longer exists.");
         }
       }
       throw ex;
@@ -155,8 +143,12 @@ public class AdsJpaController implements Serializable {
     }
   }
 
-  public void destroy(Integer id) throws NonexistentEntityException,
-      RollbackFailureException, Exception {
+  public void destroy(Integer id)
+    throws
+    NonexistentEntityException,
+    RollbackFailureException,
+    Exception
+  {
     EntityManager em = null;
     try {
       utx.begin();
@@ -166,8 +158,7 @@ public class AdsJpaController implements Serializable {
         ads = em.getReference(Ads.class, id);
         ads.getAdsPK();
       } catch (EntityNotFoundException enfe) {
-        throw new NonexistentEntityException("The ads with id " + id
-            + " no longer exists.", enfe);
+        throw new NonexistentEntityException("The ads with id " + id + " no longer exists.", enfe);
       }
       Advertisers advertisers = ads.getAdvertisers();
       if (advertisers != null) {
@@ -185,9 +176,7 @@ public class AdsJpaController implements Serializable {
       try {
         utx.rollback();
       } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
+        throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
       }
       throw ex;
     } finally {
