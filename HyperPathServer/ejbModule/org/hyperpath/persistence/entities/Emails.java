@@ -8,7 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -17,10 +19,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
-@Table(name = "emails", catalog = "hyperPath", schema = "", uniqueConstraints = { @UniqueConstraint(columnNames = { "address" }) })
+@Table
+(
+    name = "emails",
+    catalog = "hyperPath",
+    schema = "",
+    uniqueConstraints = { @UniqueConstraint(columnNames = { "address" }) }
+)
 @XmlRootElement
 public class Emails implements Serializable {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 7184463618021947289L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
@@ -32,7 +40,13 @@ public class Emails implements Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "address", nullable = false, length = 100)
   private String            address;
-  @ManyToMany(mappedBy = "emailsList")
+  @JoinTable
+  (
+      name               = "entities_has_emails",
+      joinColumns        = { @JoinColumn(name = "emails_id",   referencedColumnName = "id", nullable = false)},
+      inverseJoinColumns = { @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false)}
+  )
+  @ManyToMany
   private List<Entities>    entitiesList;
 
   public Emails() {

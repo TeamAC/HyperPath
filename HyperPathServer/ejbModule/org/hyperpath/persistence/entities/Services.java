@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -24,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "services", catalog = "hyperPath", schema = "")
 @XmlRootElement
 public class Services implements Serializable {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = -6629047844832863611L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
@@ -52,8 +51,7 @@ public class Services implements Serializable {
   private int               rating;
   @ManyToMany(mappedBy = "servicesList")
   private List<Clients>     clientsList;
-  @JoinTable(name = "services_has_reviews", joinColumns = { @JoinColumn(name = "services_id", referencedColumnName = "id", nullable = false) }, inverseJoinColumns = { @JoinColumn(name = "reviews_id", referencedColumnName = "id", nullable = false) })
-  @ManyToMany
+  @ManyToMany(mappedBy = "servicesList")
   private List<Reviews>     reviewsList;
   @JoinColumn(name = "openingHours_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
   @ManyToOne(optional = false)

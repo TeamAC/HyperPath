@@ -18,18 +18,17 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class FaxesJpaController implements Serializable {
-
   private static final long serialVersionUID = -7155478827388953032L;
-  
-  private EntityManager        em               = null;
-  private UserTransaction      utx              = null;
-  private EntityManagerFactory emf              = null;
+
+  private EntityManager        em  = null;
+  private UserTransaction      utx = null;
+  private EntityManagerFactory emf = null;
 
   public FaxesJpaController(EntityManager mockedEM) {
     em = mockedEM;
   }
-  
-	public FaxesJpaController(UserTransaction utx, EntityManagerFactory emf) {
+
+  public FaxesJpaController(UserTransaction utx, EntityManagerFactory emf) {
     this.utx = utx;
     this.emf = emf;
   }
@@ -40,7 +39,7 @@ public class FaxesJpaController implements Serializable {
     return emf.createEntityManager();
   }
 
-  public void create(Faxes faxes) throws RollbackFailureException, 
+  public void create(Faxes faxes) throws RollbackFailureException,
   Exception {
     if (faxes.getEntitiesList() == null) {
       faxes.setEntitiesList(new ArrayList<Entities>());
@@ -182,8 +181,7 @@ public class FaxesJpaController implements Serializable {
   }
 
   @SuppressWarnings("unchecked")
-  private List<Faxes> findFaxesEntities(boolean all, int maxResults,
-                                        int firstResult) {
+  private List<Faxes> findFaxesEntities(boolean all, int maxResults, int firstResult) {
     EntityManager em = getEntityManager();
     try {
       CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
@@ -199,7 +197,7 @@ public class FaxesJpaController implements Serializable {
     }
   }
 
-  
+
   @SuppressWarnings("unchecked")
   public List<Faxes> findExactFaxes(String faxNumber) {
     EntityManager em = getEntityManager();

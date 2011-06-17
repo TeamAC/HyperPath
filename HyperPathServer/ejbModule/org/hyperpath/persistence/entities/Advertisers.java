@@ -109,8 +109,7 @@ public class Advertisers implements Serializable {
       return false;
     }
     Advertisers other = (Advertisers) object;
-    if ((this.Id == null && other.Id != null)
-        || (this.Id != null && !this.Id.equals(other.Id))) {
+    if ((this.Id == null && other.Id != null) || (this.Id != null && !this.Id.equals(other.Id))) {
       return false;
     }
     return true;
@@ -118,8 +117,7 @@ public class Advertisers implements Serializable {
 
   @Override
   public String toString() {
-    return "org.hyperpath.persistence.entities.Advertisers[ Id=" + Id
-        + " ]";
+    return "Advertisers[ Id=" + Id + " ]";
   }
 
 }

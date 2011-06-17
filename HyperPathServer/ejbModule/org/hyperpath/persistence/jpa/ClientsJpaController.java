@@ -259,18 +259,19 @@ public class ClientsJpaController implements Serializable {
     return findClientsEntities(false, maxResults, firstResult);
   }
 
+  @SuppressWarnings("unchecked")
   private List<Clients> findClientsEntities(boolean all, int maxResults,
                                             int firstResult) {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      cq.select(cq.from(Clients.class));
-      Query q = em.createQuery(cq);
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Clients> criteriaQuery = criteriaBuilder.createQuery(Clients.class);
+      Query query = em.createQuery(criteriaQuery);
       if (!all) {
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        query.setFirstResult(firstResult);
       }
-      return q.getResultList();
+      return query.getResultList();
     } finally {
       em.close();
     }
@@ -288,11 +289,12 @@ public class ClientsJpaController implements Serializable {
   public int getClientsCount() {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<Clients> rt = cq.from(Clients.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+      Root<Clients> clientsRoot = criteriaQuery.from(Clients.class);
+      criteriaQuery.select(criteriaBuilder.count(clientsRoot));
+      Query query = em.createQuery(criteriaQuery);
+      return ((Long) query.getSingleResult()).intValue();
     } finally {
       em.close();
     }

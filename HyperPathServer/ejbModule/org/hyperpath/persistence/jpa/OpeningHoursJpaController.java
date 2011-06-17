@@ -5,9 +5,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
+
 import org.hyperpath.persistence.entities.OpeningHours;
 import org.hyperpath.persistence.entities.Services;
 import java.util.ArrayList;
@@ -217,19 +219,20 @@ public class OpeningHoursJpaController implements Serializable {
     return findOpeningHoursEntities(false, maxResults, firstResult);
   }
 
+  @SuppressWarnings("unchecked")
   private List<OpeningHours> findOpeningHoursEntities(boolean all,
                                                       int maxResults,
                                                       int firstResult) {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      cq.select(cq.from(OpeningHours.class));
-      Query q = em.createQuery(cq);
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<OpeningHours> criteriaQuery = criteriaBuilder.createQuery(OpeningHours.class);
+      Query query = em.createQuery(criteriaQuery);
       if (!all) {
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        query.setFirstResult(firstResult);
       }
-      return q.getResultList();
+      return query.getResultList();
     } finally {
       em.close();
     }
@@ -247,11 +250,12 @@ public class OpeningHoursJpaController implements Serializable {
   public int getOpeningHoursCount() {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<OpeningHours> rt = cq.from(OpeningHours.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+      Root<OpeningHours> openningHoursRoot = criteriaQuery.from(OpeningHours.class);
+      criteriaQuery.select(criteriaBuilder.count(openningHoursRoot));
+      Query query = em.createQuery(criteriaQuery);
+      return ((Long) query.getSingleResult()).intValue();
     } finally {
       em.close();
     }

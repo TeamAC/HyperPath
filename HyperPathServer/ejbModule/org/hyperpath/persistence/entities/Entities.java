@@ -19,27 +19,40 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
-@Table(name = "entities", catalog = "hyperPath", schema = "")
+@Table
+(
+    name = "entities",
+    catalog = "hyperPath",
+    schema = ""
+)
 @XmlRootElement
 public class Entities implements Serializable {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = -1073372743231494671L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @NotNull
   @Column(name = "id", nullable = false)
   private Integer           id;
-  @JoinTable(name = "entities_has_emails", joinColumns = { @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false) }, inverseJoinColumns = { @JoinColumn(name = "emails_id", referencedColumnName = "id", nullable = false) })
-  @ManyToMany
+  @ManyToMany(mappedBy = "entitiesList")
   private List<Emails>      emailsList;
-  @JoinTable(name = "entities_has_faxes", joinColumns = { @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false) }, inverseJoinColumns = { @JoinColumn(name = "faxes_id", referencedColumnName = "id", nullable = false) })
+  @JoinTable
+  (
+      name = "entities_has_faxes",
+      joinColumns        = { @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false) },
+      inverseJoinColumns = { @JoinColumn(name = "faxes_id"   , referencedColumnName = "id", nullable = false) }
+  )
   @ManyToMany
   private List<Faxes>       faxesList;
-  @JoinTable(name = "entities_has_phones", joinColumns = { @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false) }, inverseJoinColumns = { @JoinColumn(name = "phones_id", referencedColumnName = "id", nullable = false) })
+  @JoinTable
+  (
+      name = "entities_has_phones",
+      joinColumns        = { @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false) },
+      inverseJoinColumns = { @JoinColumn(name = "phones_id",   referencedColumnName = "id", nullable = false) }
+  )
   @ManyToMany
   private List<Phones>      phonesList;
-  @JoinTable(name = "entities_has_address", joinColumns = { @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false) }, inverseJoinColumns = { @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false) })
-  @ManyToMany
+  @ManyToMany(mappedBy = "entitiesList")
   private List<Address>     addressList;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "entities")
   private List<Advertisers> advertisersList;

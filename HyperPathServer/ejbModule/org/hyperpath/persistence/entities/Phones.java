@@ -17,10 +17,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
-@Table(name = "phones", catalog = "hyperPath", schema = "", uniqueConstraints = { @UniqueConstraint(columnNames = { "number" }) })
+@Table
+(
+    name = "phones",
+    catalog = "hyperPath",
+    schema = "", uniqueConstraints = { @UniqueConstraint(columnNames = { "number" }) }
+)
 @XmlRootElement
 public class Phones implements Serializable {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = -2835404157465461659L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)

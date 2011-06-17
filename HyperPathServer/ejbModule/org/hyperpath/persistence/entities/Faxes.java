@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "faxes", catalog = "hyperPath", schema = "", uniqueConstraints = { @UniqueConstraint(columnNames = { "number" }) })
 @XmlRootElement
 public class Faxes implements Serializable {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = -4241159688276119218L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
