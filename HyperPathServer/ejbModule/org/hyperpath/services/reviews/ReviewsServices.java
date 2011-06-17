@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.hyperpath.services.reviews;
 
 import java.util.List;
@@ -11,19 +7,17 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Clients;
 import org.hyperpath.persistence.entities.Reviews;
 import org.hyperpath.persistence.entities.Services;
+import org.hyperpath.persistence.jpa.ReviewsJpaController;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-/**
- * 
- * @author adel
- */
 @WebService(serviceName = "ReviewsServices")
 @Stateless()
 public class ReviewsServices {
@@ -33,57 +27,81 @@ public class ReviewsServices {
   @PersistenceUnit
   EntityManagerFactory    emf;
 
+  ReviewsJpaController controller;
+
   /**
-   * Web service operation
+   * Add new review
    */
   @WebMethod(operationName = "addReview")
   public void addReview(@WebParam(name = "review") Reviews review)
-      throws Exception, PreexistingEntityException,
-      RollbackFailureException {
+    throws
+    Exception,
+    PreexistingEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ReviewsJpaController(utx, emf);
+    controller.create(review);
   }
 
   /**
-   * Web service operation
+   * Update review
    */
   @WebMethod(operationName = "updateReview")
   public void updateReview(@WebParam(name = "review") Reviews review)
-      throws Exception, NonexistentEntityException,
-      RollbackFailureException {
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ReviewsJpaController(utx, emf);
+    controller.edit(review);
   }
 
   /**
-   * Web service operation
+   * Delete review
    */
   @WebMethod(operationName = "deleteReview")
   public void deleteReview(@WebParam(name = "reviewId") Integer reviewId)
-      throws Exception, NonexistentEntityException,
-      RollbackFailureException {
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ReviewsJpaController(utx, emf);
+    controller.destroy(reviewId);
   }
 
   /**
-   * Web service operation
+   * Find reviews by service
    */
-  @WebMethod(operationName = "findReviewByService")
-  public List<Reviews> findReviewByService(
-                                           @WebParam(name = "service") Services service)
-    throws Exception,
-      NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findReviewsByService")
+  public List<Reviews> findReviewsByService(@WebParam(name = "service") Services service)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ReviewsJpaController(utx, emf);
+    return controller.findReviewsByService(service);
   }
 
   /**
-   * Web service operation
+   * Find reviews by client
    */
-  @WebMethod(operationName = "findReviewByClient")
-  public List<Reviews> findReviewByClient(
-                                          @WebParam(name = "client") Clients client)
-    throws Exception,
-      NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findReviewsByClient")
+  public List<Reviews> findReviewsByClient(@WebParam(name = "client") Clients client)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ReviewsJpaController(utx, emf);
+    return controller.findReviewsByClient(client);
   }
 
 }
