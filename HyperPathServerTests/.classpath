@@ -4,7 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/HyperPathServer"/>
-	<classpathentry kind="lib" path="/home/chedi/Devel/glassfish3/glassfish/modules/javax.persistence.jar"/>
-	<classpathentry kind="lib" path="/home/chedi/Downloads/mockito-all-1.8.5.jar"/>
+	<classpathentry kind="lib" path="libs/mockito-all-1.8.5.jar"/>
+	<classpathentry kind="lib" path="libs/javax.persistence.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
