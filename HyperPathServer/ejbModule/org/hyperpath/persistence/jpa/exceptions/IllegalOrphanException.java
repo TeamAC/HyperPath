@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IllegalOrphanException extends Exception {
+  private static final long serialVersionUID = -3616879454404233434L;
   private List<String> messages;
 
   public IllegalOrphanException(List<String> messages) {
