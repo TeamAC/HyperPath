@@ -65,12 +65,13 @@ public class Ads implements Serializable {
   }
 
   public Ads(Integer id, String description, String shortDescription,
-      Date startDate, Date endDate) {
+      Date startDate, Date endDate, Advertisers advertiser) {
     this.Id = id;
     this.description = description;
     this.shortDescription = shortDescription;
     this.startDate = startDate;
     this.endDate = endDate;
+    this.advertisers = advertiser;
   }
 
   public Integer getAdsPK() {
@@ -142,8 +143,7 @@ public class Ads implements Serializable {
       return false;
     }
     Ads other = (Ads) object;
-    if ((this.Id == null && other.Id != null)
-        || (this.Id != null && !this.Id.equals(other.Id))) {
+    if ((this.Id == null && other.Id != null) || (this.Id != null && !this.Id.equals(other.Id))) {
       return false;
     }
     return true;
@@ -151,7 +151,7 @@ public class Ads implements Serializable {
 
   @Override
   public String toString() {
-    return "org.hyperpath.persistence.entities.Ads[ Id=" + Id + " ]";
+    return "Ads[ Id=" + Id + " ]";
   }
 
 }
