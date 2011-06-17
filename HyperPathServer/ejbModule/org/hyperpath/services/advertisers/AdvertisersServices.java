@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.hyperpath.services.advertisers;
 
 import java.util.List;
@@ -11,19 +7,17 @@ import javax.ejb.Stateless;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Advertisers;
 import org.hyperpath.persistence.entities.Services;
+import org.hyperpath.persistence.jpa.AdvertisersJpaController;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-/**
- * 
- * @author adel
- */
 @WebService(serviceName = "AdvertisersServices")
 @Stateless()
 public class AdvertisersServices {
@@ -33,93 +27,125 @@ public class AdvertisersServices {
   @PersistenceUnit
   EntityManagerFactory    emf;
 
+  AdvertisersJpaController controller;
+
   /**
-   * Web service operation
+   * Add new advertiser
    */
   @WebMethod(operationName = "addAdvertizer")
-  public void addService(@WebParam(name = "advertizer") Advertisers service)
-      throws Exception, PreexistingEntityException,
-      RollbackFailureException {
+  public void addService(@WebParam(name = "advertizer") Advertisers advertiser)
+    throws
+    Exception,
+    PreexistingEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new AdvertisersJpaController(utx, emf);
+    controller.create(advertiser);
   }
 
   /**
-   * Web service operation
+   * Find advertiser by address
    */
-  @WebMethod(operationName = "findServicesByAddress")
-  public List<Services> findServicesByAddress(
-                                              @WebParam(name = "address") Address address)
-    throws Exception,
-      NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findAdvertisersByAddress")
+  public List<Services> findAdvertisersByAddress(@WebParam(name = "address") Address address)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new AdvertisersJpaController(utx, emf);
+    return controller.findAdvertisersByAddress(address);
   }
 
   /**
-   * Web service operation
+   * Find advertiser by phone
    */
-  @WebMethod(operationName = "findServicesPhone")
-  public List<Services> findServicesPhone(
-                                          @WebParam(name = "phone") String phone)
-    throws Exception,
-      NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findAdvertisersByPhone")
+  public List<Services> findAdvertiserByPhone(@WebParam(name = "phone") String phone)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new AdvertisersJpaController(utx, emf);
+    return controller.findAdvertisersByPhone(phone);
   }
 
   /**
-   * Web service operation
+   * Find advertiser by fax
    */
-  @WebMethod(operationName = "findServicesByFax")
-  public List<Services> findServicesByFax(@WebParam(name = "fax") String fax)
-      throws Exception, NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findAdvertisersByFax")
+  public List<Services> findAdvertisersByFax(@WebParam(name = "fax") String fax)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new AdvertisersJpaController(utx, emf);
+    return controller.findAdvertisersByFax(fax);
   }
 
   /**
-   * Web service operation
+   * Find advertiser by mail
    */
-  @WebMethod(operationName = "findServicesByMail")
-  public List<Services> findServicesByMail(
-                                           @WebParam(name = "mail") String mail)
-    throws Exception,
-      NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+  @WebMethod(operationName = "findAdvertisersByMail")
+  public List<Services> findAdvertisersByMail(@WebParam(name = "mail") String mail)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new AdvertisersJpaController(utx, emf);
+    return controller.findAdvertisersByMail(mail);
   }
 
   /**
-   * Web service operation
+   * Update advertiser
    */
   @WebMethod(operationName = "updateAdvertiser")
-  public void updateAdvertiser(
-                               @WebParam(name = "advertiser") Advertisers advertiser)
-      throws Exception, NonexistentEntityException,
-      RollbackFailureException {
+  public void updateAdvertiser(@WebParam(name = "advertiser") Advertisers advertiser)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new AdvertisersJpaController(utx, emf);
+    controller.edit(advertiser);
   }
 
   /**
-   * Web service operation
+   * Delete advertiser
    */
   @WebMethod(operationName = "deleteAdvertiser")
-  public void deleteAdvertiser(
-                               @WebParam(name = "advertiserId") Integer advertiserId)
-      throws Exception, NonexistentEntityException,
-      RollbackFailureException {
+  public void deleteAdvertiser(@WebParam(name = "advertiserId") Integer advertiserId)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new AdvertisersJpaController(utx, emf);
+    controller.destroy(advertiserId);
   }
 
   /**
-   * Web service operation
+   * Find advertiser by Ad
    */
   @WebMethod(operationName = "findAdvertiserByAd")
   public Advertisers findAdvertiserByAd(@WebParam(name = "ad") Advertisers ad)
-      throws Exception, NonexistentEntityException,
-      RollbackFailureException {
-    // TODO write your implementation code here:
-    return null;
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new AdvertisersJpaController(utx, emf);
+    return controller.findAdvertiserByAd(ad);
   }
 }
