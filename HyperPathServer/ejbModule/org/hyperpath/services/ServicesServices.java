@@ -1,4 +1,4 @@
-package org.hyperpath.services.services;
+package org.hyperpath.services;
 
 import java.util.Date;
 import java.util.List;
