@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "openingHours", catalog = "hyperPath", schema = "")
 @XmlRootElement
 public class OpeningHours implements Serializable {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 7328467685187493531L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)

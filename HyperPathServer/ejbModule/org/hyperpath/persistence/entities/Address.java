@@ -8,7 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -17,11 +19,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
-@Table(name = "address", catalog = "hyperPath", schema = "", uniqueConstraints = { @UniqueConstraint(columnNames = {
-    "street", "zip", "city", "department", "country", "ext" }) })
+@Table
+(
+    name = "address",
+    catalog = "hyperPath",
+    schema = "",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"street", "zip", "city", "department", "country", "ext" }) }
+)
 @XmlRootElement
 public class Address implements Serializable {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 8184907376021330985L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
@@ -56,7 +63,13 @@ public class Address implements Serializable {
   @Size(max = 45)
   @Column(name = "ext", length = 45)
   private String            ext;
-  @ManyToMany(mappedBy = "addressList")
+  @JoinTable
+  (
+      name = "entities_has_address",
+      joinColumns        = {@JoinColumn(name = "address_id",  referencedColumnName = "id", nullable = false)},
+      inverseJoinColumns = {@JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false)}
+   )
+  @ManyToMany
   private List<Entities>    entitiesList;
 
   public Address() {
@@ -150,14 +163,11 @@ public class Address implements Serializable {
 
   @Override
   public boolean equals(Object object) {
-    // TODO: Warning - this method won't work in the case the id fields are
-    // not set
     if (!(object instanceof Address)) {
       return false;
     }
     Address other = (Address) object;
-    if ((this.id == null && other.id != null)
-        || (this.id != null && !this.id.equals(other.id))) {
+    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
       return false;
     }
     return true;

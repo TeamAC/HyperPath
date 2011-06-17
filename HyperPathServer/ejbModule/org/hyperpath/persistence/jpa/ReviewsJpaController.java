@@ -5,12 +5,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Clients;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hyperpath.persistence.entities.Faxes;
 import org.hyperpath.persistence.entities.Reviews;
 import org.hyperpath.persistence.entities.Services;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
@@ -19,15 +24,22 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 public class ReviewsJpaController implements Serializable {
   private static final long serialVersionUID = 4270693784161684160L;
 
+  private EntityManager        em  = null;
+  private UserTransaction      utx = null;
+  private EntityManagerFactory emf = null;
+
   public ReviewsJpaController(UserTransaction utx, EntityManagerFactory emf) {
     this.utx = utx;
     this.emf = emf;
   }
 
-  private UserTransaction      utx = null;
-  private EntityManagerFactory emf = null;
+  public ReviewsJpaController(EntityManager mockedEM) {
+    em = mockedEM;
+  }
 
   public EntityManager getEntityManager() {
+    if (em != null)
+      return em;
     return emf.createEntityManager();
   }
 
@@ -216,18 +228,18 @@ public class ReviewsJpaController implements Serializable {
     return findReviewsEntities(false, maxResults, firstResult);
   }
 
-  private List<Reviews> findReviewsEntities(boolean all, int maxResults,
-                                            int firstResult) {
+  @SuppressWarnings("unchecked")
+  private List<Reviews> findReviewsEntities(boolean all, int maxResults, int firstResult) {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      cq.select(cq.from(Reviews.class));
-      Query q = em.createQuery(cq);
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Reviews> criteriaQuery = criteriaBuilder.createQuery(Reviews.class);
+      Query query = em.createQuery(criteriaQuery);
       if (!all) {
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        query.setFirstResult(firstResult);
       }
-      return q.getResultList();
+      return query.getResultList();
     } finally {
       em.close();
     }
@@ -245,23 +257,48 @@ public class ReviewsJpaController implements Serializable {
   public int getReviewsCount() {
     EntityManager em = getEntityManager();
     try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<Reviews> rt = cq.from(Reviews.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+      Root<Reviews> reviewsRoot = criteriaQuery.from(Reviews.class);
+      criteriaQuery.select(criteriaBuilder.count(reviewsRoot));
+      Query query = em.createQuery(criteriaQuery);
+      return ((Long) query.getSingleResult()).intValue();
     } finally {
       em.close();
     }
   }
 
+  @SuppressWarnings("unchecked")
   public List<Reviews> findReviewsByService(Services service) {
-    // TODO Auto-generated method stub
+//    EntityManager em = getEntityManager();
+//    try {
+//      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+//      CriteriaQuery<Reviews> criteriaQuery = criteriaBuilder.createQuery(Reviews.class);
+//      Root<Reviews> reviewsRoot = criteriaQuery.from(Reviews.class);
+//      Join<Reviews, Services> shrJoin      = reviewsRoot.join("reviews_id", JoinType.INNER);
+//      Join<Reviews, Services> servicesJoin = reviewsRoot.join("services_id", JoinType.INNER);
+//      criteriaQuery.multiselect(reviewsRoot, servicesJoin.get("name"));
+//      Query query = em.createQuery(criteriaQuery);
+//      return query.getResultList();
+//    } finally {
+//      em.close();
+//    }
     return null;
   }
 
+  @SuppressWarnings("unchecked")
   public List<Reviews> findReviewsByClient(Clients client) {
-    // TODO Auto-generated method stub
+//    EntityManager em = getEntityManager();
+//    try {
+//      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+//      CriteriaQuery<Reviews> criteriaQuery = criteriaBuilder.createQuery(Reviews.class);
+//      Root<Reviews> reviewsRoot = criteriaQuery.from(Reviews.class);
+//      criteriaQuery.select(reviewsRoot).where( criteriaBuilder.equal(Reviews.get("address"),faxNumber));
+//      Query query = em.createQuery(criteriaQuery);
+//      return query.getResultList();
+//    } finally {
+//      em.close();
+//    }
     return null;
   }
 

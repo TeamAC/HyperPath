@@ -12,12 +12,19 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
-@Table(name = "categories", catalog = "hyperPath", schema = "")
+@Table
+(
+    name = "categories",
+    catalog = "hyperPath",
+    schema = "",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"label"})}
+)
 @XmlRootElement
 public class Categories implements Serializable {
   private static final long serialVersionUID = -7708281145961903239L;

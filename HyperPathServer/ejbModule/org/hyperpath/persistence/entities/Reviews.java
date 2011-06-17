@@ -8,8 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -20,27 +22,33 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "reviews", catalog = "hyperPath", schema = "")
 @XmlRootElement
 public class Reviews implements Serializable {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1969437855719834239L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @NotNull
   @Column(name = "id", nullable = false)
-  private Integer           id;
+  private Integer id;
   @Basic(optional = false)
   @NotNull
   @Column(name = "rating", nullable = false)
-  private int               rating;
+  private int     rating;
   @Basic(optional = false)
   @NotNull
   @Lob
   @Size(min = 1, max = 65535)
   @Column(name = "description", nullable = false, length = 65535)
-  private String            description;
+  private String         description;
   @ManyToMany(mappedBy = "reviewsList")
-  private List<Clients>     clientsList;
-  @ManyToMany(mappedBy = "reviewsList")
-  private List<Services>    servicesList;
+  private List<Clients>  clientsList;
+  @JoinTable
+  (
+      name               = "services_has_reviews",
+      joinColumns        = {@JoinColumn(name = "reviews_id",  referencedColumnName = "id", nullable = false)},
+      inverseJoinColumns = {@JoinColumn(name = "services_id", referencedColumnName = "id", nullable = false)}
+  )
+  @ManyToMany
+  private List<Services> servicesList;
 
   public Reviews() {
   }

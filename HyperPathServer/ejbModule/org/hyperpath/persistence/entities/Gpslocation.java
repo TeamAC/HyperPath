@@ -21,12 +21,12 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "gpslocation", catalog = "hyperPath", schema = "")
 @XmlRootElement
 public class Gpslocation implements Serializable {
+  private static final long serialVersionUID = 3542176889511953407L;
   @Basic(optional = false)
   @NotNull
   @Column(name = "time", nullable = false)
   @Temporal(TemporalType.TIME)
   private Date              time;
-  private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
   @NotNull
