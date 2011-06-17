@@ -36,7 +36,7 @@ public class ServicesServices {
    * Add new service
    */
   @WebMethod(operationName = "addService")
-  public void addService(@WebParam(name = "service") Services service)
+  public void addService(@WebParam(name = "newService") Services newService)
     throws
     Exception,
     PreexistingEntityException,
@@ -44,7 +44,7 @@ public class ServicesServices {
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
     controller = new ServicesJpaController(utx, emf);
-    controller.create(service);
+    controller.create(newService);
   }
 
   /**
