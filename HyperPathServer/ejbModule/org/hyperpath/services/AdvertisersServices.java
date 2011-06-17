@@ -1,4 +1,4 @@
-package org.hyperpath.services.advertisers;
+package org.hyperpath.services;
 
 import java.util.List;
 import javax.annotation.Resource;
