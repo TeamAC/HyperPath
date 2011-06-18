@@ -8,6 +8,11 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.Address;
@@ -19,8 +24,6 @@ import java.util.List;
 import org.hyperpath.persistence.entities.Reviews;
 import org.hyperpath.persistence.jpa.exceptions.IllegalOrphanException;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
-import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
-import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class ClientsJpaController implements Serializable {
   private static final long serialVersionUID = 7580378731132730416L;
@@ -47,7 +50,7 @@ public class ClientsJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Entities entitiesId = clients.getEntitiesId();
             if (entitiesId != null) {
                 entitiesId = em.getReference(entitiesId.getClass(), entitiesId.getId());
@@ -83,7 +86,28 @@ public class ClientsJpaController implements Serializable {
                     oldClientsIdOfReviewsListReviews = em.merge(oldClientsIdOfReviewsListReviews);
                 }
             }
-            em.getTransaction().commit();
+            utx.commit();
+        } catch (NotSupportedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SystemException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalStateException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (RollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicMixedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicRollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         } finally {
             if (em != null) {
                 em.close();
@@ -95,7 +119,7 @@ public class ClientsJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Clients persistentClients = em.find(Clients.class, clients.getId());
             Entities entitiesIdOld = persistentClients.getEntitiesId();
             Entities entitiesIdNew = clients.getEntitiesId();
@@ -165,7 +189,7 @@ public class ClientsJpaController implements Serializable {
                     }
                 }
             }
-            em.getTransaction().commit();
+            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -186,7 +210,7 @@ public class ClientsJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Clients clients;
             try {
                 clients = em.getReference(Clients.class, id);
@@ -216,7 +240,28 @@ public class ClientsJpaController implements Serializable {
                 servicesListServices = em.merge(servicesListServices);
             }
             em.remove(clients);
-            em.getTransaction().commit();
+            utx.commit();
+        } catch (NotSupportedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SystemException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalStateException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (RollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicMixedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicRollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         } finally {
             if (em != null) {
                 em.close();

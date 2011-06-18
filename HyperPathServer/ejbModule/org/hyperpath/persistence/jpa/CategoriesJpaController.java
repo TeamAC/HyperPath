@@ -8,6 +8,11 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Categories;
 import org.hyperpath.persistence.entities.Services;
@@ -38,7 +43,7 @@ public class CategoriesJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             List<Services> attachedServicesList = new ArrayList<Services>();
             for (Services servicesListServicesToAttach : categories.getServicesList()) {
                 servicesListServicesToAttach = em.getReference(servicesListServicesToAttach.getClass(), servicesListServicesToAttach.getId());
@@ -55,7 +60,28 @@ public class CategoriesJpaController implements Serializable {
                     oldCategoriesIdOfServicesListServices = em.merge(oldCategoriesIdOfServicesListServices);
                 }
             }
-            em.getTransaction().commit();
+            utx.commit();
+        } catch (NotSupportedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SystemException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalStateException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (RollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicMixedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicRollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         } finally {
             if (em != null) {
                 em.close();
@@ -67,7 +93,7 @@ public class CategoriesJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Categories persistentCategories = em.find(Categories.class, categories.getId());
             List<Services> servicesListOld = persistentCategories.getServicesList();
             List<Services> servicesListNew = categories.getServicesList();
@@ -102,7 +128,7 @@ public class CategoriesJpaController implements Serializable {
                     }
                 }
             }
-            em.getTransaction().commit();
+            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -123,7 +149,7 @@ public class CategoriesJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Categories categories;
             try {
                 categories = em.getReference(Categories.class, id);
@@ -143,7 +169,28 @@ public class CategoriesJpaController implements Serializable {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(categories);
-            em.getTransaction().commit();
+            utx.commit();
+        } catch (NotSupportedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SystemException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalStateException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (RollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicMixedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicRollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         } finally {
             if (em != null) {
                 em.close();

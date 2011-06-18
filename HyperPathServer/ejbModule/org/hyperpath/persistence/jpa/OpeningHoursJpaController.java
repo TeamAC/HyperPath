@@ -8,6 +8,11 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.OpeningHours;
@@ -16,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hyperpath.persistence.jpa.exceptions.IllegalOrphanException;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
-import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class OpeningHoursJpaController implements Serializable {
   private static final long serialVersionUID = -2301993862953287459L;
@@ -48,7 +52,7 @@ public class OpeningHoursJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             List<Services> attachedServicesList = new ArrayList<Services>();
             for (Services servicesListServicesToAttach : openingHours.getServicesList()) {
                 servicesListServicesToAttach = em.getReference(servicesListServicesToAttach.getClass(), servicesListServicesToAttach.getId());
@@ -65,7 +69,28 @@ public class OpeningHoursJpaController implements Serializable {
                     oldOpeningHoursidOfServicesListServices = em.merge(oldOpeningHoursidOfServicesListServices);
                 }
             }
-            em.getTransaction().commit();
+            utx.commit();
+        } catch (NotSupportedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SystemException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalStateException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (RollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicMixedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicRollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         } finally {
             if (em != null) {
                 em.close();
@@ -77,7 +102,7 @@ public class OpeningHoursJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             OpeningHours persistentOpeningHours = em.find(OpeningHours.class, openingHours.getId());
             List<Services> servicesListOld = persistentOpeningHours.getServicesList();
             List<Services> servicesListNew = openingHours.getServicesList();
@@ -112,7 +137,7 @@ public class OpeningHoursJpaController implements Serializable {
                     }
                 }
             }
-            em.getTransaction().commit();
+            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -133,7 +158,7 @@ public class OpeningHoursJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             OpeningHours openingHours;
             try {
                 openingHours = em.getReference(OpeningHours.class, id);
@@ -153,7 +178,28 @@ public class OpeningHoursJpaController implements Serializable {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(openingHours);
-            em.getTransaction().commit();
+            utx.commit();
+        } catch (NotSupportedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SystemException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalStateException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (RollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicMixedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicRollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         } finally {
             if (em != null) {
                 em.close();

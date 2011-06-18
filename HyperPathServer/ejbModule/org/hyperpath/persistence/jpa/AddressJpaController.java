@@ -8,6 +8,11 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Advertisers;
@@ -42,7 +47,7 @@ public class AddressJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             List<Entities> attachedEntitiesList = new ArrayList<Entities>();
             for (Entities entitiesListEntitiesToAttach : address.getEntitiesList()) {
                 entitiesListEntitiesToAttach = em.getReference(entitiesListEntitiesToAttach.getClass(), entitiesListEntitiesToAttach.getId());
@@ -54,7 +59,28 @@ public class AddressJpaController implements Serializable {
                 entitiesListEntities.getAddressList().add(address);
                 entitiesListEntities = em.merge(entitiesListEntities);
             }
-            em.getTransaction().commit();
+            utx.commit();
+        } catch (NotSupportedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SystemException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalStateException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (RollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicMixedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicRollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         } finally {
             if (em != null) {
                 em.close();
@@ -66,7 +92,7 @@ public class AddressJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Address persistentAddress = em.find(Address.class, address.getId());
             List<Entities> entitiesListOld = persistentAddress.getEntitiesList();
             List<Entities> entitiesListNew = address.getEntitiesList();
@@ -90,7 +116,7 @@ public class AddressJpaController implements Serializable {
                     entitiesListNewEntities = em.merge(entitiesListNewEntities);
                 }
             }
-            em.getTransaction().commit();
+            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -111,7 +137,7 @@ public class AddressJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Address address;
             try {
                 address = em.getReference(Address.class, id);
@@ -125,7 +151,28 @@ public class AddressJpaController implements Serializable {
                 entitiesListEntities = em.merge(entitiesListEntities);
             }
             em.remove(address);
-            em.getTransaction().commit();
+            utx.commit();
+        } catch (NotSupportedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SystemException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalStateException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (RollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicMixedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicRollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         } finally {
             if (em != null) {
                 em.close();

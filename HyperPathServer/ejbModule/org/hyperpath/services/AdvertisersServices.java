@@ -33,7 +33,7 @@ public class AdvertisersServices {
    * Add new advertiser
    */
   @WebMethod(operationName = "addAdvertizer")
-  public void addService(@WebParam(name = "advertizer") Advertisers advertiser)
+  public void addService(@WebParam(name = "newAdvertizer") Advertisers newAdvertizer)
     throws
     Exception,
     PreexistingEntityException,
@@ -41,7 +41,7 @@ public class AdvertisersServices {
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
     controller = new AdvertisersJpaController(utx, emf);
-    controller.create(advertiser);
+    controller.create(newAdvertizer);
   }
 
   /**

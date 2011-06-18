@@ -10,16 +10,18 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.Gpslocation;
 import org.hyperpath.persistence.entities.Services;
-import java.util.ArrayList;
-import java.util.List;
 import org.hyperpath.persistence.jpa.exceptions.IllegalOrphanException;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
-import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class GpslocationJpaController implements Serializable {
   private static final long serialVersionUID = -8056592577113286641L;
@@ -51,7 +53,7 @@ public class GpslocationJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             List<Services> attachedServicesList = new ArrayList<Services>();
             for (Services servicesListServicesToAttach : gpslocation.getServicesList()) {
                 servicesListServicesToAttach = em.getReference(servicesListServicesToAttach.getClass(), servicesListServicesToAttach.getId());
@@ -68,7 +70,7 @@ public class GpslocationJpaController implements Serializable {
                     oldGpslocationIdOfServicesListServices = em.merge(oldGpslocationIdOfServicesListServices);
                 }
             }
-            em.getTransaction().commit();
+            utx.commit();
         } catch (Exception ex) {
             if (findGpslocation(gpslocation.getId()) != null) {
                 throw new PreexistingEntityException("Gpslocation " + gpslocation + " already exists.", ex);
@@ -85,7 +87,7 @@ public class GpslocationJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Gpslocation persistentGpslocation = em.find(Gpslocation.class, gpslocation.getId());
             List<Services> servicesListOld = persistentGpslocation.getServicesList();
             List<Services> servicesListNew = gpslocation.getServicesList();
@@ -120,7 +122,7 @@ public class GpslocationJpaController implements Serializable {
                     }
                 }
             }
-            em.getTransaction().commit();
+            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -141,7 +143,7 @@ public class GpslocationJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Gpslocation gpslocation;
             try {
                 gpslocation = em.getReference(Gpslocation.class, id);
@@ -161,7 +163,28 @@ public class GpslocationJpaController implements Serializable {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(gpslocation);
-            em.getTransaction().commit();
+            utx.commit();
+        } catch (NotSupportedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SystemException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalStateException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (RollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicMixedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicRollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         } finally {
             if (em != null) {
                 em.close();

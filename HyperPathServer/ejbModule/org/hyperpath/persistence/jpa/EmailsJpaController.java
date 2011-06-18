@@ -47,7 +47,7 @@ public class EmailsJpaController implements Serializable {
     return emf.createEntityManager();
   }
 
-    public void create(Emails emails) {
+    public void create(Emails emails) throws RollbackFailureException, NonexistentEntityException, Exception {
         if (emails.getEntitiesList() == null) {
             emails.setEntitiesList(new ArrayList<Entities>());
         }
@@ -67,31 +67,24 @@ public class EmailsJpaController implements Serializable {
                 entitiesListEntities = em.merge(entitiesListEntities);
             }
             utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
+        }  catch (Exception ex) {
+          try {
+            utx.rollback();
+          } catch (Exception re) {
+            throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+          }
+          String msg = ex.getLocalizedMessage();
+          if (msg == null || msg.length() == 0) {
+            Integer id = emails.getId();
+            if (findEmails(id) == null) {
+              throw new NonexistentEntityException("The emails with id " + id + " no longer exists.");
             }
+          }
+          throw ex;
+        } finally {
+          if (em != null) {
+            em.close();
+          }
         }
     }
 

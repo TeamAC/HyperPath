@@ -8,6 +8,11 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.Address;
@@ -20,8 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hyperpath.persistence.jpa.exceptions.IllegalOrphanException;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
-import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
-import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class AdvertisersJpaController implements Serializable {
   private static final long serialVersionUID = 5591474412841830570L;
@@ -46,7 +49,7 @@ public class AdvertisersJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Entities entitiesId = advertisers.getEntitiesId();
             if (entitiesId != null) {
                 entitiesId = em.getReference(entitiesId.getClass(), entitiesId.getId());
@@ -72,7 +75,28 @@ public class AdvertisersJpaController implements Serializable {
                     oldAdvertisersIdOfAdsListAds = em.merge(oldAdvertisersIdOfAdsListAds);
                 }
             }
-            em.getTransaction().commit();
+            utx.commit();
+        } catch (NotSupportedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SystemException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalStateException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (RollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicMixedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicRollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         } finally {
             if (em != null) {
                 em.close();
@@ -84,7 +108,7 @@ public class AdvertisersJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Advertisers persistentAdvertisers = em.find(Advertisers.class, advertisers.getId());
             Entities entitiesIdOld = persistentAdvertisers.getEntitiesId();
             Entities entitiesIdNew = advertisers.getEntitiesId();
@@ -133,7 +157,7 @@ public class AdvertisersJpaController implements Serializable {
                     }
                 }
             }
-            em.getTransaction().commit();
+            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -154,7 +178,7 @@ public class AdvertisersJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            em.getTransaction().begin();
+            utx.begin();
             Advertisers advertisers;
             try {
                 advertisers = em.getReference(Advertisers.class, id);
@@ -179,7 +203,28 @@ public class AdvertisersJpaController implements Serializable {
                 entitiesId = em.merge(entitiesId);
             }
             em.remove(advertisers);
-            em.getTransaction().commit();
+            utx.commit();
+        } catch (NotSupportedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SystemException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalStateException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (RollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicMixedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicRollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         } finally {
            if (em != null) {
               em.close();
