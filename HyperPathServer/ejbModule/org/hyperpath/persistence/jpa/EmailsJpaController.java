@@ -1,6 +1,7 @@
 package org.hyperpath.persistence.jpa;
 
 import java.io.Serializable;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -8,11 +9,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.Emails;
@@ -25,11 +21,8 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 public class EmailsJpaController implements Serializable {
   private static final long    serialVersionUID = 3395709032680641939L;
 
-  /*
-   * This is used only in test mode for mocking the entity manager
-   */
   private EntityManager        em               = null;
-  private UserTransaction      utx              = null;
+//  private UserTransaction      utx              = null;
   private EntityManagerFactory emf              = null;
 
   public EmailsJpaController(EntityManager mockedEM) {
@@ -37,7 +30,7 @@ public class EmailsJpaController implements Serializable {
   }
 
   public EmailsJpaController(UserTransaction utx, EntityManagerFactory emf) {
-    this.utx = utx;
+//    this.utx = utx;
     this.emf = emf;
   }
 
@@ -53,7 +46,7 @@ public class EmailsJpaController implements Serializable {
         }
         EntityManager em = null;
         try {
-            utx.begin();
+//            utx.begin();
             em = getEntityManager();
             List<Entities> attachedEntitiesList = new ArrayList<Entities>();
             for (Entities entitiesListEntitiesToAttach : emails.getEntitiesList()) {
@@ -66,10 +59,10 @@ public class EmailsJpaController implements Serializable {
                 entitiesListEntities.getEmailsList().add(emails);
                 entitiesListEntities = em.merge(entitiesListEntities);
             }
-            utx.commit();
+//            utx.commit();
         }  catch (Exception ex) {
           try {
-            utx.rollback();
+//            utx.rollback();
           } catch (Exception re) {
             throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
           }
@@ -91,7 +84,7 @@ public class EmailsJpaController implements Serializable {
     public void edit(Emails emails) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
+//            utx.begin();
             em = getEntityManager();
             Emails persistentEmails = em.find(Emails.class, emails.getId());
             List<Entities> entitiesListOld = persistentEmails.getEntitiesList();
@@ -116,7 +109,7 @@ public class EmailsJpaController implements Serializable {
                     entitiesListNewEntities = em.merge(entitiesListNewEntities);
                 }
             }
-            utx.commit();
+//            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -133,10 +126,10 @@ public class EmailsJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws Exception, NonexistentEntityException, RollbackFailureException {
         EntityManager em = null;
         try {
-            utx.begin();
+//            utx.begin();
             em = getEntityManager();
             Emails emails;
             try {
@@ -151,33 +144,25 @@ public class EmailsJpaController implements Serializable {
                 entitiesListEntities = em.merge(entitiesListEntities);
             }
             em.remove(emails);
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+//            utx.commit();
+        } catch (Exception ex) {
+          try {
+//          utx.rollback();
+        } catch (Exception re) {
+          throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
         }
+        String msg = ex.getLocalizedMessage();
+        if (msg == null || msg.length() == 0) {
+          if (findEmails(id) == null) {
+            throw new NonexistentEntityException("The emails with id " + id + " no longer exists.");
+          }
+        }
+        throw ex;
+      } finally {
+        if (em != null) {
+          em.close();
+        }
+      }
     }
 
   public List<Emails> findEmailsEntities() {
