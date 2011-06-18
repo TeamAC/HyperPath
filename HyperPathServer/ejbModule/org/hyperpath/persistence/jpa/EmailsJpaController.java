@@ -8,6 +8,11 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.Emails;
@@ -42,138 +47,145 @@ public class EmailsJpaController implements Serializable {
     return emf.createEntityManager();
   }
 
-  public void create(Emails emails) throws RollbackFailureException,
-      Exception {
-    if (emails.getEntitiesList() == null) {
-      emails.setEntitiesList(new ArrayList<Entities>());
+    public void create(Emails emails) {
+        if (emails.getEntitiesList() == null) {
+            emails.setEntitiesList(new ArrayList<Entities>());
+        }
+        EntityManager em = null;
+        try {
+            utx.begin();
+            em = getEntityManager();
+            List<Entities> attachedEntitiesList = new ArrayList<Entities>();
+            for (Entities entitiesListEntitiesToAttach : emails.getEntitiesList()) {
+                entitiesListEntitiesToAttach = em.getReference(entitiesListEntitiesToAttach.getClass(), entitiesListEntitiesToAttach.getId());
+                attachedEntitiesList.add(entitiesListEntitiesToAttach);
+            }
+            emails.setEntitiesList(attachedEntitiesList);
+            em.persist(emails);
+            for (Entities entitiesListEntities : emails.getEntitiesList()) {
+                entitiesListEntities.getEmailsList().add(emails);
+                entitiesListEntities = em.merge(entitiesListEntities);
+            }
+            utx.commit();
+        } catch (NotSupportedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SystemException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalStateException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (RollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicMixedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicRollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
-    EntityManager em = null;
-    try {
-      utx.begin();
-      em = getEntityManager();
-      List<Entities> attachedEntitiesList = new ArrayList<Entities>();
-      for (Entities entitiesListEntitiesToAttach : emails
-          .getEntitiesList()) {
-        entitiesListEntitiesToAttach = em.getReference(
-            entitiesListEntitiesToAttach.getClass(),
-            entitiesListEntitiesToAttach.getId());
-        attachedEntitiesList.add(entitiesListEntitiesToAttach);
-      }
-      emails.setEntitiesList(attachedEntitiesList);
-      em.persist(emails);
-      for (Entities entitiesListEntities : emails.getEntitiesList()) {
-        entitiesListEntities.getEmailsList().add(emails);
-        entitiesListEntities = em.merge(entitiesListEntities);
-      }
-      utx.commit();
-    } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
-      }
-      throw ex;
-    } finally {
-      if (em != null) {
-        em.close();
-      }
-    }
-  }
 
-  public void edit(Emails emails) throws NonexistentEntityException,
-      RollbackFailureException, Exception {
-    EntityManager em = null;
-    try {
-      utx.begin();
-      em = getEntityManager();
-      Emails persistentEmails = em.find(Emails.class, emails.getId());
-      List<Entities> entitiesListOld = persistentEmails.getEntitiesList();
-      List<Entities> entitiesListNew = emails.getEntitiesList();
-      List<Entities> attachedEntitiesListNew = new ArrayList<Entities>();
-      for (Entities entitiesListNewEntitiesToAttach : entitiesListNew) {
-        entitiesListNewEntitiesToAttach = em.getReference(
-            entitiesListNewEntitiesToAttach.getClass(),
-            entitiesListNewEntitiesToAttach.getId());
-        attachedEntitiesListNew.add(entitiesListNewEntitiesToAttach);
-      }
-      entitiesListNew = attachedEntitiesListNew;
-      emails.setEntitiesList(entitiesListNew);
-      emails = em.merge(emails);
-      for (Entities entitiesListOldEntities : entitiesListOld) {
-        if (!entitiesListNew.contains(entitiesListOldEntities)) {
-          entitiesListOldEntities.getEmailsList().remove(emails);
-          entitiesListOldEntities = em.merge(entitiesListOldEntities);
+    public void edit(Emails emails) throws NonexistentEntityException, Exception {
+        EntityManager em = null;
+        try {
+            utx.begin();
+            em = getEntityManager();
+            Emails persistentEmails = em.find(Emails.class, emails.getId());
+            List<Entities> entitiesListOld = persistentEmails.getEntitiesList();
+            List<Entities> entitiesListNew = emails.getEntitiesList();
+            List<Entities> attachedEntitiesListNew = new ArrayList<Entities>();
+            for (Entities entitiesListNewEntitiesToAttach : entitiesListNew) {
+                entitiesListNewEntitiesToAttach = em.getReference(entitiesListNewEntitiesToAttach.getClass(), entitiesListNewEntitiesToAttach.getId());
+                attachedEntitiesListNew.add(entitiesListNewEntitiesToAttach);
+            }
+            entitiesListNew = attachedEntitiesListNew;
+            emails.setEntitiesList(entitiesListNew);
+            emails = em.merge(emails);
+            for (Entities entitiesListOldEntities : entitiesListOld) {
+                if (!entitiesListNew.contains(entitiesListOldEntities)) {
+                    entitiesListOldEntities.getEmailsList().remove(emails);
+                    entitiesListOldEntities = em.merge(entitiesListOldEntities);
+                }
+            }
+            for (Entities entitiesListNewEntities : entitiesListNew) {
+                if (!entitiesListOld.contains(entitiesListNewEntities)) {
+                    entitiesListNewEntities.getEmailsList().add(emails);
+                    entitiesListNewEntities = em.merge(entitiesListNewEntities);
+                }
+            }
+            utx.commit();
+        } catch (Exception ex) {
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                Integer id = emails.getId();
+                if (findEmails(id) == null) {
+                    throw new NonexistentEntityException("The emails with id " + id + " no longer exists.");
+                }
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
-      }
-      for (Entities entitiesListNewEntities : entitiesListNew) {
-        if (!entitiesListOld.contains(entitiesListNewEntities)) {
-          entitiesListNewEntities.getEmailsList().add(emails);
-          entitiesListNewEntities = em.merge(entitiesListNewEntities);
-        }
-      }
-      utx.commit();
-    } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
-      }
-      String msg = ex.getLocalizedMessage();
-      if (msg == null || msg.length() == 0) {
-        Integer id = emails.getId();
-        if (findEmails(id) == null) {
-          throw new NonexistentEntityException("The emails with id "
-              + id + " no longer exists.");
-        }
-      }
-      throw ex;
-    } finally {
-      if (em != null) {
-        em.close();
-      }
     }
-  }
 
-  public void destroy(Integer id) throws NonexistentEntityException,
-      RollbackFailureException, Exception {
-    EntityManager em = null;
-    try {
-      utx.begin();
-      em = getEntityManager();
-      Emails emails;
-      try {
-        emails = em.getReference(Emails.class, id);
-        emails.getId();
-      } catch (EntityNotFoundException enfe) {
-        throw new NonexistentEntityException("The emails with id " + id
-            + " no longer exists.", enfe);
-      }
-      List<Entities> entitiesList = emails.getEntitiesList();
-      for (Entities entitiesListEntities : entitiesList) {
-        entitiesListEntities.getEmailsList().remove(emails);
-        entitiesListEntities = em.merge(entitiesListEntities);
-      }
-      em.remove(emails);
-      utx.commit();
-    } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
-      }
-      throw ex;
-    } finally {
-      if (em != null) {
-        em.close();
-      }
+    public void destroy(Integer id) throws NonexistentEntityException {
+        EntityManager em = null;
+        try {
+            utx.begin();
+            em = getEntityManager();
+            Emails emails;
+            try {
+                emails = em.getReference(Emails.class, id);
+                emails.getId();
+            } catch (EntityNotFoundException enfe) {
+                throw new NonexistentEntityException("The emails with id " + id + " no longer exists.", enfe);
+            }
+            List<Entities> entitiesList = emails.getEntitiesList();
+            for (Entities entitiesListEntities : entitiesList) {
+                entitiesListEntities.getEmailsList().remove(emails);
+                entitiesListEntities = em.merge(entitiesListEntities);
+            }
+            em.remove(emails);
+            utx.commit();
+        } catch (NotSupportedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SystemException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalStateException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (RollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicMixedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (HeuristicRollbackException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
-  }
 
   public List<Emails> findEmailsEntities() {
     return findEmailsEntities(true, -1, -1);

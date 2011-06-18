@@ -12,7 +12,6 @@ import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Clients;
 import org.hyperpath.persistence.entities.Reviews;
-import org.hyperpath.persistence.entities.Services;
 import org.hyperpath.persistence.jpa.ReviewsJpaController;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
@@ -78,7 +77,7 @@ public class ReviewsServices {
    * Find reviews by service
    */
   @WebMethod(operationName = "findReviewsByService")
-  public List<Reviews> findReviewsByService(@WebParam(name = "service") Services service)
+  public List<Reviews> findReviewsByService(@WebParam(name = "serviceId") int serviceId)
     throws
     Exception,
     NonexistentEntityException,
@@ -86,7 +85,7 @@ public class ReviewsServices {
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
     controller = new ReviewsJpaController(utx, emf);
-    return controller.findReviewsByService(service);
+    return controller.findReviewsByService(serviceId);
   }
 
   /**

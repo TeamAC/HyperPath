@@ -22,123 +22,120 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 public class Gpslocation implements Serializable {
   private static final long serialVersionUID = 3542176889511953407L;
-  @Basic(optional = false)
-  @NotNull
-  @Column(name = "time", nullable = false)
-  @Temporal(TemporalType.TIME)
-  private Date              time;
-  @Id
-  @Basic(optional = false)
-  @NotNull
-  @Column(name = "id", nullable = false)
-  private Integer           id;
-  @Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 45)
-  @Column(name = "latitude", nullable = false, length = 45)
-  private String            latitude;
-  @Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 45)
-  @Column(name = "longitude", nullable = false, length = 45)
-  private String            longitude;
-  @Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 45)
-  @Column(name = "altitude", nullable = false, length = 45)
-  private String            altitude;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "gpslocation")
-  private List<Services>    servicesList;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "id", nullable = false)
+    private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "time", nullable = false)
+    @Temporal(TemporalType.TIME)
+    private Date time;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "latitude", nullable = false, length = 45)
+    private String latitude;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "longitude", nullable = false, length = 45)
+    private String longitude;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "altitude", nullable = false, length = 45)
+    private String altitude;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gpslocationId")
+    private List<Services> servicesList;
 
-  public Gpslocation() {
-  }
-
-  public Gpslocation(Integer id) {
-    this.id = id;
-  }
-
-  public Gpslocation(Integer id, Date time, String latitude,
-      String longitude, String altitude) {
-    this.id = id;
-    this.time = time;
-    this.latitude = latitude;
-    this.longitude = longitude;
-    this.altitude = altitude;
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public String getLatitude() {
-    return latitude;
-  }
-
-  public void setLatitude(String latitude) {
-    this.latitude = latitude;
-  }
-
-  public String getLongitude() {
-    return longitude;
-  }
-
-  public void setLongitude(String longitude) {
-    this.longitude = longitude;
-  }
-
-  public String getAltitude() {
-    return altitude;
-  }
-
-  public void setAltitude(String altitude) {
-    this.altitude = altitude;
-  }
-
-  @XmlTransient
-  public List<Services> getServicesList() {
-    return servicesList;
-  }
-
-  public void setServicesList(List<Services> servicesList) {
-    this.servicesList = servicesList;
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 0;
-    hash += (id != null ? id.hashCode() : 0);
-    return hash;
-  }
-
-  @Override
-  public boolean equals(Object object) {
-    if (!(object instanceof Gpslocation)) {
-      return false;
+    public Gpslocation() {
     }
-    Gpslocation other = (Gpslocation) object;
-    if ((this.id == null && other.id != null)
-        || (this.id != null && !this.id.equals(other.id))) {
-      return false;
+
+    public Gpslocation(Integer id) {
+        this.id = id;
     }
-    return true;
-  }
 
-  @Override
-  public String toString() {
-    return "org.hyperpath.persistence.entities.Gpslocation[ id=" + id
-        + " ]";
-  }
+    public Gpslocation(Integer id, Date time, String latitude, String longitude, String altitude) {
+        this.id = id;
+        this.time = time;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.altitude = altitude;
+    }
 
-  public Date getTime() {
-    return time;
-  }
+    public Integer getId() {
+        return id;
+    }
 
-  public void setTime(Date time) {
-    this.time = time;
-  }
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(String altitude) {
+        this.altitude = altitude;
+    }
+
+    @XmlTransient
+    public List<Services> getServicesList() {
+        return servicesList;
+    }
+
+    public void setServicesList(List<Services> servicesList) {
+        this.servicesList = servicesList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Gpslocation)) {
+            return false;
+        }
+        Gpslocation other = (Gpslocation) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Gpslocation[ id=" + id + " ]";
+    }
 
 }

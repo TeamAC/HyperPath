@@ -14,9 +14,9 @@ import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Ads;
 import org.hyperpath.persistence.entities.Advertisers;
 import org.hyperpath.persistence.entities.Services;
+import java.util.ArrayList;
+import org.hyperpath.persistence.jpa.exceptions.IllegalOrphanException;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
-import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
-import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class AdsJpaController implements Serializable {
   private static final long serialVersionUID = -3954156113997719506L;
@@ -26,9 +26,6 @@ public class AdsJpaController implements Serializable {
     this.emf = emf;
   }
 
-  /*
-   * This is used only in test mode for mocking the entity manager
-   */
   private EntityManager        em  = null;
   private UserTransaction      utx = null;
   private EntityManagerFactory emf = null;
@@ -41,159 +38,169 @@ public class AdsJpaController implements Serializable {
     return emf.createEntityManager();
   }
 
-  public void create(Ads ads) throws PreexistingEntityException,
-      RollbackFailureException, Exception {
-    EntityManager em = null;
-    try {
-      utx.begin();
-      em = getEntityManager();
-      Advertisers advertisers = ads.getAdvertisers();
-      if (advertisers != null) {
-        advertisers = em.getReference(advertisers.getClass(), advertisers.getAdvertisersPK());
-        ads.setAdvertisers(advertisers);
-      }
-      Services services = ads.getServices();
-      if (services != null) {
-        services = em.getReference(services.getClass(), services.getServicesPK());
-        ads.setServices(services);
-      }
-      em.persist(ads);
-      if (advertisers != null) {
-        advertisers.getAdsList().add(ads);
-        advertisers = em.merge(advertisers);
-      }
-      if (services != null) {
-        services.getAdsList().add(ads);
-        services = em.merge(services);
-      }
-      utx.commit();
-    } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-      }
-      if (findAds(ads.getAdsPK()) != null) {
-        throw new PreexistingEntityException("Ads " + ads + " already exists.", ex);
-      }
-      throw ex;
-    } finally {
-      if (em != null) {
-        em.close();
-      }
-    }
-  }
-
-  public void edit(Ads ads) throws NonexistentEntityException,
-      RollbackFailureException, Exception {
-
-    EntityManager em = null;
-    try {
-      utx.begin();
-      em = getEntityManager();
-      Ads persistentAds = em.find(Ads.class, ads.getAdsPK());
-      Advertisers advertisersOld = persistentAds.getAdvertisers();
-      Advertisers advertisersNew = ads.getAdvertisers();
-      Services servicesOld = persistentAds.getServices();
-      Services servicesNew = ads.getServices();
-      if (advertisersNew != null) {
-        advertisersNew = em.getReference(advertisersNew.getClass(), advertisersNew.getAdvertisersPK());
-        ads.setAdvertisers(advertisersNew);
-      }
-      if (servicesNew != null) {
-        servicesNew = em.getReference(servicesNew.getClass(), servicesNew.getServicesPK());
-        ads.setServices(servicesNew);
-      }
-      ads = em.merge(ads);
-      if (advertisersOld != null && !advertisersOld.equals(advertisersNew)) {
-        advertisersOld.getAdsList().remove(ads);
-        advertisersOld = em.merge(advertisersOld);
-      }
-      if (advertisersNew != null && !advertisersNew.equals(advertisersOld)) {
-        advertisersNew.getAdsList().add(ads);
-        advertisersNew = em.merge(advertisersNew);
-      }
-      if (servicesOld != null && !servicesOld.equals(servicesNew)) {
-        servicesOld.getAdsList().remove(ads);
-        servicesOld = em.merge(servicesOld);
-      }
-      if (servicesNew != null && !servicesNew.equals(servicesOld)) {
-        servicesNew.getAdsList().add(ads);
-        servicesNew = em.merge(servicesNew);
-      }
-      utx.commit();
-    } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-      }
-      String msg = ex.getLocalizedMessage();
-      if (msg == null || msg.length() == 0) {
-        Integer id = ads.getAdsPK();
-        if (findAds(id) == null) {
-          throw new NonexistentEntityException("The ads with id " + id + " no longer exists.");
+  public void create(Ads ads) {
+        if (ads.getServicesList() == null) {
+            ads.setServicesList(new ArrayList<Services>());
         }
-      }
-      throw ex;
-    } finally {
-      if (em != null) {
-        em.close();
-      }
-    }
-  }
-
-  public void destroy(Integer id)
-    throws
-    NonexistentEntityException,
-    RollbackFailureException,
-    Exception
-  {
-    EntityManager em = null;
-    try {
-      utx.begin();
-      em = getEntityManager();
-      Ads ads;
-      try {
-        ads = em.getReference(Ads.class, id);
-        ads.getAdsPK();
-      } catch (EntityNotFoundException enfe) {
-        throw new NonexistentEntityException("The ads with id " + id + " no longer exists.", enfe);
-      }
-      Advertisers advertisers = ads.getAdvertisers();
-      if (advertisers != null) {
-        advertisers.getAdsList().remove(ads);
-        advertisers = em.merge(advertisers);
-      }
-      Services services = ads.getServices();
-      if (services != null) {
-        services.getAdsList().remove(ads);
-        services = em.merge(services);
-      }
-      em.remove(ads);
-      utx.commit();
-    } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-      }
-      throw ex;
-    } finally {
-      if (em != null) {
-        em.close();
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Advertisers advertisersId = ads.getAdvertisersId();
+            if (advertisersId != null) {
+                advertisersId = em.getReference(advertisersId.getClass(), advertisersId.getId());
+                ads.setAdvertisersId(advertisersId);
+            }
+            List<Services> attachedServicesList = new ArrayList<Services>();
+            for (Services servicesListServicesToAttach : ads.getServicesList()) {
+                servicesListServicesToAttach = em.getReference(servicesListServicesToAttach.getClass(), servicesListServicesToAttach.getId());
+                attachedServicesList.add(servicesListServicesToAttach);
+            }
+            ads.setServicesList(attachedServicesList);
+            em.persist(ads);
+            if (advertisersId != null) {
+                advertisersId.getAdsList().add(ads);
+                advertisersId = em.merge(advertisersId);
+            }
+            for (Services servicesListServices : ads.getServicesList()) {
+                Ads oldAdsIdOfServicesListServices = servicesListServices.getAdsId();
+                servicesListServices.setAdsId(ads);
+                servicesListServices = em.merge(servicesListServices);
+                if (oldAdsIdOfServicesListServices != null) {
+                    oldAdsIdOfServicesListServices.getServicesList().remove(servicesListServices);
+                    oldAdsIdOfServicesListServices = em.merge(oldAdsIdOfServicesListServices);
+                }
+            }
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
       }
     }
   }
 
-  public List<Ads> findAdsEntities() {
-    return findAdsEntities(true, -1, -1);
+    public void edit(Ads ads) throws IllegalOrphanException, NonexistentEntityException, Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Ads persistentAds = em.find(Ads.class, ads.getId());
+            Advertisers advertisersIdOld = persistentAds.getAdvertisersId();
+            Advertisers advertisersIdNew = ads.getAdvertisersId();
+            List<Services> servicesListOld = persistentAds.getServicesList();
+            List<Services> servicesListNew = ads.getServicesList();
+            List<String> illegalOrphanMessages = null;
+            for (Services servicesListOldServices : servicesListOld) {
+                if (!servicesListNew.contains(servicesListOldServices)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Services " + servicesListOldServices + " since its adsId field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            if (advertisersIdNew != null) {
+                advertisersIdNew = em.getReference(advertisersIdNew.getClass(), advertisersIdNew.getId());
+                ads.setAdvertisersId(advertisersIdNew);
+            }
+            List<Services> attachedServicesListNew = new ArrayList<Services>();
+            for (Services servicesListNewServicesToAttach : servicesListNew) {
+                servicesListNewServicesToAttach = em.getReference(servicesListNewServicesToAttach.getClass(), servicesListNewServicesToAttach.getId());
+                attachedServicesListNew.add(servicesListNewServicesToAttach);
+            }
+            servicesListNew = attachedServicesListNew;
+            ads.setServicesList(servicesListNew);
+            ads = em.merge(ads);
+            if (advertisersIdOld != null && !advertisersIdOld.equals(advertisersIdNew)) {
+                advertisersIdOld.getAdsList().remove(ads);
+                advertisersIdOld = em.merge(advertisersIdOld);
+            }
+            if (advertisersIdNew != null && !advertisersIdNew.equals(advertisersIdOld)) {
+                advertisersIdNew.getAdsList().add(ads);
+                advertisersIdNew = em.merge(advertisersIdNew);
+            }
+            for (Services servicesListNewServices : servicesListNew) {
+                if (!servicesListOld.contains(servicesListNewServices)) {
+                    Ads oldAdsIdOfServicesListNewServices = servicesListNewServices.getAdsId();
+                    servicesListNewServices.setAdsId(ads);
+                    servicesListNewServices = em.merge(servicesListNewServices);
+                    if (oldAdsIdOfServicesListNewServices != null && !oldAdsIdOfServicesListNewServices.equals(ads)) {
+                        oldAdsIdOfServicesListNewServices.getServicesList().remove(servicesListNewServices);
+                        oldAdsIdOfServicesListNewServices = em.merge(oldAdsIdOfServicesListNewServices);
+                    }
+                }
+            }
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                Integer id = ads.getId();
+                if (findAds(id) == null) {
+                    throw new NonexistentEntityException("The ads with id " + id + " no longer exists.");
+                }
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Ads ads;
+            try {
+                ads = em.getReference(Ads.class, id);
+                ads.getId();
+            } catch (EntityNotFoundException enfe) {
+                throw new NonexistentEntityException("The ads with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            List<Services> servicesListOrphanCheck = ads.getServicesList();
+            for (Services servicesListOrphanCheckServices : servicesListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Ads (" + ads + ") cannot be destroyed since the Services " + servicesListOrphanCheckServices + " in its servicesList field has a non-nullable adsId field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            Advertisers advertisersId = ads.getAdvertisersId();
+            if (advertisersId != null) {
+                advertisersId.getAdsList().remove(ads);
+                advertisersId = em.merge(advertisersId);
+            }
+            em.remove(ads);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    public Ads findAds(Integer id) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Ads.class, id);
+        } finally {
+            em.close();
+        }
+    }
+    public List<Ads> findAdsEntities() {
+        return findAdsEntities(true, -1, -1);
   }
 
   public List<Ads> findAdsEntities(int maxResults, int firstResult) {
     return findAdsEntities(false, maxResults, firstResult);
   }
-
   @SuppressWarnings("unchecked")
   private List<Ads> findAdsEntities(boolean all, int maxResults, int firstResult) {
     EntityManager em = getEntityManager();
@@ -206,15 +213,6 @@ public class AdsJpaController implements Serializable {
         query.setFirstResult(firstResult);
       }
       return query.getResultList();
-    } finally {
-      em.close();
-    }
-  }
-
-  public Ads findAds(Integer id) {
-    EntityManager em = getEntityManager();
-    try {
-      return em.find(Ads.class, id);
     } finally {
       em.close();
     }
@@ -239,7 +237,7 @@ public class AdsJpaController implements Serializable {
     CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
     CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
     Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
-    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("advertisers_id"),advertiser.getAdvertisersPK()));
+    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("advertisers_id"),advertiser.getId()));
     Query query = em.createQuery(criteriaQuery);
     return query.getResultList();
   }
@@ -249,7 +247,7 @@ public class AdsJpaController implements Serializable {
     CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
     CriteriaQuery<Ads> criteriaQuery = criteriaBuilder.createQuery(Ads.class);
     Root<Ads> adsRoot = criteriaQuery.from(Ads.class);
-    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("services_id"),service.getServicesPK()));
+    criteriaQuery.select(adsRoot).where( criteriaBuilder.equal(adsRoot.get("services_id"),service.getId()));
     Query query = em.createQuery(criteriaQuery);
     return query.getResultList();
   }

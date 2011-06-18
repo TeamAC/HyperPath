@@ -39,136 +39,120 @@ public class FaxesJpaController implements Serializable {
     return emf.createEntityManager();
   }
 
-  public void create(Faxes faxes) throws RollbackFailureException,
-  Exception {
+  public void create(Faxes faxes) throws RollbackFailureException, Exception {
     if (faxes.getEntitiesList() == null) {
-      faxes.setEntitiesList(new ArrayList<Entities>());
+        faxes.setEntitiesList(new ArrayList<Entities>());
     }
     EntityManager em = null;
     try {
-      utx.begin();
-      em = getEntityManager();
-      List<Entities> attachedEntitiesList = new ArrayList<Entities>();
-      for (Entities entitiesListEntitiesToAttach : faxes
-          .getEntitiesList()) {
-        entitiesListEntitiesToAttach = em.getReference(
-            entitiesListEntitiesToAttach.getClass(),
-            entitiesListEntitiesToAttach.getId());
-        attachedEntitiesList.add(entitiesListEntitiesToAttach);
-      }
-      faxes.setEntitiesList(attachedEntitiesList);
-      em.persist(faxes);
-      for (Entities entitiesListEntities : faxes.getEntitiesList()) {
-        entitiesListEntities.getFaxesList().add(faxes);
-        entitiesListEntities = em.merge(entitiesListEntities);
-      }
-      utx.commit();
+        utx.begin();
+        em = getEntityManager();
+        List<Entities> attachedEntitiesList = new ArrayList<Entities>();
+        for (Entities entitiesListEntitiesToAttach : faxes.getEntitiesList()) {
+            entitiesListEntitiesToAttach = em.getReference(entitiesListEntitiesToAttach.getClass(), entitiesListEntitiesToAttach.getId());
+            attachedEntitiesList.add(entitiesListEntitiesToAttach);
+        }
+        faxes.setEntitiesList(attachedEntitiesList);
+        em.persist(faxes);
+        for (Entities entitiesListEntities : faxes.getEntitiesList()) {
+            entitiesListEntities.getFaxesList().add(faxes);
+            entitiesListEntities = em.merge(entitiesListEntities);
+        }
+        utx.commit();
     } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
-      }
-      throw ex;
+        try {
+            utx.rollback();
+        } catch (Exception re) {
+            throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+        }
+        throw ex;
     } finally {
-      if (em != null) {
-        em.close();
-      }
+        if (em != null) {
+            em.close();
+        }
     }
   }
 
-  public void edit(Faxes faxes) throws NonexistentEntityException,
-      RollbackFailureException, Exception {
+  public void edit(Faxes faxes) throws NonexistentEntityException, RollbackFailureException, Exception {
     EntityManager em = null;
     try {
-      utx.begin();
-      em = getEntityManager();
-      Faxes persistentFaxes = em.find(Faxes.class, faxes.getId());
-      List<Entities> entitiesListOld = persistentFaxes.getEntitiesList();
-      List<Entities> entitiesListNew = faxes.getEntitiesList();
-      List<Entities> attachedEntitiesListNew = new ArrayList<Entities>();
-      for (Entities entitiesListNewEntitiesToAttach : entitiesListNew) {
-        entitiesListNewEntitiesToAttach = em.getReference(
-            entitiesListNewEntitiesToAttach.getClass(),
-            entitiesListNewEntitiesToAttach.getId());
-        attachedEntitiesListNew.add(entitiesListNewEntitiesToAttach);
-      }
-      entitiesListNew = attachedEntitiesListNew;
-      faxes.setEntitiesList(entitiesListNew);
-      faxes = em.merge(faxes);
-      for (Entities entitiesListOldEntities : entitiesListOld) {
-        if (!entitiesListNew.contains(entitiesListOldEntities)) {
-          entitiesListOldEntities.getFaxesList().remove(faxes);
-          entitiesListOldEntities = em.merge(entitiesListOldEntities);
+        utx.begin();
+        em = getEntityManager();
+        Faxes persistentFaxes = em.find(Faxes.class, faxes.getId());
+        List<Entities> entitiesListOld = persistentFaxes.getEntitiesList();
+        List<Entities> entitiesListNew = faxes.getEntitiesList();
+        List<Entities> attachedEntitiesListNew = new ArrayList<Entities>();
+        for (Entities entitiesListNewEntitiesToAttach : entitiesListNew) {
+            entitiesListNewEntitiesToAttach = em.getReference(entitiesListNewEntitiesToAttach.getClass(), entitiesListNewEntitiesToAttach.getId());
+            attachedEntitiesListNew.add(entitiesListNewEntitiesToAttach);
         }
-      }
-      for (Entities entitiesListNewEntities : entitiesListNew) {
-        if (!entitiesListOld.contains(entitiesListNewEntities)) {
-          entitiesListNewEntities.getFaxesList().add(faxes);
-          entitiesListNewEntities = em.merge(entitiesListNewEntities);
+        entitiesListNew = attachedEntitiesListNew;
+        faxes.setEntitiesList(entitiesListNew);
+        faxes = em.merge(faxes);
+        for (Entities entitiesListOldEntities : entitiesListOld) {
+            if (!entitiesListNew.contains(entitiesListOldEntities)) {
+                entitiesListOldEntities.getFaxesList().remove(faxes);
+                entitiesListOldEntities = em.merge(entitiesListOldEntities);
+            }
         }
-      }
-      utx.commit();
+        for (Entities entitiesListNewEntities : entitiesListNew) {
+            if (!entitiesListOld.contains(entitiesListNewEntities)) {
+                entitiesListNewEntities.getFaxesList().add(faxes);
+                entitiesListNewEntities = em.merge(entitiesListNewEntities);
+            }
+        }
+        utx.commit();
     } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
-      }
-      String msg = ex.getLocalizedMessage();
-      if (msg == null || msg.length() == 0) {
-        Integer id = faxes.getId();
-        if (findFaxes(id) == null) {
-          throw new NonexistentEntityException("The faxes with id "
-              + id + " no longer exists.");
+        try {
+            utx.rollback();
+        } catch (Exception re) {
+            throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
         }
-      }
-      throw ex;
+        String msg = ex.getLocalizedMessage();
+        if (msg == null || msg.length() == 0) {
+            Integer id = faxes.getId();
+            if (findFaxes(id) == null) {
+                throw new NonexistentEntityException("The faxes with id " + id + " no longer exists.");
+            }
+        }
+        throw ex;
     } finally {
-      if (em != null) {
-        em.close();
-      }
+        if (em != null) {
+            em.close();
+        }
     }
   }
 
-  public void destroy(Integer id) throws NonexistentEntityException,
-      RollbackFailureException, Exception {
+  public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
     EntityManager em = null;
     try {
-      utx.begin();
-      em = getEntityManager();
-      Faxes faxes;
-      try {
-        faxes = em.getReference(Faxes.class, id);
-        faxes.getId();
-      } catch (EntityNotFoundException enfe) {
-        throw new NonexistentEntityException("The faxes with id " + id
-            + " no longer exists.", enfe);
-      }
-      List<Entities> entitiesList = faxes.getEntitiesList();
-      for (Entities entitiesListEntities : entitiesList) {
-        entitiesListEntities.getFaxesList().remove(faxes);
-        entitiesListEntities = em.merge(entitiesListEntities);
-      }
-      em.remove(faxes);
-      utx.commit();
+        utx.begin();
+        em = getEntityManager();
+        Faxes faxes;
+        try {
+            faxes = em.getReference(Faxes.class, id);
+            faxes.getId();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The faxes with id " + id + " no longer exists.", enfe);
+        }
+        List<Entities> entitiesList = faxes.getEntitiesList();
+        for (Entities entitiesListEntities : entitiesList) {
+            entitiesListEntities.getFaxesList().remove(faxes);
+            entitiesListEntities = em.merge(entitiesListEntities);
+        }
+        em.remove(faxes);
+        utx.commit();
     } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
-      }
-      throw ex;
+        try {
+            utx.rollback();
+        } catch (Exception re) {
+            throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+        }
+        throw ex;
     } finally {
-      if (em != null) {
-        em.close();
-      }
+        if (em != null) {
+            em.close();
+        }
     }
   }
 

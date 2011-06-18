@@ -1,25 +1,20 @@
 package org.hyperpath.persistence.jpa;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Clients;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.hyperpath.persistence.entities.Faxes;
 import org.hyperpath.persistence.entities.Reviews;
 import org.hyperpath.persistence.entities.Services;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
-import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class ReviewsJpaController implements Serializable {
   private static final long serialVersionUID = 4270693784161684160L;
@@ -43,186 +38,124 @@ public class ReviewsJpaController implements Serializable {
     return emf.createEntityManager();
   }
 
-  public void create(Reviews reviews) throws RollbackFailureException,
-      Exception {
-    if (reviews.getClientsList() == null) {
-      reviews.setClientsList(new ArrayList<Clients>());
+    public void create(Reviews reviews) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Clients clientsId = reviews.getClientsId();
+            if (clientsId != null) {
+                clientsId = em.getReference(clientsId.getClass(), clientsId.getId());
+                reviews.setClientsId(clientsId);
+            }
+            Services servicesId = reviews.getServicesId();
+            if (servicesId != null) {
+                servicesId = em.getReference(servicesId.getClass(), servicesId.getId());
+                reviews.setServicesId(servicesId);
+            }
+            em.persist(reviews);
+            if (clientsId != null) {
+                clientsId.getReviewsList().add(reviews);
+                clientsId = em.merge(clientsId);
+            }
+            if (servicesId != null) {
+                servicesId.getReviewsList().add(reviews);
+                servicesId = em.merge(servicesId);
+            }
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
-    if (reviews.getServicesList() == null) {
-      reviews.setServicesList(new ArrayList<Services>());
-    }
-    EntityManager em = null;
-    try {
-      utx.begin();
-      em = getEntityManager();
-      List<Clients> attachedClientsList = new ArrayList<Clients>();
-      for (Clients clientsListClientsToAttach : reviews.getClientsList()) {
-        clientsListClientsToAttach = em.getReference(
-            clientsListClientsToAttach.getClass(),
-            clientsListClientsToAttach.getClientsPK());
-        attachedClientsList.add(clientsListClientsToAttach);
-      }
-      reviews.setClientsList(attachedClientsList);
-      List<Services> attachedServicesList = new ArrayList<Services>();
-      for (Services servicesListServicesToAttach : reviews
-          .getServicesList()) {
-        servicesListServicesToAttach = em.getReference(
-            servicesListServicesToAttach.getClass(),
-            servicesListServicesToAttach.getServicesPK());
-        attachedServicesList.add(servicesListServicesToAttach);
-      }
-      reviews.setServicesList(attachedServicesList);
-      em.persist(reviews);
-      for (Clients clientsListClients : reviews.getClientsList()) {
-        clientsListClients.getReviewsList().add(reviews);
-        clientsListClients = em.merge(clientsListClients);
-      }
-      for (Services servicesListServices : reviews.getServicesList()) {
-        servicesListServices.getReviewsList().add(reviews);
-        servicesListServices = em.merge(servicesListServices);
-      }
-      utx.commit();
-    } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
-      }
-      throw ex;
-    } finally {
-      if (em != null) {
-        em.close();
-      }
-    }
-  }
 
-  public void edit(Reviews reviews) throws NonexistentEntityException,
-      RollbackFailureException, Exception {
-    EntityManager em = null;
-    try {
-      utx.begin();
-      em = getEntityManager();
-      Reviews persistentReviews = em.find(Reviews.class, reviews.getId());
-      List<Clients> clientsListOld = persistentReviews.getClientsList();
-      List<Clients> clientsListNew = reviews.getClientsList();
-      List<Services> servicesListOld = persistentReviews
-          .getServicesList();
-      List<Services> servicesListNew = reviews.getServicesList();
-      List<Clients> attachedClientsListNew = new ArrayList<Clients>();
-      for (Clients clientsListNewClientsToAttach : clientsListNew) {
-        clientsListNewClientsToAttach = em.getReference(
-            clientsListNewClientsToAttach.getClass(),
-            clientsListNewClientsToAttach.getClientsPK());
-        attachedClientsListNew.add(clientsListNewClientsToAttach);
-      }
-      clientsListNew = attachedClientsListNew;
-      reviews.setClientsList(clientsListNew);
-      List<Services> attachedServicesListNew = new ArrayList<Services>();
-      for (Services servicesListNewServicesToAttach : servicesListNew) {
-        servicesListNewServicesToAttach = em.getReference(
-            servicesListNewServicesToAttach.getClass(),
-            servicesListNewServicesToAttach.getServicesPK());
-        attachedServicesListNew.add(servicesListNewServicesToAttach);
-      }
-      servicesListNew = attachedServicesListNew;
-      reviews.setServicesList(servicesListNew);
-      reviews = em.merge(reviews);
-      for (Clients clientsListOldClients : clientsListOld) {
-        if (!clientsListNew.contains(clientsListOldClients)) {
-          clientsListOldClients.getReviewsList().remove(reviews);
-          clientsListOldClients = em.merge(clientsListOldClients);
+    public void edit(Reviews reviews) throws NonexistentEntityException, Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Reviews persistentReviews = em.find(Reviews.class, reviews.getId());
+            Clients clientsIdOld = persistentReviews.getClientsId();
+            Clients clientsIdNew = reviews.getClientsId();
+            Services servicesIdOld = persistentReviews.getServicesId();
+            Services servicesIdNew = reviews.getServicesId();
+            if (clientsIdNew != null) {
+                clientsIdNew = em.getReference(clientsIdNew.getClass(), clientsIdNew.getId());
+                reviews.setClientsId(clientsIdNew);
+            }
+            if (servicesIdNew != null) {
+                servicesIdNew = em.getReference(servicesIdNew.getClass(), servicesIdNew.getId());
+                reviews.setServicesId(servicesIdNew);
+            }
+            reviews = em.merge(reviews);
+            if (clientsIdOld != null && !clientsIdOld.equals(clientsIdNew)) {
+                clientsIdOld.getReviewsList().remove(reviews);
+                clientsIdOld = em.merge(clientsIdOld);
+            }
+            if (clientsIdNew != null && !clientsIdNew.equals(clientsIdOld)) {
+                clientsIdNew.getReviewsList().add(reviews);
+                clientsIdNew = em.merge(clientsIdNew);
+            }
+            if (servicesIdOld != null && !servicesIdOld.equals(servicesIdNew)) {
+                servicesIdOld.getReviewsList().remove(reviews);
+                servicesIdOld = em.merge(servicesIdOld);
+            }
+            if (servicesIdNew != null && !servicesIdNew.equals(servicesIdOld)) {
+                servicesIdNew.getReviewsList().add(reviews);
+                servicesIdNew = em.merge(servicesIdNew);
+            }
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                Integer id = reviews.getId();
+                if (findReviews(id) == null) {
+                    throw new NonexistentEntityException("The reviews with id " + id + " no longer exists.");
+                }
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
-      }
-      for (Clients clientsListNewClients : clientsListNew) {
-        if (!clientsListOld.contains(clientsListNewClients)) {
-          clientsListNewClients.getReviewsList().add(reviews);
-          clientsListNewClients = em.merge(clientsListNewClients);
-        }
-      }
-      for (Services servicesListOldServices : servicesListOld) {
-        if (!servicesListNew.contains(servicesListOldServices)) {
-          servicesListOldServices.getReviewsList().remove(reviews);
-          servicesListOldServices = em.merge(servicesListOldServices);
-        }
-      }
-      for (Services servicesListNewServices : servicesListNew) {
-        if (!servicesListOld.contains(servicesListNewServices)) {
-          servicesListNewServices.getReviewsList().add(reviews);
-          servicesListNewServices = em.merge(servicesListNewServices);
-        }
-      }
-      utx.commit();
-    } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
-      }
-      String msg = ex.getLocalizedMessage();
-      if (msg == null || msg.length() == 0) {
-        Integer id = reviews.getId();
-        if (findReviews(id) == null) {
-          throw new NonexistentEntityException("The reviews with id "
-              + id + " no longer exists.");
-        }
-      }
-      throw ex;
-    } finally {
-      if (em != null) {
-        em.close();
-      }
     }
-  }
 
-  public void destroy(Integer id) throws NonexistentEntityException,
-      RollbackFailureException, Exception {
-    EntityManager em = null;
-    try {
-      utx.begin();
-      em = getEntityManager();
-      Reviews reviews;
-      try {
-        reviews = em.getReference(Reviews.class, id);
-        reviews.getId();
-      } catch (EntityNotFoundException enfe) {
-        throw new NonexistentEntityException("The reviews with id "
-            + id + " no longer exists.", enfe);
-      }
-      List<Clients> clientsList = reviews.getClientsList();
-      for (Clients clientsListClients : clientsList) {
-        clientsListClients.getReviewsList().remove(reviews);
-        clientsListClients = em.merge(clientsListClients);
-      }
-      List<Services> servicesList = reviews.getServicesList();
-      for (Services servicesListServices : servicesList) {
-        servicesListServices.getReviewsList().remove(reviews);
-        servicesListServices = em.merge(servicesListServices);
-      }
-      em.remove(reviews);
-      utx.commit();
-    } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
-      }
-      throw ex;
-    } finally {
-      if (em != null) {
-        em.close();
-      }
+    public void destroy(Integer id) throws NonexistentEntityException {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Reviews reviews;
+            try {
+                reviews = em.getReference(Reviews.class, id);
+                reviews.getId();
+            } catch (EntityNotFoundException enfe) {
+                throw new NonexistentEntityException("The reviews with id " + id + " no longer exists.", enfe);
+            }
+            Clients clientsId = reviews.getClientsId();
+            if (clientsId != null) {
+                clientsId.getReviewsList().remove(reviews);
+                clientsId = em.merge(clientsId);
+            }
+            Services servicesId = reviews.getServicesId();
+            if (servicesId != null) {
+                servicesId.getReviewsList().remove(reviews);
+                servicesId = em.merge(servicesId);
+            }
+            em.remove(reviews);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
-  }
 
-  public List<Reviews> findReviewsEntities() {
-    return findReviewsEntities(true, -1, -1);
-  }
+    public List<Reviews> findReviewsEntities() {
+        return findReviewsEntities(true, -1, -1);
+    }
 
   public List<Reviews> findReviewsEntities(int maxResults, int firstResult) {
     return findReviewsEntities(false, maxResults, firstResult);
@@ -268,38 +201,36 @@ public class ReviewsJpaController implements Serializable {
     }
   }
 
-  @SuppressWarnings("unchecked")
-  public List<Reviews> findReviewsByService(Services service) {
-//    EntityManager em = getEntityManager();
-//    try {
+  public List<Reviews> findReviewsByService(int serviceID) {
+    EntityManager em = getEntityManager();
+    try {
 //      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
 //      CriteriaQuery<Reviews> criteriaQuery = criteriaBuilder.createQuery(Reviews.class);
 //      Root<Reviews> reviewsRoot = criteriaQuery.from(Reviews.class);
-//      Join<Reviews, Services> shrJoin      = reviewsRoot.join("reviews_id", JoinType.INNER);
-//      Join<Reviews, Services> servicesJoin = reviewsRoot.join("services_id", JoinType.INNER);
-//      criteriaQuery.multiselect(reviewsRoot, servicesJoin.get("name"));
+//      Join<Reviews, Services> shrJoin = reviewsRoot.join()
+//      criteriaQuery.where(criteriaBuilder.equal(shrJoin.get("services_id"), serviceID));
+//      criteriaQuery.select(reviewsRoot);
 //      Query query = em.createQuery(criteriaQuery);
 //      return query.getResultList();
-//    } finally {
-//      em.close();
-//    }
-    return null;
+return null;
+    } finally {
+      em.close();
+    }
   }
 
   @SuppressWarnings("unchecked")
   public List<Reviews> findReviewsByClient(Clients client) {
-//    EntityManager em = getEntityManager();
-//    try {
-//      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-//      CriteriaQuery<Reviews> criteriaQuery = criteriaBuilder.createQuery(Reviews.class);
-//      Root<Reviews> reviewsRoot = criteriaQuery.from(Reviews.class);
-//      criteriaQuery.select(reviewsRoot).where( criteriaBuilder.equal(Reviews.get("address"),faxNumber));
-//      Query query = em.createQuery(criteriaQuery);
-//      return query.getResultList();
-//    } finally {
-//      em.close();
-//    }
-    return null;
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Reviews> criteriaQuery = criteriaBuilder.createQuery(Reviews.class);
+      Root<Reviews> reviewsRoot = criteriaQuery.from(Reviews.class);
+      criteriaQuery.select(reviewsRoot);
+      Query query = em.createQuery(criteriaQuery);
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
   }
 
 }

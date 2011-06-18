@@ -11,21 +11,20 @@ import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.Address;
+import org.hyperpath.persistence.entities.Ads;
 import org.hyperpath.persistence.entities.Gpslocation;
 import org.hyperpath.persistence.entities.OpeningHours;
 import org.hyperpath.persistence.entities.Entities;
 import org.hyperpath.persistence.entities.Categories;
 import org.hyperpath.persistence.entities.Clients;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.hyperpath.persistence.entities.Reviews;
-import org.hyperpath.persistence.entities.Ads;
 import org.hyperpath.persistence.entities.Services;
 import org.hyperpath.persistence.jpa.exceptions.IllegalOrphanException;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
-import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
-import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class ServicesJpaController implements Serializable {
   private static final long serialVersionUID = 5950588872562050584L;
@@ -35,361 +34,319 @@ public class ServicesJpaController implements Serializable {
     this.emf = emf;
   }
 
+  public ServicesJpaController(EntityManager mockedEM){
+    em = mockedEM;
+  }
+
+  private EntityManager        em  = null;
   private UserTransaction      utx = null;
   private EntityManagerFactory emf = null;
 
   public EntityManager getEntityManager() {
+    if(em != null)
+      return em;
     return emf.createEntityManager();
   }
 
-  public void create(Services services) throws PreexistingEntityException,
-      RollbackFailureException, Exception {
-    if (services.getClientsList() == null) {
-      services.setClientsList(new ArrayList<Clients>());
-    }
-    if (services.getReviewsList() == null) {
-      services.setReviewsList(new ArrayList<Reviews>());
-    }
-    if (services.getAdsList() == null) {
-      services.setAdsList(new ArrayList<Ads>());
+    public void create(Services services) {
+        if (services.getClientsList() == null) {
+            services.setClientsList(new ArrayList<Clients>());
+        }
+        if (services.getReviewsList() == null) {
+            services.setReviewsList(new ArrayList<Reviews>());
+        }
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Ads adsId = services.getAdsId();
+            if (adsId != null) {
+                adsId = em.getReference(adsId.getClass(), adsId.getId());
+                services.setAdsId(adsId);
+            }
+            Gpslocation gpslocationId = services.getGpslocationId();
+            if (gpslocationId != null) {
+                gpslocationId = em.getReference(gpslocationId.getClass(), gpslocationId.getId());
+                services.setGpslocationId(gpslocationId);
+            }
+            OpeningHours openingHoursid = services.getOpeningHoursid();
+            if (openingHoursid != null) {
+                openingHoursid = em.getReference(openingHoursid.getClass(), openingHoursid.getId());
+                services.setOpeningHoursid(openingHoursid);
+            }
+            Entities entitiesId = services.getEntitiesId();
+            if (entitiesId != null) {
+                entitiesId = em.getReference(entitiesId.getClass(), entitiesId.getId());
+                services.setEntitiesId(entitiesId);
+            }
+            Categories categoriesId = services.getCategoriesId();
+            if (categoriesId != null) {
+                categoriesId = em.getReference(categoriesId.getClass(), categoriesId.getId());
+                services.setCategoriesId(categoriesId);
+            }
+            List<Clients> attachedClientsList = new ArrayList<Clients>();
+            for (Clients clientsListClientsToAttach : services.getClientsList()) {
+                clientsListClientsToAttach = em.getReference(clientsListClientsToAttach.getClass(), clientsListClientsToAttach.getId());
+                attachedClientsList.add(clientsListClientsToAttach);
+            }
+            services.setClientsList(attachedClientsList);
+            List<Reviews> attachedReviewsList = new ArrayList<Reviews>();
+            for (Reviews reviewsListReviewsToAttach : services.getReviewsList()) {
+                reviewsListReviewsToAttach = em.getReference(reviewsListReviewsToAttach.getClass(), reviewsListReviewsToAttach.getId());
+                attachedReviewsList.add(reviewsListReviewsToAttach);
+            }
+            services.setReviewsList(attachedReviewsList);
+            em.persist(services);
+            if (adsId != null) {
+                adsId.getServicesList().add(services);
+                adsId = em.merge(adsId);
+            }
+            if (gpslocationId != null) {
+                gpslocationId.getServicesList().add(services);
+                gpslocationId = em.merge(gpslocationId);
+            }
+            if (openingHoursid != null) {
+                openingHoursid.getServicesList().add(services);
+                openingHoursid = em.merge(openingHoursid);
+            }
+            if (entitiesId != null) {
+                entitiesId.getServicesList().add(services);
+                entitiesId = em.merge(entitiesId);
+            }
+            if (categoriesId != null) {
+                categoriesId.getServicesList().add(services);
+                categoriesId = em.merge(categoriesId);
+            }
+            for (Clients clientsListClients : services.getClientsList()) {
+                clientsListClients.getServicesList().add(services);
+                clientsListClients = em.merge(clientsListClients);
+            }
+            for (Reviews reviewsListReviews : services.getReviewsList()) {
+                Services oldServicesIdOfReviewsListReviews = reviewsListReviews.getServicesId();
+                reviewsListReviews.setServicesId(services);
+                reviewsListReviews = em.merge(reviewsListReviews);
+                if (oldServicesIdOfReviewsListReviews != null) {
+                    oldServicesIdOfReviewsListReviews.getReviewsList().remove(reviewsListReviews);
+                    oldServicesIdOfReviewsListReviews = em.merge(oldServicesIdOfReviewsListReviews);
+                }
+            }
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 
-    EntityManager em = null;
-    try {
-      utx.begin();
-      em = getEntityManager();
-      OpeningHours openingHours = services.getOpeningHours();
-      if (openingHours != null) {
-        openingHours = em.getReference(openingHours.getClass(),
-            openingHours.getId());
-        services.setOpeningHours(openingHours);
-      }
-      Entities entities = services.getEntities();
-      if (entities != null) {
-        entities = em.getReference(entities.getClass(),
-            entities.getId());
-        services.setEntities(entities);
-      }
-      Categories categories = services.getCategories();
-      if (categories != null) {
-        categories = em.getReference(categories.getClass(),
-            categories.getId());
-        services.setCategories(categories);
-      }
-      List<Clients> attachedClientsList = new ArrayList<Clients>();
-      for (Clients clientsListClientsToAttach : services.getClientsList()) {
-        clientsListClientsToAttach = em.getReference(
-            clientsListClientsToAttach.getClass(),
-            clientsListClientsToAttach.getClientsPK());
-        attachedClientsList.add(clientsListClientsToAttach);
-      }
-      services.setClientsList(attachedClientsList);
-      List<Reviews> attachedReviewsList = new ArrayList<Reviews>();
-      for (Reviews reviewsListReviewsToAttach : services.getReviewsList()) {
-        reviewsListReviewsToAttach = em.getReference(
-            reviewsListReviewsToAttach.getClass(),
-            reviewsListReviewsToAttach.getId());
-        attachedReviewsList.add(reviewsListReviewsToAttach);
-      }
-      services.setReviewsList(attachedReviewsList);
-      List<Ads> attachedAdsList = new ArrayList<Ads>();
-      for (Ads adsListAdsToAttach : services.getAdsList()) {
-        adsListAdsToAttach = em.getReference(
-            adsListAdsToAttach.getClass(),
-            adsListAdsToAttach.getAdsPK());
-        attachedAdsList.add(adsListAdsToAttach);
-      }
-      services.setAdsList(attachedAdsList);
-      em.persist(services);
-      if (openingHours != null) {
-        openingHours.getServicesList().add(services);
-        openingHours = em.merge(openingHours);
-      }
-      if (entities != null) {
-        entities.getServicesList().add(services);
-        entities = em.merge(entities);
-      }
-      if (categories != null) {
-        categories.getServicesList().add(services);
-        categories = em.merge(categories);
-      }
-      for (Clients clientsListClients : services.getClientsList()) {
-        clientsListClients.getServicesList().add(services);
-        clientsListClients = em.merge(clientsListClients);
-      }
-      for (Reviews reviewsListReviews : services.getReviewsList()) {
-        reviewsListReviews.getServicesList().add(services);
-        reviewsListReviews = em.merge(reviewsListReviews);
-      }
-      for (Ads adsListAds : services.getAdsList()) {
-        Services oldServicesOfAdsListAds = adsListAds.getServices();
-        adsListAds.setServices(services);
-        adsListAds = em.merge(adsListAds);
-        if (oldServicesOfAdsListAds != null) {
-          oldServicesOfAdsListAds.getAdsList().remove(adsListAds);
-          oldServicesOfAdsListAds = em.merge(oldServicesOfAdsListAds);
+    public void edit(Services services) throws IllegalOrphanException, NonexistentEntityException, Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Services persistentServices = em.find(Services.class, services.getId());
+            Ads adsIdOld = persistentServices.getAdsId();
+            Ads adsIdNew = services.getAdsId();
+            Gpslocation gpslocationIdOld = persistentServices.getGpslocationId();
+            Gpslocation gpslocationIdNew = services.getGpslocationId();
+            OpeningHours openingHoursidOld = persistentServices.getOpeningHoursid();
+            OpeningHours openingHoursidNew = services.getOpeningHoursid();
+            Entities entitiesIdOld = persistentServices.getEntitiesId();
+            Entities entitiesIdNew = services.getEntitiesId();
+            Categories categoriesIdOld = persistentServices.getCategoriesId();
+            Categories categoriesIdNew = services.getCategoriesId();
+            List<Clients> clientsListOld = persistentServices.getClientsList();
+            List<Clients> clientsListNew = services.getClientsList();
+            List<Reviews> reviewsListOld = persistentServices.getReviewsList();
+            List<Reviews> reviewsListNew = services.getReviewsList();
+            List<String> illegalOrphanMessages = null;
+            for (Reviews reviewsListOldReviews : reviewsListOld) {
+                if (!reviewsListNew.contains(reviewsListOldReviews)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Reviews " + reviewsListOldReviews + " since its servicesId field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            if (adsIdNew != null) {
+                adsIdNew = em.getReference(adsIdNew.getClass(), adsIdNew.getId());
+                services.setAdsId(adsIdNew);
+            }
+            if (gpslocationIdNew != null) {
+                gpslocationIdNew = em.getReference(gpslocationIdNew.getClass(), gpslocationIdNew.getId());
+                services.setGpslocationId(gpslocationIdNew);
+            }
+            if (openingHoursidNew != null) {
+                openingHoursidNew = em.getReference(openingHoursidNew.getClass(), openingHoursidNew.getId());
+                services.setOpeningHoursid(openingHoursidNew);
+            }
+            if (entitiesIdNew != null) {
+                entitiesIdNew = em.getReference(entitiesIdNew.getClass(), entitiesIdNew.getId());
+                services.setEntitiesId(entitiesIdNew);
+            }
+            if (categoriesIdNew != null) {
+                categoriesIdNew = em.getReference(categoriesIdNew.getClass(), categoriesIdNew.getId());
+                services.setCategoriesId(categoriesIdNew);
+            }
+            List<Clients> attachedClientsListNew = new ArrayList<Clients>();
+            for (Clients clientsListNewClientsToAttach : clientsListNew) {
+                clientsListNewClientsToAttach = em.getReference(clientsListNewClientsToAttach.getClass(), clientsListNewClientsToAttach.getId());
+                attachedClientsListNew.add(clientsListNewClientsToAttach);
+            }
+            clientsListNew = attachedClientsListNew;
+            services.setClientsList(clientsListNew);
+            List<Reviews> attachedReviewsListNew = new ArrayList<Reviews>();
+            for (Reviews reviewsListNewReviewsToAttach : reviewsListNew) {
+                reviewsListNewReviewsToAttach = em.getReference(reviewsListNewReviewsToAttach.getClass(), reviewsListNewReviewsToAttach.getId());
+                attachedReviewsListNew.add(reviewsListNewReviewsToAttach);
+            }
+            reviewsListNew = attachedReviewsListNew;
+            services.setReviewsList(reviewsListNew);
+            services = em.merge(services);
+            if (adsIdOld != null && !adsIdOld.equals(adsIdNew)) {
+                adsIdOld.getServicesList().remove(services);
+                adsIdOld = em.merge(adsIdOld);
+            }
+            if (adsIdNew != null && !adsIdNew.equals(adsIdOld)) {
+                adsIdNew.getServicesList().add(services);
+                adsIdNew = em.merge(adsIdNew);
+            }
+            if (gpslocationIdOld != null && !gpslocationIdOld.equals(gpslocationIdNew)) {
+                gpslocationIdOld.getServicesList().remove(services);
+                gpslocationIdOld = em.merge(gpslocationIdOld);
+            }
+            if (gpslocationIdNew != null && !gpslocationIdNew.equals(gpslocationIdOld)) {
+                gpslocationIdNew.getServicesList().add(services);
+                gpslocationIdNew = em.merge(gpslocationIdNew);
+            }
+            if (openingHoursidOld != null && !openingHoursidOld.equals(openingHoursidNew)) {
+                openingHoursidOld.getServicesList().remove(services);
+                openingHoursidOld = em.merge(openingHoursidOld);
+            }
+            if (openingHoursidNew != null && !openingHoursidNew.equals(openingHoursidOld)) {
+                openingHoursidNew.getServicesList().add(services);
+                openingHoursidNew = em.merge(openingHoursidNew);
+            }
+            if (entitiesIdOld != null && !entitiesIdOld.equals(entitiesIdNew)) {
+                entitiesIdOld.getServicesList().remove(services);
+                entitiesIdOld = em.merge(entitiesIdOld);
+            }
+            if (entitiesIdNew != null && !entitiesIdNew.equals(entitiesIdOld)) {
+                entitiesIdNew.getServicesList().add(services);
+                entitiesIdNew = em.merge(entitiesIdNew);
+            }
+            if (categoriesIdOld != null && !categoriesIdOld.equals(categoriesIdNew)) {
+                categoriesIdOld.getServicesList().remove(services);
+                categoriesIdOld = em.merge(categoriesIdOld);
+            }
+            if (categoriesIdNew != null && !categoriesIdNew.equals(categoriesIdOld)) {
+                categoriesIdNew.getServicesList().add(services);
+                categoriesIdNew = em.merge(categoriesIdNew);
+            }
+            for (Clients clientsListOldClients : clientsListOld) {
+                if (!clientsListNew.contains(clientsListOldClients)) {
+                    clientsListOldClients.getServicesList().remove(services);
+                    clientsListOldClients = em.merge(clientsListOldClients);
+                }
+            }
+            for (Clients clientsListNewClients : clientsListNew) {
+                if (!clientsListOld.contains(clientsListNewClients)) {
+                    clientsListNewClients.getServicesList().add(services);
+                    clientsListNewClients = em.merge(clientsListNewClients);
+                }
+            }
+            for (Reviews reviewsListNewReviews : reviewsListNew) {
+                if (!reviewsListOld.contains(reviewsListNewReviews)) {
+                    Services oldServicesIdOfReviewsListNewReviews = reviewsListNewReviews.getServicesId();
+                    reviewsListNewReviews.setServicesId(services);
+                    reviewsListNewReviews = em.merge(reviewsListNewReviews);
+                    if (oldServicesIdOfReviewsListNewReviews != null && !oldServicesIdOfReviewsListNewReviews.equals(services)) {
+                        oldServicesIdOfReviewsListNewReviews.getReviewsList().remove(reviewsListNewReviews);
+                        oldServicesIdOfReviewsListNewReviews = em.merge(oldServicesIdOfReviewsListNewReviews);
+                    }
+                }
+            }
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                Integer id = services.getId();
+                if (findServices(id) == null) {
+                    throw new NonexistentEntityException("The services with id " + id + " no longer exists.");
+                }
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
-      }
-      utx.commit();
-    } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
-      }
-      if (findServices(services.getServicesPK()) != null) {
-        throw new PreexistingEntityException("Services " + services
-            + " already exists.", ex);
-      }
-      throw ex;
-    } finally {
-      if (em != null) {
-        em.close();
-      }
     }
-  }
 
-  public void edit(Services services) throws IllegalOrphanException,
-      NonexistentEntityException, RollbackFailureException, Exception {
-    EntityManager em = null;
-    try {
-      utx.begin();
-      em = getEntityManager();
-      Services persistentServices = em.find(Services.class,
-          services.getServicesPK());
-      OpeningHours openingHoursOld = persistentServices.getOpeningHours();
-      OpeningHours openingHoursNew = services.getOpeningHours();
-      Entities entitiesOld = persistentServices.getEntities();
-      Entities entitiesNew = services.getEntities();
-      Categories categoriesOld = persistentServices.getCategories();
-      Categories categoriesNew = services.getCategories();
-      List<Clients> clientsListOld = persistentServices.getClientsList();
-      List<Clients> clientsListNew = services.getClientsList();
-      List<Reviews> reviewsListOld = persistentServices.getReviewsList();
-      List<Reviews> reviewsListNew = services.getReviewsList();
-      List<Ads> adsListOld = persistentServices.getAdsList();
-      List<Ads> adsListNew = services.getAdsList();
-      List<String> illegalOrphanMessages = null;
-      for (Ads adsListOldAds : adsListOld) {
-        if (!adsListNew.contains(adsListOldAds)) {
-          if (illegalOrphanMessages == null) {
-            illegalOrphanMessages = new ArrayList<String>();
-          }
-          illegalOrphanMessages.add("You must retain Ads "
-              + adsListOldAds
-              + " since its services field is not nullable.");
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Services services;
+            try {
+                services = em.getReference(Services.class, id);
+                services.getId();
+            } catch (EntityNotFoundException enfe) {
+                throw new NonexistentEntityException("The services with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            List<Reviews> reviewsListOrphanCheck = services.getReviewsList();
+            for (Reviews reviewsListOrphanCheckReviews : reviewsListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Services (" + services + ") cannot be destroyed since the Reviews " + reviewsListOrphanCheckReviews + " in its reviewsList field has a non-nullable servicesId field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            Ads adsId = services.getAdsId();
+            if (adsId != null) {
+                adsId.getServicesList().remove(services);
+                adsId = em.merge(adsId);
+            }
+            Gpslocation gpslocationId = services.getGpslocationId();
+            if (gpslocationId != null) {
+                gpslocationId.getServicesList().remove(services);
+                gpslocationId = em.merge(gpslocationId);
+            }
+            OpeningHours openingHoursid = services.getOpeningHoursid();
+            if (openingHoursid != null) {
+                openingHoursid.getServicesList().remove(services);
+                openingHoursid = em.merge(openingHoursid);
+            }
+            Entities entitiesId = services.getEntitiesId();
+            if (entitiesId != null) {
+                entitiesId.getServicesList().remove(services);
+                entitiesId = em.merge(entitiesId);
+            }
+            Categories categoriesId = services.getCategoriesId();
+            if (categoriesId != null) {
+                categoriesId.getServicesList().remove(services);
+                categoriesId = em.merge(categoriesId);
+            }
+            List<Clients> clientsList = services.getClientsList();
+            for (Clients clientsListClients : clientsList) {
+                clientsListClients.getServicesList().remove(services);
+                clientsListClients = em.merge(clientsListClients);
+            }
+            em.remove(services);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
-      }
-      if (illegalOrphanMessages != null) {
-        throw new IllegalOrphanException(illegalOrphanMessages);
-      }
-      if (openingHoursNew != null) {
-        openingHoursNew = em.getReference(openingHoursNew.getClass(),
-            openingHoursNew.getId());
-        services.setOpeningHours(openingHoursNew);
-      }
-      if (entitiesNew != null) {
-        entitiesNew = em.getReference(entitiesNew.getClass(),
-            entitiesNew.getId());
-        services.setEntities(entitiesNew);
-      }
-      if (categoriesNew != null) {
-        categoriesNew = em.getReference(categoriesNew.getClass(),
-            categoriesNew.getId());
-        services.setCategories(categoriesNew);
-      }
-      List<Clients> attachedClientsListNew = new ArrayList<Clients>();
-      for (Clients clientsListNewClientsToAttach : clientsListNew) {
-        clientsListNewClientsToAttach = em.getReference(
-            clientsListNewClientsToAttach.getClass(),
-            clientsListNewClientsToAttach.getClientsPK());
-        attachedClientsListNew.add(clientsListNewClientsToAttach);
-      }
-      clientsListNew = attachedClientsListNew;
-      services.setClientsList(clientsListNew);
-      List<Reviews> attachedReviewsListNew = new ArrayList<Reviews>();
-      for (Reviews reviewsListNewReviewsToAttach : reviewsListNew) {
-        reviewsListNewReviewsToAttach = em.getReference(
-            reviewsListNewReviewsToAttach.getClass(),
-            reviewsListNewReviewsToAttach.getId());
-        attachedReviewsListNew.add(reviewsListNewReviewsToAttach);
-      }
-      reviewsListNew = attachedReviewsListNew;
-      services.setReviewsList(reviewsListNew);
-      List<Ads> attachedAdsListNew = new ArrayList<Ads>();
-      for (Ads adsListNewAdsToAttach : adsListNew) {
-        adsListNewAdsToAttach = em.getReference(
-            adsListNewAdsToAttach.getClass(),
-            adsListNewAdsToAttach.getAdsPK());
-        attachedAdsListNew.add(adsListNewAdsToAttach);
-      }
-      adsListNew = attachedAdsListNew;
-      services.setAdsList(adsListNew);
-      services = em.merge(services);
-      if (openingHoursOld != null
-          && !openingHoursOld.equals(openingHoursNew)) {
-        openingHoursOld.getServicesList().remove(services);
-        openingHoursOld = em.merge(openingHoursOld);
-      }
-      if (openingHoursNew != null
-          && !openingHoursNew.equals(openingHoursOld)) {
-        openingHoursNew.getServicesList().add(services);
-        openingHoursNew = em.merge(openingHoursNew);
-      }
-      if (entitiesOld != null && !entitiesOld.equals(entitiesNew)) {
-        entitiesOld.getServicesList().remove(services);
-        entitiesOld = em.merge(entitiesOld);
-      }
-      if (entitiesNew != null && !entitiesNew.equals(entitiesOld)) {
-        entitiesNew.getServicesList().add(services);
-        entitiesNew = em.merge(entitiesNew);
-      }
-      if (categoriesOld != null && !categoriesOld.equals(categoriesNew)) {
-        categoriesOld.getServicesList().remove(services);
-        categoriesOld = em.merge(categoriesOld);
-      }
-      if (categoriesNew != null && !categoriesNew.equals(categoriesOld)) {
-        categoriesNew.getServicesList().add(services);
-        categoriesNew = em.merge(categoriesNew);
-      }
-      for (Clients clientsListOldClients : clientsListOld) {
-        if (!clientsListNew.contains(clientsListOldClients)) {
-          clientsListOldClients.getServicesList().remove(services);
-          clientsListOldClients = em.merge(clientsListOldClients);
-        }
-      }
-      for (Clients clientsListNewClients : clientsListNew) {
-        if (!clientsListOld.contains(clientsListNewClients)) {
-          clientsListNewClients.getServicesList().add(services);
-          clientsListNewClients = em.merge(clientsListNewClients);
-        }
-      }
-      for (Reviews reviewsListOldReviews : reviewsListOld) {
-        if (!reviewsListNew.contains(reviewsListOldReviews)) {
-          reviewsListOldReviews.getServicesList().remove(services);
-          reviewsListOldReviews = em.merge(reviewsListOldReviews);
-        }
-      }
-      for (Reviews reviewsListNewReviews : reviewsListNew) {
-        if (!reviewsListOld.contains(reviewsListNewReviews)) {
-          reviewsListNewReviews.getServicesList().add(services);
-          reviewsListNewReviews = em.merge(reviewsListNewReviews);
-        }
-      }
-      for (Ads adsListNewAds : adsListNew) {
-        if (!adsListOld.contains(adsListNewAds)) {
-          Services oldServicesOfAdsListNewAds = adsListNewAds
-              .getServices();
-          adsListNewAds.setServices(services);
-          adsListNewAds = em.merge(adsListNewAds);
-          if (oldServicesOfAdsListNewAds != null
-              && !oldServicesOfAdsListNewAds.equals(services)) {
-            oldServicesOfAdsListNewAds.getAdsList().remove(
-                adsListNewAds);
-            oldServicesOfAdsListNewAds = em
-                .merge(oldServicesOfAdsListNewAds);
-          }
-        }
-      }
-      utx.commit();
-    } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
-      }
-      String msg = ex.getLocalizedMessage();
-      if (msg == null || msg.length() == 0) {
-        Integer id = services.getServicesPK();
-        if (findServices(id) == null) {
-          throw new NonexistentEntityException(
-              "The services with id " + id + " no longer exists.");
-        }
-      }
-      throw ex;
-    } finally {
-      if (em != null) {
-        em.close();
-      }
     }
-  }
 
-  public void destroy(Integer id) throws IllegalOrphanException,
-      NonexistentEntityException, RollbackFailureException, Exception {
-    EntityManager em = null;
-    try {
-      utx.begin();
-      em = getEntityManager();
-      Services services;
-      try {
-        services = em.getReference(Services.class, id);
-        services.getServicesPK();
-      } catch (EntityNotFoundException enfe) {
-        throw new NonexistentEntityException("The services with id "
-            + id + " no longer exists.", enfe);
-      }
-      List<String> illegalOrphanMessages = null;
-      List<Ads> adsListOrphanCheck = services.getAdsList();
-      for (Ads adsListOrphanCheckAds : adsListOrphanCheck) {
-        if (illegalOrphanMessages == null) {
-          illegalOrphanMessages = new ArrayList<String>();
-        }
-        illegalOrphanMessages
-            .add("This Services ("
-                + services
-                + ") cannot be destroyed since the Ads "
-                + adsListOrphanCheckAds
-                + " in its adsList field has a non-nullable services field.");
-      }
-      if (illegalOrphanMessages != null) {
-        throw new IllegalOrphanException(illegalOrphanMessages);
-      }
-      OpeningHours openingHours = services.getOpeningHours();
-      if (openingHours != null) {
-        openingHours.getServicesList().remove(services);
-        openingHours = em.merge(openingHours);
-      }
-      Entities entities = services.getEntities();
-      if (entities != null) {
-        entities.getServicesList().remove(services);
-        entities = em.merge(entities);
-      }
-      Categories categories = services.getCategories();
-      if (categories != null) {
-        categories.getServicesList().remove(services);
-        categories = em.merge(categories);
-      }
-      List<Clients> clientsList = services.getClientsList();
-      for (Clients clientsListClients : clientsList) {
-        clientsListClients.getServicesList().remove(services);
-        clientsListClients = em.merge(clientsListClients);
-      }
-      List<Reviews> reviewsList = services.getReviewsList();
-      for (Reviews reviewsListReviews : reviewsList) {
-        reviewsListReviews.getServicesList().remove(services);
-        reviewsListReviews = em.merge(reviewsListReviews);
-      }
-      em.remove(services);
-      utx.commit();
-    } catch (Exception ex) {
-      try {
-        utx.rollback();
-      } catch (Exception re) {
-        throw new RollbackFailureException(
-            "An error occurred attempting to roll back the transaction.",
-            re);
-      }
-      throw ex;
-    } finally {
-      if (em != null) {
-        em.close();
-      }
-    }
-  }
 
   public List<Services> findServicesEntities() {
     return findServicesEntities(true, -1, -1);
@@ -420,9 +377,9 @@ public class ServicesJpaController implements Serializable {
   public Services findServices(Integer id) {
     EntityManager em = getEntityManager();
     try {
-      return em.find(Services.class, id);
+        return em.find(Services.class, id);
     } finally {
-      em.close();
+        em.close();
     }
   }
 
