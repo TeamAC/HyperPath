@@ -1,7 +1,6 @@
 package org.hyperpath.services;
 
 import java.util.List;
-import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -9,7 +8,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
-import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.Faxes;
 import org.hyperpath.persistence.jpa.FaxesJpaController;
@@ -20,8 +18,6 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 @WebService(serviceName = "FaxesServices")
 @Stateless()
 public class FaxesServices {
-  @Resource
-  private UserTransaction utx;
 
   @PersistenceUnit
   EntityManagerFactory    emf;
@@ -35,7 +31,7 @@ public class FaxesServices {
   public List<Faxes> listAllFaxes() throws Exception,
       RollbackFailureException, NonexistentEntityException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new FaxesJpaController(utx, emf);
+    controller = new FaxesJpaController(emf);
     return controller.findFaxesEntities();
   }
 
@@ -47,7 +43,7 @@ public class FaxesServices {
       throws Exception, PreexistingEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new FaxesJpaController(utx, emf);
+    controller = new FaxesJpaController(emf);
     controller.create(fax);
   }
 
@@ -59,7 +55,7 @@ public class FaxesServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new FaxesJpaController(utx, emf);
+    controller = new FaxesJpaController(emf);
     controller.edit(fax);
   }
 
@@ -71,7 +67,7 @@ public class FaxesServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new FaxesJpaController(utx, emf);
+    controller = new FaxesJpaController(emf);
     controller.destroy(faxId);
   }
 
@@ -83,7 +79,7 @@ public class FaxesServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new FaxesJpaController(utx, emf);
+    controller = new FaxesJpaController(emf);
     return controller.findExactFaxes(faxNumber);
   }
 
@@ -96,7 +92,7 @@ public class FaxesServices {
       NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new FaxesJpaController(utx, emf);
+    controller = new FaxesJpaController(emf);
     return controller.findApproximateFaxes(faxNumber);
   }
 
@@ -106,7 +102,7 @@ public class FaxesServices {
   @WebMethod(operationName = "countFaxes")
   public Integer countFaxes() throws Exception, RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new FaxesJpaController(utx, emf);
+    controller = new FaxesJpaController(emf);
     return controller.getFaxesCount();
   }
 }

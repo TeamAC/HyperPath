@@ -2,7 +2,6 @@ package org.hyperpath.services;
 
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -10,7 +9,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Categories;
 import org.hyperpath.persistence.jpa.CategoriesJpaController;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
@@ -20,8 +18,6 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 @WebService(serviceName = "CategoriesServices")
 @Stateless()
 public class CategoriesServices {
-  @Resource
-  private UserTransaction utx;
 
   @PersistenceUnit
   EntityManagerFactory    emf;
@@ -32,11 +28,11 @@ public class CategoriesServices {
    * Add new category
    */
   @WebMethod(operationName = "addCategory")
-  public void addService(@WebParam(name = "category") Categories category)
+  public void addCategory(@WebParam(name = "category") Categories category)
       throws Exception, PreexistingEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new CategoriesJpaController(utx, emf);
+    controller = new CategoriesJpaController(emf);
     controller.create(category);
   }
 
@@ -48,7 +44,7 @@ public class CategoriesServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new CategoriesJpaController(utx, emf);
+    controller = new CategoriesJpaController(emf);
     controller.edit(category);
   }
 
@@ -60,7 +56,7 @@ public class CategoriesServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new CategoriesJpaController(utx, emf);
+    controller = new CategoriesJpaController(emf);
     controller.destroy(categoryId);
   }
 
@@ -72,7 +68,7 @@ public class CategoriesServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new CategoriesJpaController(utx, emf);
+    controller = new CategoriesJpaController(emf);
     return controller.findCategoriesByExactLabel(categoryLabel);
   }
 
@@ -84,7 +80,7 @@ public class CategoriesServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new CategoriesJpaController(utx, emf);
+    controller = new CategoriesJpaController(emf);
     return controller.findCategoriesByApproximateLabel(categoryLabel);
   }
 
@@ -96,7 +92,7 @@ public class CategoriesServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new CategoriesJpaController(utx, emf);
+    controller = new CategoriesJpaController(emf);
     return controller.findCategoriesByExactDescription(categoryDescription);
   }
 
@@ -108,7 +104,7 @@ public class CategoriesServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new CategoriesJpaController(utx, emf);
+    controller = new CategoriesJpaController(emf);
     return controller.findCategoriesByApproximateDescription(categoryDescription);
   }
 
@@ -121,7 +117,7 @@ public class CategoriesServices {
       NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new CategoriesJpaController(utx, emf);
+    controller = new CategoriesJpaController(emf);
     return controller.findCategoriesEntities();
   }
 
@@ -134,7 +130,7 @@ public class CategoriesServices {
       NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new CategoriesJpaController(utx, emf);
+    controller = new CategoriesJpaController(emf);
     return controller.getCategoriesCount();
   }
 }

@@ -8,12 +8,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Advertisers;
 import org.hyperpath.persistence.entities.Categories;
@@ -29,25 +23,23 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 public class AddressJpaController implements Serializable {
   private static final long serialVersionUID = -7707097477154823435L;
 
-    public AddressJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+  public AddressJpaController(EntityManagerFactory emf)
+  {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Address address) {
+    public void create(Address address) throws Exception {
         if (address.getEntitiesList() == null) {
             address.setEntitiesList(new ArrayList<Entities>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             List<Entities> attachedEntitiesList = new ArrayList<Entities>();
             for (Entities entitiesListEntitiesToAttach : address.getEntitiesList()) {
                 entitiesListEntitiesToAttach = em.getReference(entitiesListEntitiesToAttach.getClass(), entitiesListEntitiesToAttach.getId());
@@ -59,32 +51,12 @@ public class AddressJpaController implements Serializable {
                 entitiesListEntities.getAddressList().add(address);
                 entitiesListEntities = em.merge(entitiesListEntities);
             }
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        }  catch (Exception ex) {
+          throw ex;
         } finally {
-            if (em != null) {
-                em.close();
-            }
+          if (em != null) {
+            em.close();
+          }
         }
     }
 
@@ -92,7 +64,6 @@ public class AddressJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             Address persistentAddress = em.find(Address.class, address.getId());
             List<Entities> entitiesListOld = persistentAddress.getEntitiesList();
             List<Entities> entitiesListNew = address.getEntitiesList();
@@ -116,7 +87,6 @@ public class AddressJpaController implements Serializable {
                     entitiesListNewEntities = em.merge(entitiesListNewEntities);
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -133,11 +103,10 @@ public class AddressJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             Address address;
             try {
                 address = em.getReference(Address.class, id);
@@ -151,28 +120,8 @@ public class AddressJpaController implements Serializable {
                 entitiesListEntities = em.merge(entitiesListEntities);
             }
             em.remove(address);
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        } catch (Exception ex) {
+          throw ex;
         } finally {
             if (em != null) {
                 em.close();

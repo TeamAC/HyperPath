@@ -1,7 +1,6 @@
 package org.hyperpath.services;
 
 import java.util.List;
-import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -9,7 +8,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
-import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.Phones;
 import org.hyperpath.persistence.jpa.PhonesJpaController;
@@ -20,13 +18,11 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 @WebService(serviceName = "PhonesServices")
 @Stateless()
 public class PhonesServices {
-  @Resource
-  private UserTransaction utx;
   @PersistenceUnit
   EntityManagerFactory    emf;
 
   PhonesJpaController     controller;
-  
+
   /**
    * List all phones
    */
@@ -34,10 +30,10 @@ public class PhonesServices {
   public List<Phones> listAllPhones() throws Exception,
       RollbackFailureException, NonexistentEntityException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new PhonesJpaController(utx, emf);
+    controller = new PhonesJpaController(emf);
     return controller.findPhonesEntities();
   }
-  
+
   /**
    * Add new Phone
    */
@@ -45,8 +41,8 @@ public class PhonesServices {
   public void addPhones(@WebParam(name = "phone") Phones phone)
       throws Exception, PreexistingEntityException,
       RollbackFailureException {
-  	emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new PhonesJpaController(utx, emf);
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new PhonesJpaController(emf);
     controller.create(phone);
   }
 
@@ -57,8 +53,8 @@ public class PhonesServices {
   public void updatePhones(@WebParam(name = "phone") Phones phone)
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
-  	emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new PhonesJpaController(utx, emf);
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new PhonesJpaController(emf);
     controller.edit(phone);
   }
 
@@ -69,8 +65,8 @@ public class PhonesServices {
   public void deletePhones(@WebParam(name = "phoneId") Integer phoneId)
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
-  	emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new PhonesJpaController(utx, emf);
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new PhonesJpaController(emf);
     controller.destroy(phoneId);
   }
 
@@ -82,7 +78,7 @@ public class PhonesServices {
     throws Exception, NonexistentEntityException,
     RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new PhonesJpaController(utx, emf);
+    controller = new PhonesJpaController(emf);
     return controller.findExactPhone(phoneNumber);
   }
 
@@ -95,7 +91,7 @@ public class PhonesServices {
       NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new PhonesJpaController(utx, emf);
+    controller = new PhonesJpaController(emf);
     return controller.findApproximatePhones(phoneNumber);
   }
 
@@ -105,7 +101,7 @@ public class PhonesServices {
   @WebMethod(operationName = "countPhones")
   public Integer countPhones() throws Exception, RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new PhonesJpaController(utx, emf);
+    controller = new PhonesJpaController(emf);
     return controller.getPhonesCount();
   }
 }

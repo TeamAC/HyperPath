@@ -8,7 +8,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.Entities;
 import java.util.ArrayList;
@@ -21,15 +20,13 @@ public class FaxesJpaController implements Serializable {
   private static final long serialVersionUID = -7155478827388953032L;
 
   private EntityManager        em  = null;
-  private UserTransaction      utx = null;
   private EntityManagerFactory emf = null;
 
   public FaxesJpaController(EntityManager mockedEM) {
     em = mockedEM;
   }
 
-  public FaxesJpaController(UserTransaction utx, EntityManagerFactory emf) {
-    this.utx = utx;
+  public FaxesJpaController(EntityManagerFactory emf) {
     this.emf = emf;
   }
 
@@ -45,7 +42,6 @@ public class FaxesJpaController implements Serializable {
     }
     EntityManager em = null;
     try {
-        utx.begin();
         em = getEntityManager();
         List<Entities> attachedEntitiesList = new ArrayList<Entities>();
         for (Entities entitiesListEntitiesToAttach : faxes.getEntitiesList()) {
@@ -58,13 +54,7 @@ public class FaxesJpaController implements Serializable {
             entitiesListEntities.getFaxesList().add(faxes);
             entitiesListEntities = em.merge(entitiesListEntities);
         }
-        utx.commit();
     } catch (Exception ex) {
-        try {
-            utx.rollback();
-        } catch (Exception re) {
-            throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-        }
         throw ex;
     } finally {
         if (em != null) {
@@ -76,7 +66,6 @@ public class FaxesJpaController implements Serializable {
   public void edit(Faxes faxes) throws NonexistentEntityException, RollbackFailureException, Exception {
     EntityManager em = null;
     try {
-        utx.begin();
         em = getEntityManager();
         Faxes persistentFaxes = em.find(Faxes.class, faxes.getId());
         List<Entities> entitiesListOld = persistentFaxes.getEntitiesList();
@@ -101,21 +90,8 @@ public class FaxesJpaController implements Serializable {
                 entitiesListNewEntities = em.merge(entitiesListNewEntities);
             }
         }
-        utx.commit();
     } catch (Exception ex) {
-        try {
-            utx.rollback();
-        } catch (Exception re) {
-            throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-        }
-        String msg = ex.getLocalizedMessage();
-        if (msg == null || msg.length() == 0) {
-            Integer id = faxes.getId();
-            if (findFaxes(id) == null) {
-                throw new NonexistentEntityException("The faxes with id " + id + " no longer exists.");
-            }
-        }
-        throw ex;
+      throw ex;
     } finally {
         if (em != null) {
             em.close();
@@ -126,7 +102,6 @@ public class FaxesJpaController implements Serializable {
   public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
     EntityManager em = null;
     try {
-        utx.begin();
         em = getEntityManager();
         Faxes faxes;
         try {
@@ -141,14 +116,8 @@ public class FaxesJpaController implements Serializable {
             entitiesListEntities = em.merge(entitiesListEntities);
         }
         em.remove(faxes);
-        utx.commit();
     } catch (Exception ex) {
-        try {
-            utx.rollback();
-        } catch (Exception re) {
-            throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-        }
-        throw ex;
+      throw ex;
     } finally {
         if (em != null) {
             em.close();

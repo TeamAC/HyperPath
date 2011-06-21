@@ -10,12 +10,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Ads;
 import org.hyperpath.persistence.entities.Advertisers;
 import org.hyperpath.persistence.entities.Services;
@@ -26,13 +20,11 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 public class AdsJpaController implements Serializable {
   private static final long serialVersionUID = -3954156113997719506L;
 
-  public AdsJpaController(UserTransaction utx, EntityManagerFactory emf) {
-    this.utx = utx;
+  public AdsJpaController(EntityManagerFactory emf) {
     this.emf = emf;
   }
 
   private EntityManager        em  = null;
-  private UserTransaction      utx = null;
   private EntityManagerFactory emf = null;
 
   public AdsJpaController(EntityManager mockedEM) {
@@ -43,14 +35,13 @@ public class AdsJpaController implements Serializable {
     return emf.createEntityManager();
   }
 
-  public void create(Ads ads) {
+  public void create(Ads ads) throws Exception {
         if (ads.getServicesList() == null) {
             ads.setServicesList(new ArrayList<Services>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             Advertisers advertisersId = ads.getAdvertisersId();
             if (advertisersId != null) {
                 advertisersId = em.getReference(advertisersId.getClass(), advertisersId.getId());
@@ -76,31 +67,11 @@ public class AdsJpaController implements Serializable {
                     oldAdsIdOfServicesListServices = em.merge(oldAdsIdOfServicesListServices);
                 }
             }
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        } catch (Exception ex) {
+          throw ex;
         } finally {
-            if (em != null) {
-                em.close();
+          if (em != null) {
+              em.close();
       }
     }
   }
@@ -109,7 +80,6 @@ public class AdsJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             Ads persistentAds = em.find(Ads.class, ads.getId());
             Advertisers advertisersIdOld = persistentAds.getAdvertisersId();
             Advertisers advertisersIdNew = ads.getAdvertisersId();
@@ -158,7 +128,6 @@ public class AdsJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -175,11 +144,10 @@ public class AdsJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             Ads ads;
             try {
                 ads = em.getReference(Ads.class, id);
@@ -204,28 +172,8 @@ public class AdsJpaController implements Serializable {
                 advertisersId = em.merge(advertisersId);
             }
             em.remove(ads);
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        } catch (Exception ex) {
+          throw ex;
         } finally {
             if (em != null) {
                 em.close();

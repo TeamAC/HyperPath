@@ -1,6 +1,5 @@
 package org.hyperpath.services;
 
-import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -8,7 +7,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.OpeningHours;
 import org.hyperpath.persistence.jpa.OpeningHoursJpaController;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
@@ -17,8 +15,6 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 @WebService(serviceName = "OpeningHoursServices")
 @Stateless()
 public class OpeningHoursServices {
-  @Resource
-  private UserTransaction utx;
 
   @PersistenceUnit
   EntityManagerFactory    emf;
@@ -35,7 +31,7 @@ public class OpeningHoursServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new OpeningHoursJpaController(utx, emf);
+    controller = new OpeningHoursJpaController(emf);
     controller.create(openingHours);
   }
 
@@ -50,7 +46,7 @@ public class OpeningHoursServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new OpeningHoursJpaController(utx, emf);
+    controller = new OpeningHoursJpaController(emf);
     controller.destroy(openingHoursId);
   }
 
@@ -65,7 +61,7 @@ public class OpeningHoursServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new OpeningHoursJpaController(utx, emf);
+    controller = new OpeningHoursJpaController(emf);
     controller.destroy(openingHoursId);
   }
 

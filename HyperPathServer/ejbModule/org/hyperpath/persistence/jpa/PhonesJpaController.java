@@ -8,12 +8,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.Entities;
 import java.util.ArrayList;
@@ -25,15 +19,13 @@ public class PhonesJpaController implements Serializable {
 
   private static final long serialVersionUID = -897430772120844618L;
 
-public PhonesJpaController(UserTransaction utx, EntityManagerFactory emf) {
-    this.utx = utx;
+public PhonesJpaController(EntityManagerFactory emf) {
     this.emf = emf;
   }
 
 public PhonesJpaController(EntityManager mockedEM) {
   em = mockedEM;
 }
-  private UserTransaction      utx = null;
   private EntityManagerFactory emf = null;
   private EntityManager        em  = null;
 
@@ -43,14 +35,13 @@ public PhonesJpaController(EntityManager mockedEM) {
     return emf.createEntityManager();
   }
 
-   public void create(Phones phones) {
+   public void create(Phones phones) throws Exception {
         if (phones.getEntitiesList() == null) {
             phones.setEntitiesList(new ArrayList<Entities>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             List<Entities> attachedEntitiesList = new ArrayList<Entities>();
             for (Entities entitiesListEntitiesToAttach : phones.getEntitiesList()) {
                 entitiesListEntitiesToAttach = em.getReference(entitiesListEntitiesToAttach.getClass(), entitiesListEntitiesToAttach.getId());
@@ -62,28 +53,8 @@ public PhonesJpaController(EntityManager mockedEM) {
                 entitiesListEntities.getPhonesList().add(phones);
                 entitiesListEntities = em.merge(entitiesListEntities);
             }
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        } catch (Exception ex) {
+          throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -95,7 +66,6 @@ public PhonesJpaController(EntityManager mockedEM) {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             Phones persistentPhones = em.find(Phones.class, phones.getId());
             List<Entities> entitiesListOld = persistentPhones.getEntitiesList();
             List<Entities> entitiesListNew = phones.getEntitiesList();
@@ -119,7 +89,6 @@ public PhonesJpaController(EntityManager mockedEM) {
                     entitiesListNewEntities = em.merge(entitiesListNewEntities);
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -136,11 +105,10 @@ public PhonesJpaController(EntityManager mockedEM) {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException , Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             Phones phones;
             try {
                 phones = em.getReference(Phones.class, id);
@@ -154,28 +122,8 @@ public PhonesJpaController(EntityManager mockedEM) {
                 entitiesListEntities = em.merge(entitiesListEntities);
             }
             em.remove(phones);
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        } catch (Exception ex) {
+          throw ex;
         } finally {
             if (em != null) {
                 em.close();

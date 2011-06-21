@@ -2,7 +2,6 @@ package org.hyperpath.services;
 
 import java.util.Date;
 import java.util.List;
-import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -10,7 +9,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
-import javax.transaction.UserTransaction;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import org.hyperpath.persistence.entities.Ads;
@@ -24,8 +22,6 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 @WebService(serviceName = "AdsServices")
 @Stateless()
 public class AdsServices {
-  @Resource
-  private UserTransaction utx;
 
   @PersistenceUnit
   EntityManagerFactory    emf;
@@ -40,7 +36,7 @@ public class AdsServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     return controller.findAds(id);
   }
 
@@ -54,7 +50,7 @@ public class AdsServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     return controller.findAdsByAdvertiser(advertiser);
   }
 
@@ -68,7 +64,7 @@ public class AdsServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     return controller.findAdsByService(service);
   }
 
@@ -79,7 +75,7 @@ public class AdsServices {
   public void addAds(@WebParam(name = "ads") Ads ads) throws Exception,
       RollbackFailureException, PreexistingEntityException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     controller.create(ads);
   }
 
@@ -90,7 +86,7 @@ public class AdsServices {
   public void updateAds(@WebParam(name = "ads") Ads ads) throws Exception,
       RollbackFailureException, NonexistentEntityException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     controller.edit(ads);
   }
 
@@ -101,7 +97,7 @@ public class AdsServices {
   public void deleteAds(@WebParam(name = "id") Integer id) throws Exception,
       RollbackFailureException, NonexistentEntityException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     controller.destroy(id);
   }
 
@@ -114,7 +110,7 @@ public class AdsServices {
       NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     return controller.findAdsByStartDate(startDate);
   }
 
@@ -126,7 +122,7 @@ public class AdsServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     return controller.findAdsByEndDate(endDate);
   }
 
@@ -141,7 +137,7 @@ public class AdsServices {
       NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     return controller.findAdsInBetween(startDate, endDate);
   }
 
@@ -154,7 +150,7 @@ public class AdsServices {
       NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     return controller.findAdsEntities();
   }
 
@@ -167,7 +163,7 @@ public class AdsServices {
       NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     return controller.getAdsCount();
   }
 
@@ -180,7 +176,7 @@ public class AdsServices {
       NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     return controller.findAdsByExactDescription(adsDescription);
   }
 
@@ -193,7 +189,7 @@ public class AdsServices {
       NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     return controller.findAdsByExactDescription(adsShortDescription);
   }
 
@@ -206,7 +202,7 @@ public class AdsServices {
       NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     return controller.findAdsByApproximateDescription(adsDescription);
   }
 
@@ -219,7 +215,7 @@ public class AdsServices {
       NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdsJpaController(utx, emf);
+    controller = new AdsJpaController(emf);
     return controller.findAdsByApproximateShortDescription(adsShortDescription);
   }
 

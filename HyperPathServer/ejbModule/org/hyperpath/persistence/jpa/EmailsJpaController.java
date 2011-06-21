@@ -9,7 +9,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.Emails;
 import org.hyperpath.persistence.entities.Entities;
@@ -22,15 +21,13 @@ public class EmailsJpaController implements Serializable {
   private static final long    serialVersionUID = 3395709032680641939L;
 
   private EntityManager        em               = null;
-//  private UserTransaction      utx              = null;
   private EntityManagerFactory emf              = null;
 
   public EmailsJpaController(EntityManager mockedEM) {
     em = mockedEM;
   }
 
-  public EmailsJpaController(UserTransaction utx, EntityManagerFactory emf) {
-//    this.utx = utx;
+  public EmailsJpaController(EntityManagerFactory emf) {
     this.emf = emf;
   }
 
@@ -40,46 +37,32 @@ public class EmailsJpaController implements Serializable {
     return emf.createEntityManager();
   }
 
-    public void create(Emails emails) throws RollbackFailureException, NonexistentEntityException, Exception {
-        if (emails.getEntitiesList() == null) {
-            emails.setEntitiesList(new ArrayList<Entities>());
+  public void create(Emails emails) throws RollbackFailureException, NonexistentEntityException, Exception {
+      if (emails.getEntitiesList() == null) {
+          emails.setEntitiesList(new ArrayList<Entities>());
+      }
+      EntityManager em = null;
+      try {
+          em = getEntityManager();
+          List<Entities> attachedEntitiesList = new ArrayList<Entities>();
+          for (Entities entitiesListEntitiesToAttach : emails.getEntitiesList()) {
+              entitiesListEntitiesToAttach = em.getReference(entitiesListEntitiesToAttach.getClass(), entitiesListEntitiesToAttach.getId());
+              attachedEntitiesList.add(entitiesListEntitiesToAttach);
+          }
+          emails.setEntitiesList(attachedEntitiesList);
+          em.persist(emails);
+          for (Entities entitiesListEntities : emails.getEntitiesList()) {
+              entitiesListEntities.getEmailsList().add(emails);
+              entitiesListEntities = em.merge(entitiesListEntities);
+          }
+      } catch (Exception ex) {
+        throw ex;
+      } finally {
+        if (em != null) {
+          em.close();
         }
-        EntityManager em = null;
-        try {
-//            utx.begin();
-            em = getEntityManager();
-            List<Entities> attachedEntitiesList = new ArrayList<Entities>();
-            for (Entities entitiesListEntitiesToAttach : emails.getEntitiesList()) {
-                entitiesListEntitiesToAttach = em.getReference(entitiesListEntitiesToAttach.getClass(), entitiesListEntitiesToAttach.getId());
-                attachedEntitiesList.add(entitiesListEntitiesToAttach);
-            }
-            emails.setEntitiesList(attachedEntitiesList);
-            em.persist(emails);
-            for (Entities entitiesListEntities : emails.getEntitiesList()) {
-                entitiesListEntities.getEmailsList().add(emails);
-                entitiesListEntities = em.merge(entitiesListEntities);
-            }
-//            utx.commit();
-        }  catch (Exception ex) {
-          try {
-//            utx.rollback();
-          } catch (Exception re) {
-            throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-          }
-          String msg = ex.getLocalizedMessage();
-          if (msg == null || msg.length() == 0) {
-            Integer id = emails.getId();
-            if (findEmails(id) == null) {
-              throw new NonexistentEntityException("The emails with id " + id + " no longer exists.");
-            }
-          }
-          throw ex;
-        } finally {
-          if (em != null) {
-            em.close();
-          }
-        }
-    }
+      }
+  }
 
     public void edit(Emails emails) throws NonexistentEntityException, Exception {
         EntityManager em = null;

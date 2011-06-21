@@ -9,12 +9,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Clients;
 
 import org.hyperpath.persistence.entities.Reviews;
@@ -25,11 +19,9 @@ public class ReviewsJpaController implements Serializable {
   private static final long serialVersionUID = 4270693784161684160L;
 
   private EntityManager        em  = null;
-  private UserTransaction      utx = null;
   private EntityManagerFactory emf = null;
 
-  public ReviewsJpaController(UserTransaction utx, EntityManagerFactory emf) {
-    this.utx = utx;
+  public ReviewsJpaController(EntityManagerFactory emf) {
     this.emf = emf;
   }
 
@@ -43,11 +35,10 @@ public class ReviewsJpaController implements Serializable {
     return emf.createEntityManager();
   }
 
-    public void create(Reviews reviews) {
+    public void create(Reviews reviews) throws Exception{
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             Clients clientsId = reviews.getClientsId();
             if (clientsId != null) {
                 clientsId = em.getReference(clientsId.getClass(), clientsId.getId());
@@ -67,28 +58,8 @@ public class ReviewsJpaController implements Serializable {
                 servicesId.getReviewsList().add(reviews);
                 servicesId = em.merge(servicesId);
             }
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        } catch (Exception ex) {
+          throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -100,7 +71,6 @@ public class ReviewsJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             Reviews persistentReviews = em.find(Reviews.class, reviews.getId());
             Clients clientsIdOld = persistentReviews.getClientsId();
             Clients clientsIdNew = reviews.getClientsId();
@@ -131,7 +101,6 @@ public class ReviewsJpaController implements Serializable {
                 servicesIdNew.getReviewsList().add(reviews);
                 servicesIdNew = em.merge(servicesIdNew);
             }
-            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -148,11 +117,10 @@ public class ReviewsJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             Reviews reviews;
             try {
                 reviews = em.getReference(Reviews.class, id);
@@ -171,28 +139,8 @@ public class ReviewsJpaController implements Serializable {
                 servicesId = em.merge(servicesId);
             }
             em.remove(reviews);
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        } catch (Exception ex) {
+          throw ex;
         } finally {
             if (em != null) {
                 em.close();

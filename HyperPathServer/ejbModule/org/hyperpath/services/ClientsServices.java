@@ -1,7 +1,6 @@
 package org.hyperpath.services;
 
 import java.util.List;
-import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -9,7 +8,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Clients;
 import org.hyperpath.persistence.jpa.ClientsJpaController;
@@ -19,8 +17,6 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 @WebService(serviceName = "ClientsServices")
 @Stateless()
 public class ClientsServices {
-  @Resource
-  private UserTransaction utx;
 
   @PersistenceUnit
   EntityManagerFactory    emf;
@@ -38,7 +34,7 @@ public class ClientsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ClientsJpaController(utx, emf);
+    controller = new ClientsJpaController(emf);
     return controller.findClientsByAddress(address);
   }
 
@@ -53,7 +49,7 @@ public class ClientsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ClientsJpaController(utx, emf);
+    controller = new ClientsJpaController(emf);
     return controller.findClientsByPhone(phone);
   }
 
@@ -68,7 +64,7 @@ public class ClientsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ClientsJpaController(utx, emf);
+    controller = new ClientsJpaController(emf);
     return controller.findClientsByFax(fax);
   }
 
@@ -83,7 +79,7 @@ public class ClientsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ClientsJpaController(utx, emf);
+    controller = new ClientsJpaController(emf);
     return controller.findClientsByMail(mail);
   }
 
@@ -98,7 +94,7 @@ public class ClientsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ClientsJpaController(utx, emf);
+    controller = new ClientsJpaController(emf);
     return controller.findClientsByName(clientName);
   }
 
@@ -113,7 +109,7 @@ public class ClientsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ClientsJpaController(utx, emf);
+    controller = new ClientsJpaController(emf);
     return controller.findClientsByLastName(clientLastName);
   }
 
@@ -128,7 +124,7 @@ public class ClientsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ClientsJpaController(utx, emf);
+    controller = new ClientsJpaController(emf);
     return controller.findClientsByLogin(clientLogin);
   }
 
@@ -143,7 +139,7 @@ public class ClientsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ClientsJpaController(utx, emf);
+    controller = new ClientsJpaController(emf);
     return controller.findClientsByBirthDate(clientBirthDate);
   }
 
@@ -158,7 +154,7 @@ public class ClientsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ClientsJpaController(utx, emf);
+    controller = new ClientsJpaController(emf);
     return controller.findClientsByAge(clientAge);
   }
 }

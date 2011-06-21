@@ -8,12 +8,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Advertisers;
@@ -29,27 +23,23 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 public class AdvertisersJpaController implements Serializable {
   private static final long serialVersionUID = 5591474412841830570L;
 
-  public AdvertisersJpaController(UserTransaction utx,
-      EntityManagerFactory emf) {
-    this.utx = utx;
+  public AdvertisersJpaController(EntityManagerFactory emf) {
     this.emf = emf;
   }
 
-  private UserTransaction      utx = null;
   private EntityManagerFactory emf = null;
 
   public EntityManager getEntityManager() {
     return emf.createEntityManager();
   }
 
-  public void create(Advertisers advertisers) {
+  public void create(Advertisers advertisers) throws Exception {
         if (advertisers.getAdsList() == null) {
             advertisers.setAdsList(new ArrayList<Ads>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             Entities entitiesId = advertisers.getEntitiesId();
             if (entitiesId != null) {
                 entitiesId = em.getReference(entitiesId.getClass(), entitiesId.getId());
@@ -75,28 +65,8 @@ public class AdvertisersJpaController implements Serializable {
                     oldAdvertisersIdOfAdsListAds = em.merge(oldAdvertisersIdOfAdsListAds);
                 }
             }
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        } catch (Exception ex) {
+          throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -108,7 +78,6 @@ public class AdvertisersJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             Advertisers persistentAdvertisers = em.find(Advertisers.class, advertisers.getId());
             Entities entitiesIdOld = persistentAdvertisers.getEntitiesId();
             Entities entitiesIdNew = advertisers.getEntitiesId();
@@ -157,7 +126,6 @@ public class AdvertisersJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -174,62 +142,41 @@ public class AdvertisersJpaController implements Serializable {
       }
   }
 
-  public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            utx.begin();
-            Advertisers advertisers;
-            try {
-                advertisers = em.getReference(Advertisers.class, id);
-                advertisers.getId();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The advertisers with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            List<Ads> adsListOrphanCheck = advertisers.getAdsList();
-            for (Ads adsListOrphanCheckAds : adsListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Advertisers (" + advertisers + ") cannot be destroyed since the Ads " + adsListOrphanCheckAds + " in its adsList field has a non-nullable advertisersId field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Entities entitiesId = advertisers.getEntitiesId();
-            if (entitiesId != null) {
-                entitiesId.getAdvertisersList().remove(advertisers);
-                entitiesId = em.merge(entitiesId);
-            }
-            em.remove(advertisers);
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } finally {
-           if (em != null) {
-              em.close();
-           }
-        }
+  public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, Exception {
+      EntityManager em = null;
+      try {
+          em = getEntityManager();
+          Advertisers advertisers;
+          try {
+              advertisers = em.getReference(Advertisers.class, id);
+              advertisers.getId();
+          } catch (EntityNotFoundException enfe) {
+              throw new NonexistentEntityException("The advertisers with id " + id + " no longer exists.", enfe);
+          }
+          List<String> illegalOrphanMessages = null;
+          List<Ads> adsListOrphanCheck = advertisers.getAdsList();
+          for (Ads adsListOrphanCheckAds : adsListOrphanCheck) {
+              if (illegalOrphanMessages == null) {
+                  illegalOrphanMessages = new ArrayList<String>();
+              }
+              illegalOrphanMessages.add("This Advertisers (" + advertisers + ") cannot be destroyed since the Ads " + adsListOrphanCheckAds + " in its adsList field has a non-nullable advertisersId field.");
+          }
+          if (illegalOrphanMessages != null) {
+              throw new IllegalOrphanException(illegalOrphanMessages);
+          }
+          Entities entitiesId = advertisers.getEntitiesId();
+          if (entitiesId != null) {
+              entitiesId.getAdvertisersList().remove(advertisers);
+              entitiesId = em.merge(entitiesId);
+          }
+          em.remove(advertisers);
+      } catch (Exception ex) {
+        throw ex;
+      } finally {
+         if (em != null) {
+            em.close();
+         }
+      }
    }
 
     public List<Advertisers> findAdvertisersEntities() {

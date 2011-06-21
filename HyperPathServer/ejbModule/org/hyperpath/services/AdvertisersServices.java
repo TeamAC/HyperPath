@@ -1,7 +1,6 @@
 package org.hyperpath.services;
 
 import java.util.List;
-import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
@@ -9,7 +8,6 @@ import javax.jws.WebParam;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Advertisers;
 import org.hyperpath.persistence.entities.Services;
@@ -21,8 +19,6 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 @WebService(serviceName = "AdvertisersServices")
 @Stateless()
 public class AdvertisersServices {
-  @Resource
-  private UserTransaction utx;
 
   @PersistenceUnit
   EntityManagerFactory    emf;
@@ -33,14 +29,14 @@ public class AdvertisersServices {
    * Add new advertiser
    */
   @WebMethod(operationName = "addAdvertizer")
-  public void addService(@WebParam(name = "newAdvertizer") Advertisers newAdvertizer)
+  public void addAdvertizer(@WebParam(name = "newAdvertizer") Advertisers newAdvertizer)
     throws
     Exception,
     PreexistingEntityException,
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdvertisersJpaController(utx, emf);
+    controller = new AdvertisersJpaController(emf);
     controller.create(newAdvertizer);
   }
 
@@ -55,7 +51,7 @@ public class AdvertisersServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdvertisersJpaController(utx, emf);
+    controller = new AdvertisersJpaController(emf);
     return controller.findAdvertisersByAddress(address);
   }
 
@@ -70,7 +66,7 @@ public class AdvertisersServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdvertisersJpaController(utx, emf);
+    controller = new AdvertisersJpaController(emf);
     return controller.findAdvertisersByPhone(phone);
   }
 
@@ -85,7 +81,7 @@ public class AdvertisersServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdvertisersJpaController(utx, emf);
+    controller = new AdvertisersJpaController(emf);
     return controller.findAdvertisersByFax(fax);
   }
 
@@ -100,7 +96,7 @@ public class AdvertisersServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdvertisersJpaController(utx, emf);
+    controller = new AdvertisersJpaController(emf);
     return controller.findAdvertisersByMail(mail);
   }
 
@@ -115,7 +111,7 @@ public class AdvertisersServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdvertisersJpaController(utx, emf);
+    controller = new AdvertisersJpaController(emf);
     controller.edit(advertiser);
   }
 
@@ -130,7 +126,7 @@ public class AdvertisersServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdvertisersJpaController(utx, emf);
+    controller = new AdvertisersJpaController(emf);
     controller.destroy(advertiserId);
   }
 
@@ -145,7 +141,7 @@ public class AdvertisersServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AdvertisersJpaController(utx, emf);
+    controller = new AdvertisersJpaController(emf);
     return controller.findAdvertiserByAd(ad);
   }
 }

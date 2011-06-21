@@ -8,12 +8,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Categories;
 import org.hyperpath.persistence.entities.Services;
 import java.util.ArrayList;
@@ -24,76 +18,52 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 public class CategoriesJpaController implements Serializable {
   private static final long serialVersionUID = 8448103872273399270L;
 
-  public CategoriesJpaController(UserTransaction utx, EntityManagerFactory emf) {
-    this.utx = utx;
+  public CategoriesJpaController(EntityManagerFactory emf) {
     this.emf = emf;
   }
 
-  private UserTransaction      utx = null;
   private EntityManagerFactory emf = null;
 
   public EntityManager getEntityManager() {
     return emf.createEntityManager();
   }
 
-  public void create(Categories categories) {
-        if (categories.getServicesList() == null) {
-            categories.setServicesList(new ArrayList<Services>());
-        }
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            utx.begin();
-            List<Services> attachedServicesList = new ArrayList<Services>();
-            for (Services servicesListServicesToAttach : categories.getServicesList()) {
-                servicesListServicesToAttach = em.getReference(servicesListServicesToAttach.getClass(), servicesListServicesToAttach.getId());
-                attachedServicesList.add(servicesListServicesToAttach);
-            }
-            categories.setServicesList(attachedServicesList);
-            em.persist(categories);
-            for (Services servicesListServices : categories.getServicesList()) {
-                Categories oldCategoriesIdOfServicesListServices = servicesListServices.getCategoriesId();
-                servicesListServices.setCategoriesId(categories);
-                servicesListServices = em.merge(servicesListServices);
-                if (oldCategoriesIdOfServicesListServices != null) {
-                    oldCategoriesIdOfServicesListServices.getServicesList().remove(servicesListServices);
-                    oldCategoriesIdOfServicesListServices = em.merge(oldCategoriesIdOfServicesListServices);
-                }
-            }
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
+  public void create(Categories categories) throws Exception {
+      if (categories.getServicesList() == null) {
+          categories.setServicesList(new ArrayList<Services>());
+      }
+      EntityManager em = null;
+      try {
+          em = getEntityManager();
+          List<Services> attachedServicesList = new ArrayList<Services>();
+          for (Services servicesListServicesToAttach : categories.getServicesList()) {
+              servicesListServicesToAttach = em.getReference(servicesListServicesToAttach.getClass(), servicesListServicesToAttach.getId());
+              attachedServicesList.add(servicesListServicesToAttach);
+          }
+          categories.setServicesList(attachedServicesList);
+          em.persist(categories);
+          for (Services servicesListServices : categories.getServicesList()) {
+              Categories oldCategoriesIdOfServicesListServices = servicesListServices.getCategoriesId();
+              servicesListServices.setCategoriesId(categories);
+              servicesListServices = em.merge(servicesListServices);
+              if (oldCategoriesIdOfServicesListServices != null) {
+                  oldCategoriesIdOfServicesListServices.getServicesList().remove(servicesListServices);
+                  oldCategoriesIdOfServicesListServices = em.merge(oldCategoriesIdOfServicesListServices);
+              }
+          }
+      } catch (Exception ex) {
+        throw ex;
+      } finally {
+          if (em != null) {
+              em.close();
+          }
+      }
   }
 
   public void edit(Categories categories) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             Categories persistentCategories = em.find(Categories.class, categories.getId());
             List<Services> servicesListOld = persistentCategories.getServicesList();
             List<Services> servicesListNew = categories.getServicesList();
@@ -128,7 +98,6 @@ public class CategoriesJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -145,57 +114,36 @@ public class CategoriesJpaController implements Serializable {
         }
   }
 
-  public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            utx.begin();
-            Categories categories;
-            try {
-                categories = em.getReference(Categories.class, id);
-                categories.getId();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The categories with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            List<Services> servicesListOrphanCheck = categories.getServicesList();
-            for (Services servicesListOrphanCheckServices : servicesListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Categories (" + categories + ") cannot be destroyed since the Services " + servicesListOrphanCheckServices + " in its servicesList field has a non-nullable categoriesId field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            em.remove(categories);
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
+  public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, Exception {
+      EntityManager em = null;
+      try {
+          em = getEntityManager();
+          Categories categories;
+          try {
+              categories = em.getReference(Categories.class, id);
+              categories.getId();
+          } catch (EntityNotFoundException enfe) {
+              throw new NonexistentEntityException("The categories with id " + id + " no longer exists.", enfe);
+          }
+          List<String> illegalOrphanMessages = null;
+          List<Services> servicesListOrphanCheck = categories.getServicesList();
+          for (Services servicesListOrphanCheckServices : servicesListOrphanCheck) {
+              if (illegalOrphanMessages == null) {
+                  illegalOrphanMessages = new ArrayList<String>();
+              }
+              illegalOrphanMessages.add("This Categories (" + categories + ") cannot be destroyed since the Services " + servicesListOrphanCheckServices + " in its servicesList field has a non-nullable categoriesId field.");
+          }
+          if (illegalOrphanMessages != null) {
+              throw new IllegalOrphanException(illegalOrphanMessages);
+          }
+          em.remove(categories);
+      } catch (Exception ex) {
+        throw ex;
+      } finally {
+          if (em != null) {
+              em.close();
+          }
+      }
   }
 
   public List<Categories> findCategoriesEntities() {

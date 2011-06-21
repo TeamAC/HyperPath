@@ -1,7 +1,6 @@
 package org.hyperpath.services;
 
 import java.util.List;
-import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -9,7 +8,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Clients;
 import org.hyperpath.persistence.entities.Reviews;
 import org.hyperpath.persistence.jpa.ReviewsJpaController;
@@ -20,8 +18,6 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 @WebService(serviceName = "ReviewsServices")
 @Stateless()
 public class ReviewsServices {
-  @Resource
-  private UserTransaction utx;
 
   @PersistenceUnit
   EntityManagerFactory    emf;
@@ -39,7 +35,7 @@ public class ReviewsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ReviewsJpaController(utx, emf);
+    controller = new ReviewsJpaController(emf);
     controller.create(review);
   }
 
@@ -54,7 +50,7 @@ public class ReviewsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ReviewsJpaController(utx, emf);
+    controller = new ReviewsJpaController(emf);
     controller.edit(review);
   }
 
@@ -69,7 +65,7 @@ public class ReviewsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ReviewsJpaController(utx, emf);
+    controller = new ReviewsJpaController(emf);
     controller.destroy(reviewId);
   }
 
@@ -84,7 +80,7 @@ public class ReviewsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ReviewsJpaController(utx, emf);
+    controller = new ReviewsJpaController(emf);
     return controller.findReviewsByService(serviceId);
   }
 
@@ -99,7 +95,7 @@ public class ReviewsServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ReviewsJpaController(utx, emf);
+    controller = new ReviewsJpaController(emf);
     return controller.findReviewsByClient(client);
   }
 

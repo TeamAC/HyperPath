@@ -1,30 +1,22 @@
 package org.hyperpath.services;
 
 import java.util.List;
-import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Emails;
 import org.hyperpath.persistence.jpa.EmailsJpaController;
-import javax.ejb.TransactionManagementType;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-//@TransactionAttribute(TransactionAttributeType.MANDATORY)
-
 @WebService(serviceName = "EmailsServices")
 @Stateless()
 public class EmailsServices {
-  @Resource
-  private UserTransaction utx;
 
   @PersistenceUnit
   EntityManagerFactory    emf;
@@ -38,7 +30,7 @@ public class EmailsServices {
   public List<Emails> listAllEmails() throws Exception,
       RollbackFailureException, NonexistentEntityException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new EmailsJpaController(utx, emf);
+    controller = new EmailsJpaController(emf);
     return controller.findEmailsEntities();
   }
 
@@ -50,7 +42,7 @@ public class EmailsServices {
       throws Exception, PreexistingEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new EmailsJpaController(utx, emf);
+    controller = new EmailsJpaController(emf);
     controller.create(email);
   }
 
@@ -62,7 +54,7 @@ public class EmailsServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new EmailsJpaController(utx, emf);
+    controller = new EmailsJpaController(emf);
     controller.edit(email);
   }
 
@@ -74,7 +66,7 @@ public class EmailsServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new EmailsJpaController(utx, emf);
+    controller = new EmailsJpaController(emf);
     controller.destroy(emailId);
   }
 
@@ -86,7 +78,7 @@ public class EmailsServices {
       throws Exception, NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new EmailsJpaController(utx, emf);
+    controller = new EmailsJpaController(emf);
     return controller.findExactEmails(email);
   }
 
@@ -99,7 +91,7 @@ public class EmailsServices {
       NonexistentEntityException,
       RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new EmailsJpaController(utx, emf);
+    controller = new EmailsJpaController(emf);
     return controller.findApproximateEmails(email);
   }
 
@@ -109,7 +101,7 @@ public class EmailsServices {
   @WebMethod(operationName = "countEmails")
   public Integer countEmails() throws Exception, RollbackFailureException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new EmailsJpaController(utx, emf);
+    controller = new EmailsJpaController(emf);
     return controller.getEmailsCount();
   }
 }

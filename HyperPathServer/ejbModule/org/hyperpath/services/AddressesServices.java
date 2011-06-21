@@ -1,7 +1,6 @@
 package org.hyperpath.services;
 
 import java.util.List;
-import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -9,7 +8,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
-import javax.transaction.UserTransaction;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import org.hyperpath.persistence.entities.Address;
@@ -25,8 +23,6 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 @WebService(serviceName = "AddressesServices")
 @Stateless()
 public class AddressesServices {
-  @Resource
-  private UserTransaction utx;
 
   @PersistenceUnit
   EntityManagerFactory    emf;
@@ -40,7 +36,7 @@ public class AddressesServices {
   public List<Address> listAllAddress() throws Exception,
       RollbackFailureException, NonexistentEntityException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new AddressJpaController(utx, emf);
+    controller = new AddressJpaController(emf);
     return controller.findAddressEntities();
   }
 
@@ -52,7 +48,7 @@ public class AddressesServices {
       throws Exception, RollbackFailureException,
       PreexistingEntityException {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    AddressJpaController controller = new AddressJpaController(utx, emf);
+    AddressJpaController controller = new AddressJpaController(emf);
     controller.create(address);
   }
 
@@ -63,7 +59,7 @@ public class AddressesServices {
   public void updateAddress(@WebParam(name = "address") Address address)
       throws Exception, RollbackFailureException,
       PreexistingEntityException {
-    controller = new AddressJpaController(utx, emf);
+    controller = new AddressJpaController(emf);
     controller.edit(address);
   }
 
@@ -74,7 +70,7 @@ public class AddressesServices {
   public void deleteAddress(@WebParam(name = "address") Address address)
       throws Exception, RollbackFailureException,
       NonexistentEntityException {
-    controller = new AddressJpaController(utx, emf);
+    controller = new AddressJpaController(emf);
     controller.destroy(address.getId());
   }
 
@@ -87,7 +83,7 @@ public class AddressesServices {
                              @WebParam(name = "address") String address)
     throws Exception,
       NonexistentEntityException {
-    controller = new AddressJpaController(utx, emf);
+    controller = new AddressJpaController(emf);
     return controller.findApproximateAddressesByCategory(category, address);
   }
 
@@ -102,7 +98,7 @@ public class AddressesServices {
                                        @WebParam(name = "location") String location,
                                        @WebParam(name = "range") int range)
       throws NonexistentEntityException {
-    controller = new AddressJpaController(utx, emf);
+    controller = new AddressJpaController(emf);
     return controller.findAddressByRange(category, location, range);
   }
 
@@ -113,7 +109,7 @@ public class AddressesServices {
   public List<Services> findServicesByAddress(@WebParam(name = "address") Address address)
     throws Exception,
       NonexistentEntityException {
-    controller = new AddressJpaController(utx, emf);
+    controller = new AddressJpaController(emf);
     return controller.findServicesByAddress(address);
   }
 
@@ -124,7 +120,7 @@ public class AddressesServices {
   public List<Advertisers> findAdvertizersByAddress(@WebParam(name = "address") Address address)
     throws Exception,
       NonexistentEntityException {
-    controller = new AddressJpaController(utx, emf);
+    controller = new AddressJpaController(emf);
     return controller.findAdvertizersByAddress(address);
   }
 
@@ -135,7 +131,7 @@ public class AddressesServices {
   public List<Clients> findClientsByAddress(@WebParam(name = "address") Address address)
     throws Exception,
       NonexistentEntityException {
-    controller = new AddressJpaController(utx, emf);
+    controller = new AddressJpaController(emf);
     return controller.findClientsByAddress(address);
   }
 }

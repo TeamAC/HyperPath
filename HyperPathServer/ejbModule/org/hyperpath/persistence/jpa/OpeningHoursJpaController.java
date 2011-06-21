@@ -8,12 +8,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 
 import org.hyperpath.persistence.entities.OpeningHours;
 import org.hyperpath.persistence.entities.Services;
@@ -25,8 +19,7 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 public class OpeningHoursJpaController implements Serializable {
   private static final long serialVersionUID = -2301993862953287459L;
 
-  public OpeningHoursJpaController(UserTransaction utx, EntityManagerFactory emf) {
-    this.utx = utx;
+  public OpeningHoursJpaController(EntityManagerFactory emf) {
     this.emf = emf;
   }
 
@@ -35,7 +28,6 @@ public class OpeningHoursJpaController implements Serializable {
   }
 
   private EntityManager        em  = null;
-  private UserTransaction      utx = null;
   private EntityManagerFactory emf = null;
 
   public EntityManager getEntityManager() {
@@ -45,14 +37,13 @@ public class OpeningHoursJpaController implements Serializable {
     return emf.createEntityManager();
   }
 
-    public void create(OpeningHours openingHours) {
+    public void create(OpeningHours openingHours) throws Exception {
         if (openingHours.getServicesList() == null) {
             openingHours.setServicesList(new ArrayList<Services>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             List<Services> attachedServicesList = new ArrayList<Services>();
             for (Services servicesListServicesToAttach : openingHours.getServicesList()) {
                 servicesListServicesToAttach = em.getReference(servicesListServicesToAttach.getClass(), servicesListServicesToAttach.getId());
@@ -69,28 +60,8 @@ public class OpeningHoursJpaController implements Serializable {
                     oldOpeningHoursidOfServicesListServices = em.merge(oldOpeningHoursidOfServicesListServices);
                 }
             }
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        } catch (Exception ex) {
+          throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -102,7 +73,6 @@ public class OpeningHoursJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             OpeningHours persistentOpeningHours = em.find(OpeningHours.class, openingHours.getId());
             List<Services> servicesListOld = persistentOpeningHours.getServicesList();
             List<Services> servicesListNew = openingHours.getServicesList();
@@ -137,7 +107,6 @@ public class OpeningHoursJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -154,11 +123,10 @@ public class OpeningHoursJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            utx.begin();
             OpeningHours openingHours;
             try {
                 openingHours = em.getReference(OpeningHours.class, id);
@@ -178,28 +146,8 @@ public class OpeningHoursJpaController implements Serializable {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(openingHours);
-            utx.commit();
-        } catch (NotSupportedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SystemException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (RollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        } catch (Exception ex) {
+          throw ex;
         } finally {
             if (em != null) {
                 em.close();
