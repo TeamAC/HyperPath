@@ -48,7 +48,7 @@ public class FaxesServices {
   }
 
   /**
-   * Update fax address
+   * Update fax number
    */
   @WebMethod(operationName = "updateFax")
   public void updateFax(@WebParam(name = "fax") Faxes fax)
@@ -60,7 +60,7 @@ public class FaxesServices {
   }
 
   /**
-   * Delete emacs address
+   * Delete fax number
    */
   @WebMethod(operationName = "deleteFax")
   public void deleteFax(@WebParam(name = "faxId") Integer faxId)
@@ -84,7 +84,7 @@ public class FaxesServices {
   }
 
   /**
-   * Find fax address by address approximation
+   * Find fax by number approximation
    */
   @WebMethod(operationName = "findAppoximateFax")
   public List<Faxes> findAppoximateFax(@WebParam(name = "fax") String faxNumber)

@@ -158,7 +158,7 @@ public class FaxesJpaController implements Serializable {
       CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
       CriteriaQuery<Faxes> criteriaQuery = criteriaBuilder.createQuery(Faxes.class);
       Root<Faxes> faxRoot = criteriaQuery.from(Faxes.class);
-      criteriaQuery.select(faxRoot).where( criteriaBuilder.equal(faxRoot.get("address"),faxNumber));
+      criteriaQuery.select(faxRoot).where( criteriaBuilder.equal(faxRoot.get("number"),faxNumber));
       Query query = em.createQuery(criteriaQuery);
       return query.getResultList();
     } finally {
@@ -173,7 +173,7 @@ public class FaxesJpaController implements Serializable {
       CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
       CriteriaQuery<Faxes> criteriaQuery = criteriaBuilder.createQuery(Faxes.class);
       Root<Faxes> faxRoot = criteriaQuery.from(Faxes.class);
-      criteriaQuery.select(faxRoot).where(criteriaBuilder.like(faxRoot.<String> get("address"),'%' + faxNumber + '%'));
+      criteriaQuery.select(faxRoot).where(criteriaBuilder.like(faxRoot.<String> get("number"),'%' + faxNumber + '%'));
       Query query = em.createQuery(criteriaQuery);
       return query.getResultList();
     } finally {

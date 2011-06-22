@@ -2,6 +2,7 @@ package org.hyperpath.services;
 
 import java.util.Date;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -9,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
+import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Categories;
 import org.hyperpath.persistence.entities.Clients;
@@ -22,6 +24,8 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 @WebService(serviceName = "ServicesServices")
 @Stateless()
 public class ServicesServices {
+  @Resource
+  private UserTransaction utx;
 
   @PersistenceUnit
   EntityManagerFactory    emf;
@@ -39,7 +43,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     controller.create(newService);
   }
 
@@ -54,7 +58,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     controller.edit(service);
   }
 
@@ -69,7 +73,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     controller.destroy(serviceId);
   }
 
@@ -84,7 +88,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     return controller.findServicesByLabel(serviceLabel);
   }
 
@@ -99,7 +103,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     return controller.findServicesByCategory(category);
   }
 
@@ -116,7 +120,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     return controller.findServicesByGpsLocation(gpsLocation, range);
   }
 
@@ -133,7 +137,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     return controller.findServiceByRating(rating, category);
   }
 
@@ -148,7 +152,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     return controller.findServicesByUser(client);
   }
 
@@ -163,7 +167,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     return controller.findServicesByAddress(address);
   }
 
@@ -178,7 +182,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     return controller.findServicesPhone(phone);
   }
 
@@ -193,7 +197,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     return controller.findServicesByFax(fax);
   }
 
@@ -208,7 +212,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     return controller.findServicesByFax(mail);
   }
 
@@ -225,7 +229,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     return controller.findServicesByOpeningTime(category, startTime);
   }
 
@@ -242,7 +246,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     return controller.findServicesByClosingTime(category, endTime);
   }
 
@@ -260,7 +264,7 @@ public class ServicesServices {
     RollbackFailureException
   {
     emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new ServicesJpaController(emf);
+    controller = new ServicesJpaController(utx, emf);
     return controller.findServicesByTimeRange(category, startTime, endTime);
   }
 }
