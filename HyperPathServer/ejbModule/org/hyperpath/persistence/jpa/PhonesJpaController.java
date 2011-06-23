@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.hyperpath.persistence.jpa;
 
 import java.io.Serializable;
@@ -9,9 +5,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Entities;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,31 +15,23 @@ import org.hyperpath.persistence.entities.Phones;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-/**
- *
- * @author chedi
- */
 public class PhonesJpaController implements Serializable {
+  private static final long serialVersionUID = 8649955848124565699L;
+  private EntityManager em = null;
 
-    public PhonesJpaController(EntityManagerFactory emf) {
-        this.utx = utx;
-        this.emf = emf;
-    }
-    private UserTransaction utx = null;
-    private EntityManagerFactory emf = null;
+	public PhonesJpaController(EntityManagerFactory emf) {
+      this.em = emf.createEntityManager();
+  }
 
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+	public PhonesJpaController(EntityManager mockedEM) {
+		this.em = mockedEM;
+	}
 
     public void create(Phones phones) throws RollbackFailureException, Exception {
         if (phones.getEntitiesList() == null) {
             phones.setEntitiesList(new ArrayList<Entities>());
         }
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             List<Entities> attachedEntitiesList = new ArrayList<Entities>();
             for (Entities entitiesListEntitiesToAttach : phones.getEntitiesList()) {
                 entitiesListEntitiesToAttach = em.getReference(entitiesListEntitiesToAttach.getClass(), entitiesListEntitiesToAttach.getId());
@@ -55,13 +43,7 @@ public class PhonesJpaController implements Serializable {
                 entitiesListEntities.getPhonesList().add(phones);
                 entitiesListEntities = em.merge(entitiesListEntities);
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -71,10 +53,7 @@ public class PhonesJpaController implements Serializable {
     }
 
     public void edit(Phones phones) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             Phones persistentPhones = em.find(Phones.class, phones.getId());
             List<Entities> entitiesListOld = persistentPhones.getEntitiesList();
             List<Entities> entitiesListNew = phones.getEntitiesList();
@@ -98,20 +77,7 @@ public class PhonesJpaController implements Serializable {
                     entitiesListNewEntities = em.merge(entitiesListNewEntities);
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Integer id = phones.getId();
-                if (findPhones(id) == null) {
-                    throw new NonexistentEntityException("The phones with id " + id + " no longer exists.");
-                }
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -121,10 +87,7 @@ public class PhonesJpaController implements Serializable {
     }
 
     public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             Phones phones;
             try {
                 phones = em.getReference(Phones.class, id);
@@ -138,13 +101,7 @@ public class PhonesJpaController implements Serializable {
                 entitiesListEntities = em.merge(entitiesListEntities);
             }
             em.remove(phones);
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -161,42 +118,75 @@ public class PhonesJpaController implements Serializable {
         return findPhonesEntities(false, maxResults, firstResult);
     }
 
+    @SuppressWarnings("unchecked")
     private List<Phones> findPhonesEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Phones.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Phones> criteriaQuery = criteriaBuilder.createQuery(Phones.class);
+        Query query = em.createQuery(criteriaQuery);
+        if (!all) {
+          query.setMaxResults(maxResults);
+          query.setFirstResult(firstResult);
         }
+        return query.getResultList();
+      } finally {
+        em.close();
+      }
     }
 
     public Phones findPhones(Integer id) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Phones.class, id);
-        } finally {
-            em.close();
-        }
+      try {
+        return em.find(Phones.class, id);
+      } finally {
+        em.close();
+      }
     }
 
-    public int getPhonesCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Phones> rt = cq.from(Phones.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
+    @SuppressWarnings("unchecked")
+    public List<Phones> findExactPhone(String phoneNumber) {
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Phones> criteriaQuery = criteriaBuilder
+            .createQuery(Phones.class);
+        Root<Phones> phoneRoot = criteriaQuery.from(Phones.class);
+        criteriaQuery.select(phoneRoot).where(
+            criteriaBuilder.equal(phoneRoot.get("number"),
+                phoneNumber));
+        Query query = em.createQuery(criteriaQuery);
+        return query.getResultList();
+      } finally {
+        em.close();
+      }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Phones> findApproximatePhones(String phoneNumber) {
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Phones> criteriaQuery = criteriaBuilder.createQuery(Phones.class);
+        Root<Phones> phoneRoot = criteriaQuery.from(Phones.class);
+        criteriaQuery.select(phoneRoot).where(
+            criteriaBuilder.like(phoneRoot.<String> get("number"),
+                '%' + phoneNumber + '%'));
+        Query query = em.createQuery(criteriaQuery);
+        return query.getResultList();
+      } finally {
+        em.close();
+      }
+    }
+
+    public int getPhonesCount() throws Exception {
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder
+            .createQuery(Long.class);
+        Root<Phones> phoneRoot = criteriaQuery.from(Phones.class);
+        criteriaQuery.select(criteriaBuilder.count(phoneRoot));
+        Query q = em.createQuery(criteriaQuery);
+        return ((Long) q.getSingleResult()).intValue();
+      } finally {
+          em.close();
+      }
     }
 
 }

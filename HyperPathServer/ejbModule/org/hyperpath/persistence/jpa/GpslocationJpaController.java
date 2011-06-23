@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.hyperpath.persistence.jpa;
 
 import java.io.Serializable;
@@ -9,9 +5,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Gpslocation;
 import org.hyperpath.persistence.entities.Services;
 import java.util.ArrayList;
@@ -21,31 +17,23 @@ import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-/**
- *
- * @author chedi
- */
 public class GpslocationJpaController implements Serializable {
+  private static final long serialVersionUID = -8056592577113286641L;
+  private EntityManager em = null;
 
-    public GpslocationJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
-        this.emf = emf;
-    }
-    private UserTransaction utx = null;
-    private EntityManagerFactory emf = null;
+	public GpslocationJpaController(EntityManagerFactory emf) {
+      this.em = emf.createEntityManager();
+  }
 
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+	public GpslocationJpaController(EntityManager mockedEM) {
+		this.em = mockedEM;
+	}
 
     public void create(Gpslocation gpslocation) throws PreexistingEntityException, RollbackFailureException, Exception {
         if (gpslocation.getServicesList() == null) {
             gpslocation.setServicesList(new ArrayList<Services>());
         }
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             List<Services> attachedServicesList = new ArrayList<Services>();
             for (Services servicesListServicesToAttach : gpslocation.getServicesList()) {
                 servicesListServicesToAttach = em.getReference(servicesListServicesToAttach.getClass(), servicesListServicesToAttach.getId());
@@ -62,16 +50,7 @@ public class GpslocationJpaController implements Serializable {
                     oldGpslocationIdOfServicesListServices = em.merge(oldGpslocationIdOfServicesListServices);
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findGpslocation(gpslocation.getId()) != null) {
-                throw new PreexistingEntityException("Gpslocation " + gpslocation + " already exists.", ex);
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -81,10 +60,7 @@ public class GpslocationJpaController implements Serializable {
     }
 
     public void edit(Gpslocation gpslocation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             Gpslocation persistentGpslocation = em.find(Gpslocation.class, gpslocation.getId());
             List<Services> servicesListOld = persistentGpslocation.getServicesList();
             List<Services> servicesListNew = gpslocation.getServicesList();
@@ -119,20 +95,7 @@ public class GpslocationJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Integer id = gpslocation.getId();
-                if (findGpslocation(id) == null) {
-                    throw new NonexistentEntityException("The gpslocation with id " + id + " no longer exists.");
-                }
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -142,10 +105,7 @@ public class GpslocationJpaController implements Serializable {
     }
 
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             Gpslocation gpslocation;
             try {
                 gpslocation = em.getReference(Gpslocation.class, id);
@@ -165,13 +125,7 @@ public class GpslocationJpaController implements Serializable {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(gpslocation);
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -188,42 +142,43 @@ public class GpslocationJpaController implements Serializable {
         return findGpslocationEntities(false, maxResults, firstResult);
     }
 
-    private List<Gpslocation> findGpslocationEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Gpslocation.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+    @SuppressWarnings("unchecked")
+    private List<Gpslocation> findGpslocationEntities(boolean all,
+                                                      int maxResults,
+                                                      int firstResult) {
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Gpslocation> criteriaQuery = criteriaBuilder.createQuery(Gpslocation.class);
+        Query query = em.createQuery(criteriaQuery);
+        if (!all) {
+          query.setMaxResults(maxResults);
+          query.setFirstResult(firstResult);
         }
+        return query.getResultList();
+      } finally {
+        em.close();
+      }
     }
 
     public Gpslocation findGpslocation(Integer id) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Gpslocation.class, id);
-        } finally {
-            em.close();
-        }
+      try {
+        return em.find(Gpslocation.class, id);
+      } finally {
+        em.close();
+      }
     }
 
     public int getGpslocationCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Gpslocation> rt = cq.from(Gpslocation.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<Gpslocation> gpslocationRoot = criteriaQuery.from(Gpslocation.class);
+        criteriaQuery.select(criteriaBuilder.count(gpslocationRoot));
+        Query query = em.createQuery(criteriaQuery);
+        return ((Long) query.getSingleResult()).intValue();
+      } finally {
+        em.close();
+      }
     }
-    
+
 }

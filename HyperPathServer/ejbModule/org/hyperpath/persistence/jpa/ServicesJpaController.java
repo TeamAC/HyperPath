@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.hyperpath.persistence.jpa;
 
 import java.io.Serializable;
@@ -9,9 +5,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.UserTransaction;
+
+import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Ads;
 import org.hyperpath.persistence.entities.Gpslocation;
 import org.hyperpath.persistence.entities.OpeningHours;
@@ -19,6 +17,7 @@ import org.hyperpath.persistence.entities.Entities;
 import org.hyperpath.persistence.entities.Categories;
 import org.hyperpath.persistence.entities.Clients;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.hyperpath.persistence.entities.Reviews;
 import org.hyperpath.persistence.entities.Services;
@@ -26,20 +25,17 @@ import org.hyperpath.persistence.jpa.exceptions.IllegalOrphanException;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-/**
- *
- * @author chedi
- */
 public class ServicesJpaController implements Serializable {
+	private static final long serialVersionUID = 863398841220321231L;
+    private EntityManager em         = null;
 
-    public ServicesJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+	public ServicesJpaController(EntityManagerFactory emf) {
+        this.em = emf.createEntityManager();
     }
-    private EntityManagerFactory emf = null;
 
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+	public ServicesJpaController(EntityManager mockedEm){
+		this.em = mockedEm;
+	}
 
     public void create(Services services) throws RollbackFailureException, Exception {
         if (services.getClientsList() == null) {
@@ -48,9 +44,7 @@ public class ServicesJpaController implements Serializable {
         if (services.getReviewsList() == null) {
             services.setReviewsList(new ArrayList<Reviews>());
         }
-        EntityManager em = null;
         try {
-            em = getEntityManager();
             Ads adsId = services.getAdsId();
             if (adsId != null) {
                 adsId = em.getReference(adsId.getClass(), adsId.getId());
@@ -133,9 +127,7 @@ public class ServicesJpaController implements Serializable {
     }
 
     public void edit(Services services) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            em = getEntityManager();
             Services persistentServices = em.find(Services.class, services.getId());
             Ads adsIdOld = persistentServices.getAdsId();
             Ads adsIdNew = services.getAdsId();
@@ -272,9 +264,7 @@ public class ServicesJpaController implements Serializable {
     }
 
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            em = getEntityManager();
             Services services;
             try {
                 services = em.getReference(Services.class, id);
@@ -325,7 +315,6 @@ public class ServicesJpaController implements Serializable {
             }
             em.remove(services);
         } catch (Exception ex) {
-
             throw ex;
         } finally {
             if (em != null) {
@@ -342,24 +331,23 @@ public class ServicesJpaController implements Serializable {
         return findServicesEntities(false, maxResults, firstResult);
     }
 
+    @SuppressWarnings("unchecked")
     private List<Services> findServicesEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Services.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Services> criteriaQuery = criteriaBuilder.createQuery(Services.class);
+        Query query = em.createQuery(criteriaQuery);
+        if (!all) {
+          query.setMaxResults(maxResults);
+          query.setFirstResult(firstResult);
         }
+        return query.getResultList();
+      } finally {
+        em.close();
+      }
     }
 
     public Services findServices(Integer id) {
-        EntityManager em = getEntityManager();
         try {
             return em.find(Services.class, id);
         } finally {
@@ -368,16 +356,92 @@ public class ServicesJpaController implements Serializable {
     }
 
     public int getServicesCount() {
-        EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Services> rt = cq.from(Services.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
+          CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+          CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+          Root<Services> servicesRoot = criteriaQuery.from(Services.class);
+          criteriaQuery.select(criteriaBuilder.count(servicesRoot));
+          Query query = em.createQuery(criteriaQuery);
+          return ((Long) query.getSingleResult()).intValue();
+        } finally {
+          em.close();
+        }
+      }
+
+      @SuppressWarnings("unchecked")
+      public List<Services> findServicesByLabel(String serviceLabel) {
+        try {
+          CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+          CriteriaQuery<Services> criteriaQuery = criteriaBuilder.createQuery(Services.class);
+          Root<Services> serviceRoot = criteriaQuery.from(Services.class);
+          criteriaQuery.select(serviceRoot).where( criteriaBuilder.equal(serviceRoot.get("label"),serviceLabel));
+          Query query = em.createQuery(criteriaQuery);
+          return query.getResultList();
+        } finally {
+          em.close();
+        }
+      }
+
+      @SuppressWarnings("unchecked")
+  	public List<Services> findServicesByCategory(Categories category){
+      	try {
+              CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+              CriteriaQuery<Services> criteriaQuery = criteriaBuilder.createQuery(Services.class);
+              Root<Services> serviceRoot = criteriaQuery.from(Services.class);
+              criteriaQuery.select(serviceRoot).where( criteriaBuilder.equal(serviceRoot.get("category").get("id"),category.getId()));
+              Query query = em.createQuery(criteriaQuery);
+              return query.getResultList();
         } finally {
             em.close();
         }
-    }
+      }
 
+      public List<Services> findServicesByGpsLocation(Gpslocation gpsLocation, int range) {
+        // TODO Auto-generated method stub
+        return null;
+      }
+
+      public List<Services> findServiceByRating(int rating, Categories category) {
+        // TODO Auto-generated method stub
+        return null;
+      }
+
+      public List<Services> findServicesByUser(Clients client) {
+        // TODO Auto-generated method stub
+        return null;
+      }
+
+      public List<Services> findServicesByAddress(Address address) {
+        // TODO Auto-generated method stub
+        return null;
+      }
+
+      public List<Services> findServicesPhone(String phone) {
+        // TODO Auto-generated method stub
+        return null;
+      }
+
+      public List<Services> findServicesByFax(String fax) {
+        // TODO Auto-generated method stub
+        return null;
+      }
+
+      public List<Services> findServicesByOpeningTime(Categories category,
+                                                      Date startTime) {
+        // TODO Auto-generated method stub
+        return null;
+      }
+
+      public List<Services> findServicesByClosingTime(Categories category,
+                                                      Date endTime) {
+        // TODO Auto-generated method stub
+        return null;
+      }
+
+      public List<Services> findServicesByTimeRange(Categories category,
+                                                      Date startTime,
+                                                      Date endTime) {
+        // TODO Auto-generated method stub
+        return null;
+      }
 }

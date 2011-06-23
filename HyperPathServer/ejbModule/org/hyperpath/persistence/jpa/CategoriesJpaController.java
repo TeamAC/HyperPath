@@ -18,9 +18,9 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class CategoriesJpaController implements Serializable {
 	private static final long serialVersionUID = 8689698790842031781L;
+    private EntityManager em         = null;
 
 	public CategoriesJpaController(EntityManagerFactory emf) {
-		this.emf = emf;
         this.em = emf.createEntityManager();
     }
 
@@ -28,15 +28,11 @@ public class CategoriesJpaController implements Serializable {
 		this.em = mockedEm;
 	}
 
-    private EntityManager em = null;
-    private EntityManagerFactory emf;
-
     public void create(Categories categories) throws RollbackFailureException, Exception {
         if (categories.getServicesList() == null) {
             categories.setServicesList(new ArrayList<Services>());
         }
 	    try {
-	    	em = emf.createEntityManager();
 	        List<Services> attachedServicesList = new ArrayList<Services>();
 	        for (Services servicesListServicesToAttach : categories.getServicesList()) {
 	            servicesListServicesToAttach = em.getReference(servicesListServicesToAttach.getClass(), servicesListServicesToAttach.getId());
@@ -64,7 +60,6 @@ public class CategoriesJpaController implements Serializable {
 
     public void edit(Categories categories) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         try {
-        	em = emf.createEntityManager();
         	Categories old_categories = em.find(Categories.class, categories.getId());
         	if(categories != null){
         		old_categories.setLabel(categories.getLabel());

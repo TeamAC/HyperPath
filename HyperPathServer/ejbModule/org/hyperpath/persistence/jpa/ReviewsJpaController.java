@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.hyperpath.persistence.jpa;
 
 import java.io.Serializable;
@@ -10,37 +6,28 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Reviews;
 import org.hyperpath.persistence.entities.Services;
 import org.hyperpath.persistence.entities.Clients;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-/**
- *
- * @author chedi
- */
 public class ReviewsJpaController implements Serializable {
+  private static final long serialVersionUID = 913466467907993591L;
+	private EntityManager em = null;
 
-    public ReviewsJpaController(EntityManagerFactory emf) {
-        this.utx = utx;
-        this.emf = emf;
-    }
-    private UserTransaction utx = null;
-    private EntityManagerFactory emf = null;
+	public ReviewsJpaController(EntityManagerFactory emf) {
+      this.em = emf.createEntityManager();
+  }
 
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
-
+	public ReviewsJpaController(EntityManager mockedEM) {
+		this.em = mockedEM;
+	}
     public void create(Reviews reviews) throws RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             Services servicesId = reviews.getServicesId();
             if (servicesId != null) {
                 servicesId = em.getReference(servicesId.getClass(), servicesId.getId());
@@ -60,13 +47,7 @@ public class ReviewsJpaController implements Serializable {
                 clientsId.getReviewsList().add(reviews);
                 clientsId = em.merge(clientsId);
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -76,10 +57,7 @@ public class ReviewsJpaController implements Serializable {
     }
 
     public void edit(Reviews reviews) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             Reviews persistentReviews = em.find(Reviews.class, reviews.getId());
             Services servicesIdOld = persistentReviews.getServicesId();
             Services servicesIdNew = reviews.getServicesId();
@@ -110,20 +88,7 @@ public class ReviewsJpaController implements Serializable {
                 clientsIdNew.getReviewsList().add(reviews);
                 clientsIdNew = em.merge(clientsIdNew);
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Integer id = reviews.getId();
-                if (findReviews(id) == null) {
-                    throw new NonexistentEntityException("The reviews with id " + id + " no longer exists.");
-                }
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -133,10 +98,7 @@ public class ReviewsJpaController implements Serializable {
     }
 
     public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             Reviews reviews;
             try {
                 reviews = em.getReference(Reviews.class, id);
@@ -155,13 +117,7 @@ public class ReviewsJpaController implements Serializable {
                 clientsId = em.merge(clientsId);
             }
             em.remove(reviews);
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -178,42 +134,71 @@ public class ReviewsJpaController implements Serializable {
         return findReviewsEntities(false, maxResults, firstResult);
     }
 
+    @SuppressWarnings("unchecked")
     private List<Reviews> findReviewsEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Reviews.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Reviews> criteriaQuery = criteriaBuilder.createQuery(Reviews.class);
+        Query query = em.createQuery(criteriaQuery);
+        if (!all) {
+          query.setMaxResults(maxResults);
+          query.setFirstResult(firstResult);
         }
+        return query.getResultList();
+      } finally {
+        em.close();
+      }
     }
 
     public Reviews findReviews(Integer id) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Reviews.class, id);
-        } finally {
-            em.close();
-        }
+      try {
+        return em.find(Reviews.class, id);
+      } finally {
+        em.close();
+      }
     }
 
     public int getReviewsCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Reviews> rt = cq.from(Reviews.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<Reviews> reviewsRoot = criteriaQuery.from(Reviews.class);
+        criteriaQuery.select(criteriaBuilder.count(reviewsRoot));
+        Query query = em.createQuery(criteriaQuery);
+        return ((Long) query.getSingleResult()).intValue();
+      } finally {
+        em.close();
+      }
+    }
+
+    public List<Reviews> findReviewsByService(int serviceID) {
+      try {
+//        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+//        CriteriaQuery<Reviews> criteriaQuery = criteriaBuilder.createQuery(Reviews.class);
+//        Root<Reviews> reviewsRoot = criteriaQuery.from(Reviews.class);
+//        Join<Reviews, Services> shrJoin = reviewsRoot.join()
+//        criteriaQuery.where(criteriaBuilder.equal(shrJoin.get("services_id"), serviceID));
+//        criteriaQuery.select(reviewsRoot);
+//        Query query = em.createQuery(criteriaQuery);
+//        return query.getResultList();
+  return null;
+      } finally {
+        em.close();
+      }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Reviews> findReviewsByClient(Clients client) {
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Reviews> criteriaQuery = criteriaBuilder.createQuery(Reviews.class);
+        Root<Reviews> reviewsRoot = criteriaQuery.from(Reviews.class);
+        criteriaQuery.select(reviewsRoot);
+        Query query = em.createQuery(criteriaQuery);
+        return query.getResultList();
+      } finally {
+        em.close();
+      }
     }
 
 }

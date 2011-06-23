@@ -33,75 +33,75 @@ public class EmailsServices {
     controller = new EmailsJpaController(emf);
     return controller.findEmailsEntities();
   }
-//
-//  /**
-//   * Add new email address
-//   */
-//  @WebMethod(operationName = "addEmail")
-//  public void addEmail(@WebParam(name = "email") Emails email)
-//      throws Exception, PreexistingEntityException,
-//      RollbackFailureException {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new EmailsJpaController(emf);
-//    controller.create(email);
-//  }
-//
-//  /**
-//   * Update email address
-//   */
-//  @WebMethod(operationName = "updateEmail")
-//  public void updateEmail(@WebParam(name = "email") Emails email)
-//      throws Exception, NonexistentEntityException,
-//      RollbackFailureException {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new EmailsJpaController(emf);
-//    controller.edit(email);
-//  }
-//
-//  /**
-//   * Delete emacs address
-//   */
-//  @WebMethod(operationName = "deleteEmail")
-//  public void deleteEmail(@WebParam(name = "emailId") Integer emailId)
-//      throws Exception, NonexistentEntityException,
-//      RollbackFailureException {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new EmailsJpaController(emf);
-//    controller.destroy(emailId);
-//  }
-//
-//  /**
-//   * Find email address by exact address
-//   */
-//  @WebMethod(operationName = "findExactEmails")
-//  public List<Emails> findExactEmail(@WebParam(name = "email") String email)
-//      throws Exception, NonexistentEntityException,
-//      RollbackFailureException {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new EmailsJpaController(emf);
-//    return controller.findExactEmails(email);
-//  }
-//
-//  /**
-//   * Find email address by address approximation
-//   */
-//  @WebMethod(operationName = "findAppoximateEmail")
-//  public List<Emails> findAppoximateEmail(@WebParam(name = "email") String email)
-//    throws Exception,
-//      NonexistentEntityException,
-//      RollbackFailureException {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new EmailsJpaController(emf);
-//    return controller.findApproximateEmails(email);
-//  }
-//
-//  /**
-//   * Find total mails number
-//   */
-//  @WebMethod(operationName = "countEmails")
-//  public Integer countEmails() throws Exception, RollbackFailureException {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new EmailsJpaController(emf);
-//    return controller.getEmailsCount();
-//  }
+
+  /**
+   * Add new email address
+   */
+  @WebMethod(operationName = "addEmail")
+  public void addEmail(@WebParam(name = "email") Emails email)
+      throws Exception, PreexistingEntityException,
+      RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new EmailsJpaController(emf);
+    controller.create(email);
+  }
+
+  /**
+   * Update email address
+   */
+  @WebMethod(operationName = "updateEmail")
+  public void updateEmail(@WebParam(name = "email") Emails email)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new EmailsJpaController(emf);
+    controller.edit(email);
+  }
+
+  /**
+   * Delete emacs address
+   */
+  @WebMethod(operationName = "deleteEmail")
+  public void deleteEmail(@WebParam(name = "emailId") Integer emailId)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new EmailsJpaController(emf);
+    controller.destroy(emailId);
+  }
+
+  /**
+   * Find email address by exact address
+   */
+  @WebMethod(operationName = "findExactEmails")
+  public List<Emails> findExactEmail(@WebParam(name = "email") String email)
+      throws Exception, NonexistentEntityException,
+      RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new EmailsJpaController(emf);
+    return controller.findExactEmails(email);
+  }
+
+  /**
+   * Find email address by address approximation
+   */
+  @WebMethod(operationName = "findAppoximateEmail")
+  public List<Emails> findAppoximateEmail(@WebParam(name = "email") String email)
+    throws Exception,
+      NonexistentEntityException,
+      RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new EmailsJpaController(emf);
+    return controller.findApproximateEmails(email);
+  }
+
+  /**
+   * Find total mails number
+   */
+  @WebMethod(operationName = "countEmails")
+  public Integer countEmails() throws Exception, RollbackFailureException {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new EmailsJpaController(emf);
+    return controller.getEmailsCount();
+  }
 }

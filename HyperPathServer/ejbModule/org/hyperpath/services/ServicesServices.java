@@ -14,7 +14,6 @@ import org.hyperpath.persistence.entities.Categories;
 import org.hyperpath.persistence.entities.Clients;
 import org.hyperpath.persistence.entities.Gpslocation;
 import org.hyperpath.persistence.entities.Services;
-import org.hyperpath.persistence.jpa.CategoriesJpaController;
 import org.hyperpath.persistence.jpa.ServicesJpaController;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
@@ -76,193 +75,193 @@ public class ServicesServices {
   /**
    * Find services by label
    */
-//  @WebMethod(operationName = "findServicesByLabel")
-//  public List<Services> findServicesByLabel(@WebParam(name = "serviceLabel") String serviceLabel)
-//    throws
-//    Exception,
-//    NonexistentEntityException,
-//    RollbackFailureException
-//  {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new ServicesJpaController(emf);
-//    return controller.findServicesByLabel(serviceLabel);
-//  }
+  @WebMethod(operationName = "findServicesByLabel")
+  public List<Services> findServicesByLabel(@WebParam(name = "serviceLabel") String serviceLabel)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ServicesJpaController(emf);
+    return controller.findServicesByLabel(serviceLabel);
+  }
 
   /**
    * Find services by category
    */
-//  @WebMethod(operationName = "findServicesByCategory")
-//  public List<Services> findServicesByCategory(@WebParam(name = "category") Categories category)
-//    throws
-//    Exception,
-//    NonexistentEntityException,
-//    RollbackFailureException
-//  {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new ServicesJpaController(emf);
-//    return controller.findServicesByCategory(category);
-//  }
+  @WebMethod(operationName = "findServicesByCategory")
+  public List<Services> findServicesByCategory(@WebParam(name = "category") Categories category)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ServicesJpaController(emf);
+    return controller.findServicesByCategory(category);
+  }
 
   /**
-   * Find services by gps location
+   * Find services by GPS location
    */
-//  @WebMethod(operationName = "findServicesByGpsLocation")
-//  public List<Services> findServicesByGpsLocation(
-//                                                  @WebParam(name = "gpsLocation") Gpslocation gpsLocation,
-//                                                  @WebParam(name = "range") int range)
-//    throws
-//    Exception,
-//    NonexistentEntityException,
-//    RollbackFailureException
-//  {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new ServicesJpaController(emf);
-//    return controller.findServicesByGpsLocation(gpsLocation, range);
-//  }
+  @WebMethod(operationName = "findServicesByGpsLocation")
+  public List<Services> findServicesByGpsLocation(
+                                                  @WebParam(name = "gpsLocation") Gpslocation gpsLocation,
+                                                  @WebParam(name = "range") int range)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ServicesJpaController(emf);
+    return controller.findServicesByGpsLocation(gpsLocation, range);
+  }
 
   /**
    * Find services by category
    */
-//  @WebMethod(operationName = "findServiceByRating")
-//  public List<Services> findServiceByRating(
-//                                            @WebParam(name = "rating") int rating,
-//                                            @WebParam(name = "category") Categories category)
-//    throws
-//    Exception,
-//    NonexistentEntityException,
-//    RollbackFailureException
-//  {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new ServicesJpaController(emf);
-//    return controller.findServiceByRating(rating, category);
-//  }
+  @WebMethod(operationName = "findServiceByRating")
+  public List<Services> findServiceByRating(
+                                            @WebParam(name = "rating") int rating,
+                                            @WebParam(name = "category") Categories category)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ServicesJpaController(emf);
+    return controller.findServiceByRating(rating, category);
+  }
 
   /**
    * Find services by user
    */
-//  @WebMethod(operationName = "findServicesByUser")
-//  public List<Services> findServicesByUser(@WebParam(name = "client") Clients client)
-//    throws
-//    Exception,
-//    NonexistentEntityException,
-//    RollbackFailureException
-//  {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new ServicesJpaController(emf);
-//    return controller.findServicesByUser(client);
-//  }
+  @WebMethod(operationName = "findServicesByUser")
+  public List<Services> findServicesByUser(@WebParam(name = "client") Clients client)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ServicesJpaController(emf);
+    return controller.findServicesByUser(client);
+  }
 
   /**
    * Find services by address
    */
-//  @WebMethod(operationName = "findServicesByAddress")
-//  public List<Services> findServicesByAddress(@WebParam(name = "address") Address address)
-//    throws
-//    Exception,
-//    NonexistentEntityException,
-//    RollbackFailureException
-//  {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new ServicesJpaController(emf);
-//    return controller.findServicesByAddress(address);
-//  }
+  @WebMethod(operationName = "findServicesByAddress")
+  public List<Services> findServicesByAddress(@WebParam(name = "address") Address address)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ServicesJpaController(emf);
+    return controller.findServicesByAddress(address);
+  }
 
   /**
    * Find services by phone
    */
-//  @WebMethod(operationName = "findServicesPhone")
-//  public List<Services> findServicesPhone(@WebParam(name = "phone") String phone)
-//    throws
-//    Exception,
-//    NonexistentEntityException,
-//    RollbackFailureException
-//  {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new ServicesJpaController(emf);
-//    return controller.findServicesPhone(phone);
-//  }
+  @WebMethod(operationName = "findServicesPhone")
+  public List<Services> findServicesPhone(@WebParam(name = "phone") String phone)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ServicesJpaController(emf);
+    return controller.findServicesPhone(phone);
+  }
 
   /**
    * Find services by fax
    */
-//  @WebMethod(operationName = "findServicesByFax")
-//  public List<Services> findServicesByFax(@WebParam(name = "fax") String fax)
-//    throws
-//    Exception,
-//    NonexistentEntityException,
-//    RollbackFailureException
-//  {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new ServicesJpaController(emf);
-//    return controller.findServicesByFax(fax);
-//  }
+  @WebMethod(operationName = "findServicesByFax")
+  public List<Services> findServicesByFax(@WebParam(name = "fax") String fax)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ServicesJpaController(emf);
+    return controller.findServicesByFax(fax);
+  }
 
   /**
    * Find services by mail
    */
-//  @WebMethod(operationName = "findServicesByMail")
-//  public List<Services> findServicesByMail(@WebParam(name = "mail") String mail)
-//    throws
-//    Exception,
-//    NonexistentEntityException,
-//    RollbackFailureException
-//  {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new ServicesJpaController(emf);
-//    return controller.findServicesByFax(mail);
-//  }
+  @WebMethod(operationName = "findServicesByMail")
+  public List<Services> findServicesByMail(@WebParam(name = "mail") String mail)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ServicesJpaController(emf);
+    return controller.findServicesByFax(mail);
+  }
 
   /**
    * Find services by opening hours
    */
-//  @WebMethod(operationName = "findServicesByOpeningTime")
-//  public List<Services> findServicesByOpeningTime(
-//                                                  @WebParam(name = "category") Categories category,
-//                                                  @WebParam(name = "startTime") Date startTime)
-//    throws
-//    Exception,
-//    NonexistentEntityException,
-//    RollbackFailureException
-//  {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new ServicesJpaController(emf);
-//    return controller.findServicesByOpeningTime(category, startTime);
-//  }
+  @WebMethod(operationName = "findServicesByOpeningTime")
+  public List<Services> findServicesByOpeningTime(
+                                                  @WebParam(name = "category") Categories category,
+                                                  @WebParam(name = "startTime") Date startTime)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ServicesJpaController(emf);
+    return controller.findServicesByOpeningTime(category, startTime);
+  }
 
   /**
    * Find services by closing hours
    */
-//  @WebMethod(operationName = "findServicesByClosingTime")
-//  public List<Services> findServicesByClosingTime(
-//                                                  @WebParam(name = "category") Categories category,
-//                                                  @WebParam(name = "endTime") Date endTime)
-//    throws
-//    Exception,
-//    NonexistentEntityException,
-//    RollbackFailureException
-//  {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new ServicesJpaController(emf);
-//    return controller.findServicesByClosingTime(category, endTime);
-//  }
+  @WebMethod(operationName = "findServicesByClosingTime")
+  public List<Services> findServicesByClosingTime(
+                                                  @WebParam(name = "category") Categories category,
+                                                  @WebParam(name = "endTime") Date endTime)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ServicesJpaController(emf);
+    return controller.findServicesByClosingTime(category, endTime);
+  }
 
   /**
    * Find services by both opening and closing hours
    */
-//  @WebMethod(operationName = "findServicesByTimeRange")
-//  public List<Services> findServicesByTimeRange(
-//                                                @WebParam(name = "category") Categories category,
-//                                                @WebParam(name = "startTime") Date startTime,
-//                                                @WebParam(name = "endTime") Date endTime)
-//    throws
-//    Exception,
-//    NonexistentEntityException,
-//    RollbackFailureException
-//  {
-//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-//    controller = new ServicesJpaController(emf);
-//    return controller.findServicesByTimeRange(category, startTime, endTime);
-//  }
+  @WebMethod(operationName = "findServicesByTimeRange")
+  public List<Services> findServicesByTimeRange(
+                                                @WebParam(name = "category") Categories category,
+                                                @WebParam(name = "startTime") Date startTime,
+                                                @WebParam(name = "endTime") Date endTime)
+    throws
+    Exception,
+    NonexistentEntityException,
+    RollbackFailureException
+  {
+    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+    controller = new ServicesJpaController(emf);
+    return controller.findServicesByTimeRange(category, startTime, endTime);
+  }
 
   /**
    * list all services

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.hyperpath.persistence.jpa;
 
 import java.io.Serializable;
@@ -9,9 +5,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.UserTransaction;
+
+import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Clients;
 import org.hyperpath.persistence.entities.Entities;
 import org.hyperpath.persistence.entities.Services;
@@ -22,22 +20,17 @@ import org.hyperpath.persistence.jpa.exceptions.IllegalOrphanException;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-/**
- *
- * @author chedi
- */
 public class ClientsJpaController implements Serializable {
+  private static final long serialVersionUID = 6354417595319914937L;
+  private EntityManager em = null;
 
-    public ClientsJpaController(EntityManagerFactory emf) {
-        this.utx = utx;
-        this.emf = emf;
-    }
-    private UserTransaction utx = null;
-    private EntityManagerFactory emf = null;
+	public ClientsJpaController(EntityManagerFactory emf) {
+      this.em = emf.createEntityManager();
+  }
 
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+	public ClientsJpaController(EntityManager mockedEM) {
+		this.em = mockedEM;
+	}
 
     public void create(Clients clients) throws RollbackFailureException, Exception {
         if (clients.getServicesList() == null) {
@@ -46,10 +39,7 @@ public class ClientsJpaController implements Serializable {
         if (clients.getReviewsList() == null) {
             clients.setReviewsList(new ArrayList<Reviews>());
         }
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             Entities entitiesId = clients.getEntitiesId();
             if (entitiesId != null) {
                 entitiesId = em.getReference(entitiesId.getClass(), entitiesId.getId());
@@ -85,13 +75,7 @@ public class ClientsJpaController implements Serializable {
                     oldClientsIdOfReviewsListReviews = em.merge(oldClientsIdOfReviewsListReviews);
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -101,10 +85,7 @@ public class ClientsJpaController implements Serializable {
     }
 
     public void edit(Clients clients) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             Clients persistentClients = em.find(Clients.class, clients.getId());
             Entities entitiesIdOld = persistentClients.getEntitiesId();
             Entities entitiesIdNew = clients.getEntitiesId();
@@ -174,20 +155,7 @@ public class ClientsJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Integer id = clients.getId();
-                if (findClients(id) == null) {
-                    throw new NonexistentEntityException("The clients with id " + id + " no longer exists.");
-                }
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -197,10 +165,7 @@ public class ClientsJpaController implements Serializable {
     }
 
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             Clients clients;
             try {
                 clients = em.getReference(Clients.class, id);
@@ -230,13 +195,7 @@ public class ClientsJpaController implements Serializable {
                 servicesListServices = em.merge(servicesListServices);
             }
             em.remove(clients);
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -253,42 +212,122 @@ public class ClientsJpaController implements Serializable {
         return findClientsEntities(false, maxResults, firstResult);
     }
 
+    @SuppressWarnings("unchecked")
     private List<Clients> findClientsEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Clients.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Clients> criteriaQuery = criteriaBuilder.createQuery(Clients.class);
+        Query query = em.createQuery(criteriaQuery);
+        if (!all) {
+          query.setMaxResults(maxResults);
+          query.setFirstResult(firstResult);
         }
+        return query.getResultList();
+      } finally {
+        em.close();
+      }
     }
 
     public Clients findClients(Integer id) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Clients.class, id);
-        } finally {
-            em.close();
-        }
+      try {
+        return em.find(Clients.class, id);
+      } finally {
+        em.close();
+      }
     }
 
     public int getClientsCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Clients> rt = cq.from(Clients.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<Clients> clientsRoot = criteriaQuery.from(Clients.class);
+        criteriaQuery.select(criteriaBuilder.count(clientsRoot));
+        Query query = em.createQuery(criteriaQuery);
+        return ((Long) query.getSingleResult()).intValue();
+      } finally {
+        em.close();
+      }
+    }
+
+    public List<Clients> findClientsByAddress(Address address) {
+      // TODO Auto-generated method stub
+      return null;
+    }
+
+    public List<Clients> findClientsByPhone(String phone) {
+      // TODO Auto-generated method stub
+      return null;
+    }
+
+    public List<Clients> findClientsByFax(String fax) {
+      // TODO Auto-generated method stub
+      return null;
+    }
+
+    public List<Clients> findClientsByMail(String mail) {
+      // TODO Auto-generated method stub
+      return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Clients> findClientsByName(String clientName) {
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Clients> criteriaQuery = criteriaBuilder.createQuery(Clients.class);
+        Root<Clients> clientRoot = criteriaQuery.from(Clients.class);
+        criteriaQuery.select(clientRoot).where( criteriaBuilder.equal(clientRoot.<String>get("name"),clientName));
+        Query query = em.createQuery(criteriaQuery);
+        return query.getResultList();
+      } finally {
+        em.close();
+      }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Clients> findClientsByLastName(String clientLastName) {
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Clients> criteriaQuery = criteriaBuilder.createQuery(Clients.class);
+        Root<Clients> clientRoot = criteriaQuery.from(Clients.class);
+        criteriaQuery.select(clientRoot).where( criteriaBuilder.equal(clientRoot.get("lastName"),clientLastName));
+        Query query = em.createQuery(criteriaQuery);
+        return query.getResultList();
+      } finally {
+        em.close();
+      }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Clients> findClientsByLogin(String clientLogin) {
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Clients> criteriaQuery = criteriaBuilder.createQuery(Clients.class);
+        Root<Clients> clientRoot = criteriaQuery.from(Clients.class);
+        criteriaQuery.select(clientRoot).where( criteriaBuilder.equal(clientRoot.get("login"),clientLogin));
+        Query query = em.createQuery(criteriaQuery);
+        return query.getResultList();
+      } finally {
+        em.close();
+      }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Clients> findClientsByBirthDate(String clientBirthDate) {
+      try {
+  	    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+  	    CriteriaQuery<Clients> criteriaQuery = criteriaBuilder.createQuery(Clients.class);
+  	    Root<Clients> clientRoot = criteriaQuery.from(Clients.class);
+  	    criteriaQuery.select(clientRoot).where( criteriaBuilder.equal(clientRoot.get("birthdate"), clientBirthDate));
+  	    Query query = em.createQuery(criteriaQuery);
+  	    return query.getResultList();
+      } finally {
+        em.close();
+      }
+    }
+
+    public List<Clients> findClientsByAge(int clientAge) {
+      // TODO Auto-generated method stub
+      return null;
     }
 
 }

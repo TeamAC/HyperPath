@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.hyperpath.persistence.jpa;
 
 import java.io.Serializable;
@@ -9,9 +5,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Emails;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,22 +22,17 @@ import org.hyperpath.persistence.jpa.exceptions.IllegalOrphanException;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
-/**
- *
- * @author chedi
- */
 public class EntitiesJpaController implements Serializable {
+  private static final long serialVersionUID = 4420567803215333749L;
+  private EntityManager em = null;
 
-    public EntitiesJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
-        this.emf = emf;
-    }
-    private UserTransaction utx = null;
-    private EntityManagerFactory emf = null;
+	public EntitiesJpaController(EntityManagerFactory emf) {
+      this.em = emf.createEntityManager();
+  }
 
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+	public EntitiesJpaController(EntityManager mockedEM) {
+		this.em = mockedEM;
+	}
 
     public void create(Entities entities) throws RollbackFailureException, Exception {
         if (entities.getEmailsList() == null) {
@@ -65,10 +56,7 @@ public class EntitiesJpaController implements Serializable {
         if (entities.getClientsList() == null) {
             entities.setClientsList(new ArrayList<Clients>());
         }
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             List<Emails> attachedEmailsList = new ArrayList<Emails>();
             for (Emails emailsListEmailsToAttach : entities.getEmailsList()) {
                 emailsListEmailsToAttach = em.getReference(emailsListEmailsToAttach.getClass(), emailsListEmailsToAttach.getId());
@@ -155,13 +143,7 @@ public class EntitiesJpaController implements Serializable {
                     oldEntitiesIdOfClientsListClients = em.merge(oldEntitiesIdOfClientsListClients);
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -171,10 +153,7 @@ public class EntitiesJpaController implements Serializable {
     }
 
     public void edit(Entities entities) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             Entities persistentEntities = em.find(Entities.class, entities.getId());
             List<Emails> emailsListOld = persistentEntities.getEmailsList();
             List<Emails> emailsListNew = entities.getEmailsList();
@@ -349,20 +328,7 @@ public class EntitiesJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Integer id = entities.getId();
-                if (findEntities(id) == null) {
-                    throw new NonexistentEntityException("The entities with id " + id + " no longer exists.");
-                }
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -372,10 +338,7 @@ public class EntitiesJpaController implements Serializable {
     }
 
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            utx.begin();
-            em = getEntityManager();
             Entities entities;
             try {
                 entities = em.getReference(Entities.class, id);
@@ -429,13 +392,7 @@ public class EntitiesJpaController implements Serializable {
                 addressListAddress = em.merge(addressListAddress);
             }
             em.remove(entities);
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -448,46 +405,40 @@ public class EntitiesJpaController implements Serializable {
         return findEntitiesEntities(true, -1, -1);
     }
 
-    public List<Entities> findEntitiesEntities(int maxResults, int firstResult) {
-        return findEntitiesEntities(false, maxResults, firstResult);
-    }
-
+    @SuppressWarnings("unchecked")
     private List<Entities> findEntitiesEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Entities.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Entities> criteriaQuery = criteriaBuilder.createQuery(Entities.class);
+        Query query = em.createQuery(criteriaQuery);
+        if (!all) {
+          query.setMaxResults(maxResults);
+          query.setFirstResult(firstResult);
         }
+        return query.getResultList();
+      } finally {
+        em.close();
+      }
     }
 
     public Entities findEntities(Integer id) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Entities.class, id);
-        } finally {
-            em.close();
-        }
+      try {
+        return em.find(Entities.class, id);
+      } finally {
+        em.close();
+      }
     }
 
     public int getEntitiesCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Entities> rt = cq.from(Entities.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<Entities> entitiesRoot = criteriaQuery.from(Entities.class);
+        criteriaQuery.select(criteriaBuilder.count(entitiesRoot));
+        Query query = em.createQuery(criteriaQuery);
+        return ((Long) query.getSingleResult()).intValue();
+      } finally {
+        em.close();
+      }
     }
-    
 }

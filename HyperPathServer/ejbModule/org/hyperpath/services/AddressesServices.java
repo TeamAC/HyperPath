@@ -77,61 +77,61 @@ public class AddressesServices {
   /**
    * Find address by textual approximation
    */
-//  @WebMethod(operationName = "findApproximateAddressesByCategory")
-//  public List<Address> findApproximateAddressesByCategory(
-//                             @WebParam(name = "category") Categories category,
-//                             @WebParam(name = "address") String address)
-//    throws Exception,
-//      NonexistentEntityException {
-//    controller = new AddressJpaController(emf);
-//    return controller.findApproximateAddressesByCategory(category, address);
-//  }
+  @WebMethod(operationName = "findApproximateAddressesByCategory")
+  public List<Address> findApproximateAddressesByCategory(
+                             @WebParam(name = "category") Categories category,
+                             @WebParam(name = "address") String address)
+    throws Exception,
+      NonexistentEntityException {
+    controller = new AddressJpaController(emf);
+    return controller.findApproximateAddressesByCategory(category, address);
+  }
 
   /**
    * Find address by location and range
    */
-//  @WebMethod(operationName = "findAddressByLocation")
-//  @RequestWrapper(className = "org.findAddressByLocation")
-//  @ResponseWrapper(className = "org.findAddressByLocationResponse")
-//  public List<Address> findAddressByLocation(
-//                                       @WebParam(name = "category") Categories category,
-//                                       @WebParam(name = "location") String location,
-//                                       @WebParam(name = "range") int range)
-//      throws NonexistentEntityException {
-//    controller = new AddressJpaController(emf);
-//    return controller.findAddressByRange(category, location, range);
-//  }
+  @WebMethod(operationName = "findAddressByLocation")
+  @RequestWrapper(className = "org.findAddressByLocation")
+  @ResponseWrapper(className = "org.findAddressByLocationResponse")
+  public List<Address> findAddressByLocation(
+                                       @WebParam(name = "category") Categories category,
+                                       @WebParam(name = "location") String location,
+                                       @WebParam(name = "range") int range)
+      throws NonexistentEntityException {
+    controller = new AddressJpaController(emf);
+    return controller.findAddressByRange(category, location, range);
+  }
 
   /**
    * Find services based on their address
    */
-//  @WebMethod(operationName = "findServicesByAddress")
-//  public List<Services> findServicesByAddress(@WebParam(name = "address") Address address)
-//    throws Exception,
-//      NonexistentEntityException {
-//    controller = new AddressJpaController(emf);
-//    return controller.findServicesByAddress(address);
-//  }
+  @WebMethod(operationName = "findServicesByAddress")
+  public List<Services> findServicesByAddress(@WebParam(name = "address") Address address)
+    throws Exception,
+      NonexistentEntityException {
+    controller = new AddressJpaController(emf);
+    return controller.findServicesByAddress(address);
+  }
 
   /**
    * Find advertisers base on their address
    */
-//  @WebMethod(operationName = "findAdvertizersByAddress")
-//  public List<Advertisers> findAdvertizersByAddress(@WebParam(name = "address") Address address)
-//    throws Exception,
-//      NonexistentEntityException {
-//    controller = new AddressJpaController(emf);
-//    return controller.findAdvertizersByAddress(address);
-//  }
+  @WebMethod(operationName = "findAdvertizersByAddress")
+  public List<Advertisers> findAdvertizersByAddress(@WebParam(name = "address") Address address)
+    throws Exception,
+      NonexistentEntityException {
+    controller = new AddressJpaController(emf);
+    return controller.findAdvertizersByAddress(address);
+  }
 
   /**
    * Find clients based on their address
    */
-//  @WebMethod(operationName = "findClientsByAddress")
-//  public List<Clients> findClientsByAddress(@WebParam(name = "address") Address address)
-//    throws Exception,
-//      NonexistentEntityException {
-//    controller = new AddressJpaController(emf);
-//    return controller.findClientsByAddress(address);
-//  }
+  @WebMethod(operationName = "findClientsByAddress")
+  public List<Clients> findClientsByAddress(@WebParam(name = "address") Address address)
+    throws Exception,
+      NonexistentEntityException {
+    controller = new AddressJpaController(emf);
+    return controller.findClientsByAddress(address);
+  }
 }

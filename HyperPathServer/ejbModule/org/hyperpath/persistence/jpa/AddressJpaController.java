@@ -8,7 +8,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.Address;
 import org.hyperpath.persistence.entities.Advertisers;
 import org.hyperpath.persistence.entities.Categories;
@@ -24,24 +23,21 @@ import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 public class AddressJpaController implements Serializable {
   private static final long serialVersionUID = -7707097477154823435L;
-  private EntityManagerFactory emf = null;
+  private EntityManager em = null;
 
     public AddressJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+        this.em = emf.createEntityManager();
     }
 
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-  }
+    public AddressJpaController(EntityManager mockedEM){
+    	this.em = mockedEM;
+    }
 
     public void create(Address address) throws RollbackFailureException, Exception {
         if (address.getEntitiesList() == null) {
             address.setEntitiesList(new ArrayList<Entities>());
         }
-        EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
             List<Entities> attachedEntitiesList = new ArrayList<Entities>();
             for (Entities entitiesListEntitiesToAttach : address.getEntitiesList()) {
                 entitiesListEntitiesToAttach = em.getReference(entitiesListEntitiesToAttach.getClass(), entitiesListEntitiesToAttach.getId());
@@ -53,9 +49,7 @@ public class AddressJpaController implements Serializable {
                 entitiesListEntities.getAddressList().add(address);
                 entitiesListEntities = em.merge(entitiesListEntities);
             }
-            em.getTransaction().commit();
         } catch (Exception ex) {
-
             throw ex;
         } finally {
             if (em != null) {
@@ -65,10 +59,7 @@ public class AddressJpaController implements Serializable {
     }
 
     public void edit(Address address) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
             Address persistentAddress = em.find(Address.class, address.getId());
             List<Entities> entitiesListOld = persistentAddress.getEntitiesList();
             List<Entities> entitiesListNew = address.getEntitiesList();
@@ -92,9 +83,7 @@ public class AddressJpaController implements Serializable {
                     entitiesListNewEntities = em.merge(entitiesListNewEntities);
                 }
             }
-            em.getTransaction().commit();
         } catch (Exception ex) {
-
             throw ex;
         } finally {
             if (em != null) {
@@ -104,10 +93,7 @@ public class AddressJpaController implements Serializable {
     }
 
     public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
             Address address;
             try {
                 address = em.getReference(Address.class, id);
@@ -121,9 +107,7 @@ public class AddressJpaController implements Serializable {
                 entitiesListEntities = em.merge(entitiesListEntities);
             }
             em.remove(address);
-            em.getTransaction().commit();
         } catch (Exception ex) {
-
             throw ex;
         } finally {
             if (em != null) {
@@ -140,42 +124,66 @@ public class AddressJpaController implements Serializable {
         return findAddressEntities(false, maxResults, firstResult);
     }
 
-    private List<Address> findAddressEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Address.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+    @SuppressWarnings("unchecked")
+    private List<Address> findAddressEntities(boolean all, int maxResults,  int firstResult) {
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Emails> criteriaQuery = criteriaBuilder.createQuery(Emails.class);
+        Query query = em.createQuery(criteriaQuery);
+        if (!all) {
+          query.setMaxResults(maxResults);
+          query.setFirstResult(firstResult);
         }
+        return query.getResultList();
+      } finally {
+        em.close();
+      }
     }
 
     public Address findAddress(Integer id) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Address.class, id);
-        } finally {
-            em.close();
-        }
+      try {
+        return em.find(Address.class, id);
+      } finally {
+        em.close();
+      }
     }
 
     public int getAddressCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Address> rt = cq.from(Address.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
+      try {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<Address> addressRoot = criteriaQuery.from(Address.class);
+        criteriaQuery.select(criteriaBuilder.count(addressRoot));
+        Query query = em.createQuery(criteriaQuery);
+        return ((Long) query.getSingleResult()).intValue();
+      } finally {
+        em.close();
+      }
+    }
+
+    public List<Address> findApproximateAddressesByCategory(Categories category, String address) {
+      // TODO Auto-generated method stub
+      return null;
+    }
+
+    public List<Address> findAddressByRange(Categories category, String location, int range) {
+      // TODO Auto-generated method stub
+      return null;
+    }
+
+    public List<Services> findServicesByAddress(Address address) {
+      // TODO Auto-generated method stub
+      return null;
+    }
+
+    public List<Advertisers> findAdvertizersByAddress(Address address) {
+      // TODO Auto-generated method stub
+      return null;
+    }
+
+    public List<Clients> findClientsByAddress(Address address) {
+      // TODO Auto-generated method stub
+      return null;
     }
 
 }
