@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://localhost:8080/AddressesServices/AddressesServices?wsdl" uri="xml-resources/web-service-references/AddressesServices/wsdl/localhost_8080/AddressesServices/AddressesServices.wsdl"/>
+    <system systemId="http://localhost:8080/AddressesServices/AddressesServices?xsd=1" uri="xml-resources/web-service-references/AddressesServices/wsdl/localhost_8080/AddressesServices/AddressesServices.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/EmailsServices/EmailsServices?wsdl" uri="xml-resources/web-service-references/EmailsServices/wsdl/localhost_8080/EmailsServices/EmailsServices.wsdl"/>
+    <system systemId="http://localhost:8080/EmailsServices/EmailsServices?xsd=1" uri="xml-resources/web-service-references/EmailsServices/wsdl/localhost_8080/EmailsServices/EmailsServices.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/ClientsServices/ClientsServices?wsdl" uri="xml-resources/web-service-references/ClientsServices/wsdl/localhost_8080/ClientsServices/ClientsServices.wsdl"/>
+    <system systemId="http://localhost:8080/ClientsServices/ClientsServices?xsd=1" uri="xml-resources/web-service-references/ClientsServices/wsdl/localhost_8080/ClientsServices/ClientsServices.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/AdsServices/AdsServices?wsdl" uri="xml-resources/web-service-references/AdsServices/wsdl/localhost_8080/AdsServices/AdsServices.wsdl"/>
+    <system systemId="http://localhost:8080/AdsServices/AdsServices?xsd=1" uri="xml-resources/web-service-references/AdsServices/wsdl/localhost_8080/AdsServices/AdsServices.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/FaxesServices/FaxesServices?wsdl" uri="xml-resources/web-service-references/FaxesServices/wsdl/localhost_8080/FaxesServices/FaxesServices.wsdl"/>
+    <system systemId="http://localhost:8080/FaxesServices/FaxesServices?xsd=1" uri="xml-resources/web-service-references/FaxesServices/wsdl/localhost_8080/FaxesServices/FaxesServices.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/CategoriesServices/CategoriesServices?wsdl" uri="xml-resources/web-service-references/CategoriesServices/wsdl/localhost_8080/CategoriesServices/CategoriesServices.wsdl"/>
+    <system systemId="http://localhost:8080/CategoriesServices/CategoriesServices?xsd=1" uri="xml-resources/web-service-references/CategoriesServices/wsdl/localhost_8080/CategoriesServices/CategoriesServices.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/ServicesServices/ServicesServices?wsdl" uri="xml-resources/web-service-references/ServicesServices/wsdl/localhost_8080/ServicesServices/ServicesServices.wsdl"/>
+    <system systemId="http://localhost:8080/ServicesServices/ServicesServices?xsd=1" uri="xml-resources/web-service-references/ServicesServices/wsdl/localhost_8080/ServicesServices/ServicesServices.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/PhonesServices/PhonesServices?wsdl" uri="xml-resources/web-service-references/PhonesServices/wsdl/localhost_8080/PhonesServices/PhonesServices.wsdl"/>
+    <system systemId="http://localhost:8080/PhonesServices/PhonesServices?xsd=1" uri="xml-resources/web-service-references/PhonesServices/wsdl/localhost_8080/PhonesServices/PhonesServices.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/ReviewsServices/ReviewsServices?wsdl" uri="xml-resources/web-service-references/ReviewsServices/wsdl/localhost_8080/ReviewsServices/ReviewsServices.wsdl"/>
+    <system systemId="http://localhost:8080/ReviewsServices/ReviewsServices?xsd=1" uri="xml-resources/web-service-references/ReviewsServices/wsdl/localhost_8080/ReviewsServices/ReviewsServices.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/AdvertisersServices/AdvertisersServices?wsdl" uri="xml-resources/web-service-references/AdvertisersServices/wsdl/localhost_8080/AdvertisersServices/AdvertisersServices.wsdl"/>
+    <system systemId="http://localhost:8080/AdvertisersServices/AdvertisersServices?xsd=1" uri="xml-resources/web-service-references/AdvertisersServices/wsdl/localhost_8080/AdvertisersServices/AdvertisersServices.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/OpeningHoursServices/OpeningHoursServices?wsdl" uri="xml-resources/web-service-references/OpeningHoursServices/wsdl/localhost_8080/OpeningHoursServices/OpeningHoursServices.wsdl"/>
+    <system systemId="http://localhost:8080/OpeningHoursServices/OpeningHoursServices?xsd=1" uri="xml-resources/web-service-references/OpeningHoursServices/wsdl/localhost_8080/OpeningHoursServices/OpeningHoursServices.xsd_1.xsd"/>
+</catalog>

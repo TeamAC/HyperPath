@@ -1,0 +1,412 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.1 (branches/2.1-6728; 2011-02-03T14:14:58+0000) JAXWS-RI/2.2.3 JAXWS/2.2. --><xs:schema xmlns:tns="http://services.hyperpath.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://services.hyperpath.org/">
+
+<xs:element name="Exception" type="tns:Exception" />
+
+<xs:element name="NonexistentEntityException" type="tns:NonexistentEntityException" />
+
+<xs:element name="PreexistingEntityException" type="tns:PreexistingEntityException" />
+
+<xs:element name="RollbackFailureException" type="tns:RollbackFailureException" />
+
+<xs:element name="addService" type="tns:addService" />
+
+<xs:element name="addServiceResponse" type="tns:addServiceResponse" />
+
+<xs:element name="address" type="tns:address" />
+
+<xs:element name="ads" type="tns:ads" />
+
+<xs:element name="advertisers" type="tns:advertisers" />
+
+<xs:element name="categories" type="tns:categories" />
+
+<xs:element name="clients" type="tns:clients" />
+
+<xs:element name="countCategories" type="tns:countCategories" />
+
+<xs:element name="countCategoriesResponse" type="tns:countCategoriesResponse" />
+
+<xs:element name="deleteService" type="tns:deleteService" />
+
+<xs:element name="deleteServiceResponse" type="tns:deleteServiceResponse" />
+
+<xs:element name="entities" type="tns:entities" />
+
+<xs:element name="findServiceByRating" type="tns:findServiceByRating" />
+
+<xs:element name="findServiceByRatingResponse" type="tns:findServiceByRatingResponse" />
+
+<xs:element name="findServicesByAddress" type="tns:findServicesByAddress" />
+
+<xs:element name="findServicesByAddressResponse" type="tns:findServicesByAddressResponse" />
+
+<xs:element name="findServicesByCategory" type="tns:findServicesByCategory" />
+
+<xs:element name="findServicesByCategoryResponse" type="tns:findServicesByCategoryResponse" />
+
+<xs:element name="findServicesByClosingTime" type="tns:findServicesByClosingTime" />
+
+<xs:element name="findServicesByClosingTimeResponse" type="tns:findServicesByClosingTimeResponse" />
+
+<xs:element name="findServicesByFax" type="tns:findServicesByFax" />
+
+<xs:element name="findServicesByFaxResponse" type="tns:findServicesByFaxResponse" />
+
+<xs:element name="findServicesByGpsLocation" type="tns:findServicesByGpsLocation" />
+
+<xs:element name="findServicesByGpsLocationResponse" type="tns:findServicesByGpsLocationResponse" />
+
+<xs:element name="findServicesByLabel" type="tns:findServicesByLabel" />
+
+<xs:element name="findServicesByLabelResponse" type="tns:findServicesByLabelResponse" />
+
+<xs:element name="findServicesByMail" type="tns:findServicesByMail" />
+
+<xs:element name="findServicesByMailResponse" type="tns:findServicesByMailResponse" />
+
+<xs:element name="findServicesByOpeningTime" type="tns:findServicesByOpeningTime" />
+
+<xs:element name="findServicesByOpeningTimeResponse" type="tns:findServicesByOpeningTimeResponse" />
+
+<xs:element name="findServicesByTimeRange" type="tns:findServicesByTimeRange" />
+
+<xs:element name="findServicesByTimeRangeResponse" type="tns:findServicesByTimeRangeResponse" />
+
+<xs:element name="findServicesByUser" type="tns:findServicesByUser" />
+
+<xs:element name="findServicesByUserResponse" type="tns:findServicesByUserResponse" />
+
+<xs:element name="findServicesPhone" type="tns:findServicesPhone" />
+
+<xs:element name="findServicesPhoneResponse" type="tns:findServicesPhoneResponse" />
+
+<xs:element name="gpslocation" type="tns:gpslocation" />
+
+<xs:element name="listAllServices" type="tns:listAllServices" />
+
+<xs:element name="listAllServicesResponse" type="tns:listAllServicesResponse" />
+
+<xs:element name="openingHours" type="tns:openingHours" />
+
+<xs:element name="services" type="tns:services" />
+
+<xs:element name="updateService" type="tns:updateService" />
+
+<xs:element name="updateServiceResponse" type="tns:updateServiceResponse" />
+
+<xs:complexType name="findServicesByTimeRange">
+<xs:sequence>
+<xs:element name="category" type="tns:categories" minOccurs="0" />
+<xs:element name="startTime" type="xs:dateTime" minOccurs="0" />
+<xs:element name="endTime" type="xs:dateTime" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="categories">
+<xs:sequence>
+<xs:element name="description" type="xs:string" minOccurs="0" />
+<xs:element name="id" type="xs:int" minOccurs="0" />
+<xs:element name="label" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByTimeRangeResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:services" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="services">
+<xs:sequence>
+<xs:element name="adsId" type="tns:ads" minOccurs="0" />
+<xs:element name="category" type="tns:categories" minOccurs="0" />
+<xs:element name="description" type="xs:string" minOccurs="0" />
+<xs:element name="entitiesId" type="tns:entities" minOccurs="0" />
+<xs:element name="gpslocationId" type="tns:gpslocation" minOccurs="0" />
+<xs:element name="id" type="xs:int" minOccurs="0" />
+<xs:element name="label" type="xs:string" minOccurs="0" />
+<xs:element name="openingHoursid" type="tns:openingHours" minOccurs="0" />
+<xs:element name="rating" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ads">
+<xs:sequence>
+<xs:element name="advertisersId" type="tns:advertisers" minOccurs="0" />
+<xs:element name="description" type="xs:string" minOccurs="0" />
+<xs:element name="endDate" type="xs:dateTime" minOccurs="0" />
+<xs:element name="id" type="xs:int" minOccurs="0" />
+<xs:element name="shortDescription" type="xs:string" minOccurs="0" />
+<xs:element name="startDate" type="xs:dateTime" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="advertisers">
+<xs:sequence>
+<xs:element name="description" type="xs:string" minOccurs="0" />
+<xs:element name="entitiesId" type="tns:entities" minOccurs="0" />
+<xs:element name="id" type="xs:int" minOccurs="0" />
+<xs:element name="name" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="entities">
+<xs:sequence>
+<xs:element name="id" type="xs:int" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="gpslocation">
+<xs:sequence>
+<xs:element name="altitude" type="xs:string" minOccurs="0" />
+<xs:element name="id" type="xs:int" minOccurs="0" />
+<xs:element name="latitude" type="xs:string" minOccurs="0" />
+<xs:element name="longitude" type="xs:string" minOccurs="0" />
+<xs:element name="time" type="xs:dateTime" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="openingHours">
+<xs:sequence>
+<xs:element name="closeTime" type="xs:dateTime" minOccurs="0" />
+<xs:element name="days" type="xs:int" />
+<xs:element name="id" type="xs:int" minOccurs="0" />
+<xs:element name="openTime" type="xs:dateTime" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Exception">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="NonexistentEntityException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="RollbackFailureException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByUser">
+<xs:sequence>
+<xs:element name="client" type="tns:clients" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="clients">
+<xs:sequence>
+<xs:element name="birthdate" type="xs:dateTime" minOccurs="0" />
+<xs:element name="entitiesId" type="tns:entities" minOccurs="0" />
+<xs:element name="gender" type="xs:string" minOccurs="0" />
+<xs:element name="id" type="xs:int" minOccurs="0" />
+<xs:element name="lastName" type="xs:string" minOccurs="0" />
+<xs:element name="login" type="xs:string" minOccurs="0" />
+<xs:element name="name" type="xs:string" minOccurs="0" />
+<xs:element name="password" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByUserResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:services" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesPhone">
+<xs:sequence>
+<xs:element name="phone" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesPhoneResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:services" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByOpeningTime">
+<xs:sequence>
+<xs:element name="category" type="tns:categories" minOccurs="0" />
+<xs:element name="startTime" type="xs:dateTime" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByOpeningTimeResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:services" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addService">
+<xs:sequence>
+<xs:element name="newService" type="tns:services" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addServiceResponse">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="PreexistingEntityException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByClosingTime">
+<xs:sequence>
+<xs:element name="category" type="tns:categories" minOccurs="0" />
+<xs:element name="endTime" type="xs:dateTime" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByClosingTimeResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:services" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="countCategories">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="countCategoriesResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByCategory">
+<xs:sequence>
+<xs:element name="category" type="tns:categories" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByCategoryResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:services" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByGpsLocation">
+<xs:sequence>
+<xs:element name="gpsLocation" type="tns:gpslocation" minOccurs="0" />
+<xs:element name="range" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByGpsLocationResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:services" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteService">
+<xs:sequence>
+<xs:element name="serviceId" type="xs:int" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteServiceResponse">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="findServicesByMail">
+<xs:sequence>
+<xs:element name="mail" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByMailResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:services" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="listAllServices">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="listAllServicesResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:services" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByAddress">
+<xs:sequence>
+<xs:element name="address" type="tns:address" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="address">
+<xs:sequence>
+<xs:element name="city" type="xs:string" minOccurs="0" />
+<xs:element name="country" type="xs:string" minOccurs="0" />
+<xs:element name="department" type="xs:string" minOccurs="0" />
+<xs:element name="ext" type="xs:string" minOccurs="0" />
+<xs:element name="id" type="xs:int" minOccurs="0" />
+<xs:element name="street" type="xs:string" minOccurs="0" />
+<xs:element name="zip" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByAddressResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:services" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByFax">
+<xs:sequence>
+<xs:element name="fax" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByFaxResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:services" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByLabel">
+<xs:sequence>
+<xs:element name="serviceLabel" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServicesByLabelResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:services" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updateService">
+<xs:sequence>
+<xs:element name="service" type="tns:services" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updateServiceResponse">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="findServiceByRating">
+<xs:sequence>
+<xs:element name="rating" type="xs:int" />
+<xs:element name="category" type="tns:categories" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findServiceByRatingResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:services" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

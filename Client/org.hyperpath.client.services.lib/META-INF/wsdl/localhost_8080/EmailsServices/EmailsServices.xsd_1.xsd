@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.1 (branches/2.1-6728; 2011-02-03T14:14:58+0000) JAXWS-RI/2.2.3 JAXWS/2.2. --><xs:schema xmlns:tns="http://services.hyperpath.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://services.hyperpath.org/">
+
+<xs:element name="Exception" type="tns:Exception" />
+
+<xs:element name="NonexistentEntityException" type="tns:NonexistentEntityException" />
+
+<xs:element name="PreexistingEntityException" type="tns:PreexistingEntityException" />
+
+<xs:element name="RollbackFailureException" type="tns:RollbackFailureException" />
+
+<xs:element name="addEmail" type="tns:addEmail" />
+
+<xs:element name="addEmailResponse" type="tns:addEmailResponse" />
+
+<xs:element name="countEmails" type="tns:countEmails" />
+
+<xs:element name="countEmailsResponse" type="tns:countEmailsResponse" />
+
+<xs:element name="deleteEmail" type="tns:deleteEmail" />
+
+<xs:element name="deleteEmailResponse" type="tns:deleteEmailResponse" />
+
+<xs:element name="emails" type="tns:emails" />
+
+<xs:element name="findAppoximateEmail" type="tns:findAppoximateEmail" />
+
+<xs:element name="findAppoximateEmailResponse" type="tns:findAppoximateEmailResponse" />
+
+<xs:element name="findExactEmails" type="tns:findExactEmails" />
+
+<xs:element name="findExactEmailsResponse" type="tns:findExactEmailsResponse" />
+
+<xs:element name="listAllEmails" type="tns:listAllEmails" />
+
+<xs:element name="listAllEmailsResponse" type="tns:listAllEmailsResponse" />
+
+<xs:element name="updateEmail" type="tns:updateEmail" />
+
+<xs:element name="updateEmailResponse" type="tns:updateEmailResponse" />
+
+<xs:complexType name="findExactEmails">
+<xs:sequence>
+<xs:element name="email" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findExactEmailsResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:emails" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="emails">
+<xs:sequence>
+<xs:element name="address" type="xs:string" minOccurs="0" />
+<xs:element name="id" type="xs:int" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Exception">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="NonexistentEntityException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="RollbackFailureException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updateEmail">
+<xs:sequence>
+<xs:element name="email" type="tns:emails" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updateEmailResponse">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="findAppoximateEmail">
+<xs:sequence>
+<xs:element name="email" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findAppoximateEmailResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:emails" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="listAllEmails">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="listAllEmailsResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:emails" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteEmail">
+<xs:sequence>
+<xs:element name="emailId" type="xs:int" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteEmailResponse">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="addEmail">
+<xs:sequence>
+<xs:element name="email" type="tns:emails" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addEmailResponse">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="PreexistingEntityException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="countEmails">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="countEmailsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

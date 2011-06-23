@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+        *** GENERATED FROM jax-ws.xml - DO NOT EDIT !                             ***
+        *** TO MODIFY wsimport options USE Web Service node -> Edit WS Attributes ***
+        *** TO CHANGE TARGETS GENERATED TO jaxws-build.xml COPY THOSE             ***
+        *** TARGETS TO ../build.xml AND MODIFY THAT FILE INSTEAD                  ***
+
+        -->
+<project xmlns:xalan="http://xml.apache.org/xslt" xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3" xmlns:jaxws="http://www.netbeans.org/ns/jax-ws/1">
+    <!--
+                ===================
+                JAX-WS WSIMPORT SECTION
+                ===================
+            -->
+    <target name="wsimport-init" depends="init">
+        <mkdir dir="${build.generated.sources.dir}/jax-ws"/>
+        <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+            <classpath path="${libs.jaxws21.classpath}"/>
+        </taskdef>
+    </target>
+    <target name="wsimport-client-AddressesServices" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/AddressesServices"/>
+        <property name="wsdl-AddressesServices" location="xml-resources/web-service-references/AddressesServices/wsdl/localhost_8080/AddressesServices/AddressesServices.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/AddressesServices" destdir="${build.generated.dir}/jax-wsCache/AddressesServices" wsdl="${wsdl-AddressesServices}" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/AddressesServices/AddressesServices?wsdl" xendorsed="true">
+            <depends file="${wsdl-AddressesServices}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/AddressesServices"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/AddressesServices">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-AddressesServices" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/AddressesServices"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/org/hyperpath/services"/>
+    </target>
+    <target name="wsimport-client-EmailsServices" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/EmailsServices"/>
+        <property name="wsdl-EmailsServices" location="xml-resources/web-service-references/EmailsServices/wsdl/localhost_8080/EmailsServices/EmailsServices.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/EmailsServices" destdir="${build.generated.dir}/jax-wsCache/EmailsServices" wsdl="${wsdl-EmailsServices}" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/EmailsServices/EmailsServices?wsdl" xendorsed="true">
+            <depends file="${wsdl-EmailsServices}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/EmailsServices"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/EmailsServices">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-EmailsServices" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/EmailsServices"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/org/hyperpath/services"/>
+    </target>
+    <target name="wsimport-client-ClientsServices" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/ClientsServices"/>
+        <property name="wsdl-ClientsServices" location="xml-resources/web-service-references/ClientsServices/wsdl/localhost_8080/ClientsServices/ClientsServices.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ClientsServices" destdir="${build.generated.dir}/jax-wsCache/ClientsServices" wsdl="${wsdl-ClientsServices}" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/ClientsServices/ClientsServices?wsdl" xendorsed="true">
+            <depends file="${wsdl-ClientsServices}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/ClientsServices"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/ClientsServices">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-ClientsServices" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/ClientsServices"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/org/hyperpath/services"/>
+    </target>
+    <target name="wsimport-client-AdsServices" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/AdsServices"/>
+        <property name="wsdl-AdsServices" location="xml-resources/web-service-references/AdsServices/wsdl/localhost_8080/AdsServices/AdsServices.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/AdsServices" destdir="${build.generated.dir}/jax-wsCache/AdsServices" wsdl="${wsdl-AdsServices}" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/AdsServices/AdsServices?wsdl" xendorsed="true">
+            <depends file="${wsdl-AdsServices}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/AdsServices"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/AdsServices">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-AdsServices" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/AdsServices"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/org/hyperpath/services"/>
+    </target>
+    <target name="wsimport-client-FaxesServices" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/FaxesServices"/>
+        <property name="wsdl-FaxesServices" location="xml-resources/web-service-references/FaxesServices/wsdl/localhost_8080/FaxesServices/FaxesServices.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/FaxesServices" destdir="${build.generated.dir}/jax-wsCache/FaxesServices" wsdl="${wsdl-FaxesServices}" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/FaxesServices/FaxesServices?wsdl" xendorsed="true">
+            <depends file="${wsdl-FaxesServices}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/FaxesServices"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/FaxesServices">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-FaxesServices" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/FaxesServices"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/org/hyperpath/services"/>
+    </target>
+    <target name="wsimport-client-CategoriesServices" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/CategoriesServices"/>
+        <property name="wsdl-CategoriesServices" location="xml-resources/web-service-references/CategoriesServices/wsdl/localhost_8080/CategoriesServices/CategoriesServices.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/CategoriesServices" destdir="${build.generated.dir}/jax-wsCache/CategoriesServices" wsdl="${wsdl-CategoriesServices}" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/CategoriesServices/CategoriesServices?wsdl" xendorsed="true">
+            <depends file="${wsdl-CategoriesServices}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/CategoriesServices"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/CategoriesServices">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-CategoriesServices" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/CategoriesServices"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/org/hyperpath/services"/>
+    </target>
+    <target name="wsimport-client-ServicesServices" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/ServicesServices"/>
+        <property name="wsdl-ServicesServices" location="xml-resources/web-service-references/ServicesServices/wsdl/localhost_8080/ServicesServices/ServicesServices.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ServicesServices" destdir="${build.generated.dir}/jax-wsCache/ServicesServices" wsdl="${wsdl-ServicesServices}" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/ServicesServices/ServicesServices?wsdl" xendorsed="true">
+            <depends file="${wsdl-ServicesServices}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/ServicesServices"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/ServicesServices">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-ServicesServices" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/ServicesServices"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/org/hyperpath/services"/>
+    </target>
+    <target name="wsimport-client-PhonesServices" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/PhonesServices"/>
+        <property name="wsdl-PhonesServices" location="xml-resources/web-service-references/PhonesServices/wsdl/localhost_8080/PhonesServices/PhonesServices.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/PhonesServices" destdir="${build.generated.dir}/jax-wsCache/PhonesServices" wsdl="${wsdl-PhonesServices}" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/PhonesServices/PhonesServices?wsdl" xendorsed="true">
+            <depends file="${wsdl-PhonesServices}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/PhonesServices"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/PhonesServices">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-PhonesServices" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/PhonesServices"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/org/hyperpath/services"/>
+    </target>
+    <target name="wsimport-client-ReviewsServices" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/ReviewsServices"/>
+        <property name="wsdl-ReviewsServices" location="xml-resources/web-service-references/ReviewsServices/wsdl/localhost_8080/ReviewsServices/ReviewsServices.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ReviewsServices" destdir="${build.generated.dir}/jax-wsCache/ReviewsServices" wsdl="${wsdl-ReviewsServices}" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/ReviewsServices/ReviewsServices?wsdl" xendorsed="true">
+            <depends file="${wsdl-ReviewsServices}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/ReviewsServices"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/ReviewsServices">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-ReviewsServices" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/ReviewsServices"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/org/hyperpath/services"/>
+    </target>
+    <target name="wsimport-client-AdvertisersServices" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/AdvertisersServices"/>
+        <property name="wsdl-AdvertisersServices" location="xml-resources/web-service-references/AdvertisersServices/wsdl/localhost_8080/AdvertisersServices/AdvertisersServices.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/AdvertisersServices" destdir="${build.generated.dir}/jax-wsCache/AdvertisersServices" wsdl="${wsdl-AdvertisersServices}" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/AdvertisersServices/AdvertisersServices?wsdl" xendorsed="true">
+            <depends file="${wsdl-AdvertisersServices}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/AdvertisersServices"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/AdvertisersServices">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-AdvertisersServices" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/AdvertisersServices"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/org/hyperpath/services"/>
+    </target>
+    <target name="wsimport-client-OpeningHoursServices" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/OpeningHoursServices"/>
+        <property name="wsdl-OpeningHoursServices" location="xml-resources/web-service-references/OpeningHoursServices/wsdl/localhost_8080/OpeningHoursServices/OpeningHoursServices.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/OpeningHoursServices" destdir="${build.generated.dir}/jax-wsCache/OpeningHoursServices" wsdl="${wsdl-OpeningHoursServices}" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/OpeningHoursServices/OpeningHoursServices?wsdl" xendorsed="true">
+            <depends file="${wsdl-OpeningHoursServices}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/OpeningHoursServices"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/OpeningHoursServices">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-OpeningHoursServices" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/OpeningHoursServices"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/org/hyperpath/services"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-AddressesServices, wsimport-client-EmailsServices, wsimport-client-ClientsServices, wsimport-client-AdsServices, wsimport-client-FaxesServices, wsimport-client-CategoriesServices, wsimport-client-ServicesServices, wsimport-client-PhonesServices, wsimport-client-ReviewsServices, wsimport-client-AdvertisersServices, wsimport-client-OpeningHoursServices"/>
+</project>

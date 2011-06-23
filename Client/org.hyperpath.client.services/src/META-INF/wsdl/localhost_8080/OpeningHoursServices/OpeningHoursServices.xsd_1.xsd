@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.1 (branches/2.1-6728; 2011-02-03T14:14:58+0000) JAXWS-RI/2.2.3 JAXWS/2.2. --><xs:schema xmlns:tns="http://services.hyperpath.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://services.hyperpath.org/">
+
+<xs:element name="Exception" type="tns:Exception" />
+
+<xs:element name="NonexistentEntityException" type="tns:NonexistentEntityException" />
+
+<xs:element name="RollbackFailureException" type="tns:RollbackFailureException" />
+
+<xs:element name="addOpeningHours" type="tns:addOpeningHours" />
+
+<xs:element name="addOpeningHoursResponse" type="tns:addOpeningHoursResponse" />
+
+<xs:element name="deleteOpeningHours" type="tns:deleteOpeningHours" />
+
+<xs:element name="deleteOpeningHoursResponse" type="tns:deleteOpeningHoursResponse" />
+
+<xs:element name="openingHours" type="tns:openingHours" />
+
+<xs:element name="updateOpeningHours" type="tns:updateOpeningHours" />
+
+<xs:element name="updateOpeningHoursResponse" type="tns:updateOpeningHoursResponse" />
+
+<xs:complexType name="addOpeningHours">
+<xs:sequence>
+<xs:element name="openingHours" type="tns:openingHours" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="openingHours">
+<xs:sequence>
+<xs:element name="closeTime" type="xs:dateTime" minOccurs="0" />
+<xs:element name="days" type="xs:int" />
+<xs:element name="id" type="xs:int" minOccurs="0" />
+<xs:element name="openTime" type="xs:dateTime" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addOpeningHoursResponse">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="Exception">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="NonexistentEntityException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="RollbackFailureException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updateOpeningHours">
+<xs:sequence>
+<xs:element name="openingHoursId" type="xs:int" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updateOpeningHoursResponse">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="deleteOpeningHours">
+<xs:sequence>
+<xs:element name="openingHoursId" type="xs:int" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteOpeningHoursResponse">
+<xs:sequence />
+</xs:complexType>
+</xs:schema>

@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.1 (branches/2.1-6728; 2011-02-03T14:14:58+0000) JAXWS-RI/2.2.3 JAXWS/2.2. --><xs:schema xmlns:tns="http://services.hyperpath.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://services.hyperpath.org/">
+
+<xs:element name="Exception" type="tns:Exception" />
+
+<xs:element name="NonexistentEntityException" type="tns:NonexistentEntityException" />
+
+<xs:element name="PreexistingEntityException" type="tns:PreexistingEntityException" />
+
+<xs:element name="RollbackFailureException" type="tns:RollbackFailureException" />
+
+<xs:element name="addPhones" type="tns:addPhones" />
+
+<xs:element name="addPhonesResponse" type="tns:addPhonesResponse" />
+
+<xs:element name="countPhones" type="tns:countPhones" />
+
+<xs:element name="countPhonesResponse" type="tns:countPhonesResponse" />
+
+<xs:element name="deletePhones" type="tns:deletePhones" />
+
+<xs:element name="deletePhonesResponse" type="tns:deletePhonesResponse" />
+
+<xs:element name="findAppoximatePhones" type="tns:findAppoximatePhones" />
+
+<xs:element name="findAppoximatePhonesResponse" type="tns:findAppoximatePhonesResponse" />
+
+<xs:element name="findExactPhones" type="tns:findExactPhones" />
+
+<xs:element name="findExactPhonesResponse" type="tns:findExactPhonesResponse" />
+
+<xs:element name="listAllPhones" type="tns:listAllPhones" />
+
+<xs:element name="listAllPhonesResponse" type="tns:listAllPhonesResponse" />
+
+<xs:element name="phones" type="tns:phones" />
+
+<xs:element name="updatePhones" type="tns:updatePhones" />
+
+<xs:element name="updatePhonesResponse" type="tns:updatePhonesResponse" />
+
+<xs:complexType name="findExactPhones">
+<xs:sequence>
+<xs:element name="phoneNumber" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findExactPhonesResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:phones" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="phones">
+<xs:sequence>
+<xs:element name="id" type="xs:int" minOccurs="0" />
+<xs:element name="number" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Exception">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="NonexistentEntityException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="RollbackFailureException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deletePhones">
+<xs:sequence>
+<xs:element name="phoneId" type="xs:int" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deletePhonesResponse">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="countPhones">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="countPhonesResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addPhones">
+<xs:sequence>
+<xs:element name="phone" type="tns:phones" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addPhonesResponse">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="PreexistingEntityException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="listAllPhones">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="listAllPhonesResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:phones" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findAppoximatePhones">
+<xs:sequence>
+<xs:element name="phoneNumber" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findAppoximatePhonesResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:phones" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updatePhones">
+<xs:sequence>
+<xs:element name="phone" type="tns:phones" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updatePhonesResponse">
+<xs:sequence />
+</xs:complexType>
+</xs:schema>
