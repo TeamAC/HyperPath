@@ -34,35 +34,35 @@ public class OpeningHoursServices {
     controller = new OpeningHoursJpaController(emf);
     controller.create(openingHours);
   }
-
-  /**
-   * Delete opening hour
-   */
-  @WebMethod(operationName = "deleteOpeningHours")
-  public void deleteOpeningHours(@WebParam(name = "openingHoursId") Integer openingHoursId)
-    throws
-    Exception,
-    NonexistentEntityException,
-    RollbackFailureException
-  {
-    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new OpeningHoursJpaController(emf);
-    controller.destroy(openingHoursId);
-  }
-
-  /**
-   * Update opening hour
-   */
-  @WebMethod(operationName = "updateOpeningHours")
-  public void updateOpeningHours(@WebParam(name = "openingHoursId") Integer openingHoursId)
-    throws
-    Exception,
-    NonexistentEntityException,
-    RollbackFailureException
-  {
-    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new OpeningHoursJpaController(emf);
-    controller.destroy(openingHoursId);
-  }
+//
+//  /**
+//   * Delete opening hour
+//   */
+//  @WebMethod(operationName = "deleteOpeningHours")
+//  public void deleteOpeningHours(@WebParam(name = "openingHoursId") Integer openingHoursId)
+//    throws
+//    Exception,
+//    NonexistentEntityException,
+//    RollbackFailureException
+//  {
+//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+//    controller = new OpeningHoursJpaController(emf);
+//    controller.destroy(openingHoursId);
+//  }
+//
+//  /**
+//   * Update opening hour
+//   */
+//  @WebMethod(operationName = "updateOpeningHours")
+//  public void updateOpeningHours(@WebParam(name = "openingHoursId") Integer openingHoursId)
+//    throws
+//    Exception,
+//    NonexistentEntityException,
+//    RollbackFailureException
+//  {
+//    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+//    controller = new OpeningHoursJpaController(emf);
+//    controller.destroy(openingHoursId);
+//  }
 
 }

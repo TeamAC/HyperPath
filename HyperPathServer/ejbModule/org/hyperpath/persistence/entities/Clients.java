@@ -7,6 +7,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -69,12 +70,12 @@ public class Clients implements Serializable {
     @Column(name = "birthdate", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date birthdate;
-    @ManyToMany(mappedBy = "clientsList")
+    @ManyToMany(mappedBy = "clientsList", fetch = FetchType.EAGER)
     private List<Services> servicesList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientsId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientsId", fetch = FetchType.EAGER)
     private List<Reviews> reviewsList;
     @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Entities entitiesId;
 
     public Clients() {

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,12 +37,12 @@ public class Reviews implements Serializable {
     @Size(min = 1, max = 65535)
     @Column(name = "description", nullable = false, length = 65535)
     private String description;
-    @JoinColumn(name = "clients_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
-    private Clients clientsId;
     @JoinColumn(name = "services_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Services servicesId;
+    @JoinColumn(name = "clients_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Clients clientsId;
 
     public Reviews() {
     }
@@ -79,6 +80,14 @@ public class Reviews implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+  
+    public Services getServicesId() {
+        return servicesId;
+    }
+
+    public void setServicesId(Services servicesId) {
+        this.servicesId = servicesId;
+    }
 
     public Clients getClientsId() {
         return clientsId;
@@ -86,14 +95,6 @@ public class Reviews implements Serializable {
 
     public void setClientsId(Clients clientsId) {
         this.clientsId = clientsId;
-    }
-
-    public Services getServicesId() {
-        return servicesId;
-    }
-
-    public void setServicesId(Services servicesId) {
-        this.servicesId = servicesId;
     }
 
     @Override

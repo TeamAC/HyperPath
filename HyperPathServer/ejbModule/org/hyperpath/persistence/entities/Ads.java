@@ -7,6 +7,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -54,10 +55,10 @@ public class Ads implements Serializable {
     @Column(name = "endDate", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "adsId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "adsId", fetch = FetchType.EAGER)
     private List<Services> servicesList;
     @JoinColumn(name = "advertisers_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Advertisers advertisersId;
 
     public Ads() {

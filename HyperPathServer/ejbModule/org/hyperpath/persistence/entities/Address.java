@@ -5,9 +5,12 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -56,7 +59,10 @@ public class Address implements Serializable {
     @Size(max = 45)
     @Column(name = "ext", length = 45)
     private String ext;
-    @ManyToMany(mappedBy = "addressList")
+    @JoinTable(name = "entities_has_address", joinColumns = {
+        @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
+        @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false)})
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Entities> entitiesList;
 
     public Address() {

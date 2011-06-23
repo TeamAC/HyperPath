@@ -7,6 +7,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -47,7 +48,7 @@ public class Gpslocation implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "altitude", nullable = false, length = 45)
     private String altitude;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gpslocationId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gpslocationId", fetch = FetchType.EAGER)
     private List<Services> servicesList;
 
     public Gpslocation() {

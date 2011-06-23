@@ -12,7 +12,6 @@ import javax.persistence.PersistenceUnit;
 import org.hyperpath.persistence.entities.Categories;
 import org.hyperpath.persistence.jpa.CategoriesJpaController;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
-import org.hyperpath.persistence.jpa.exceptions.PreexistingEntityException;
 import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
 @WebService(serviceName = "CategoriesServices")
@@ -23,18 +22,6 @@ public class CategoriesServices {
   EntityManagerFactory    emf;
 
   CategoriesJpaController controller;
-
-  /**
-   * Add new category
-   */
-  @WebMethod(operationName = "addCategory")
-  public void addCategory(@WebParam(name = "category") Categories category)
-      throws Exception, PreexistingEntityException,
-      RollbackFailureException {
-    emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
-    controller = new CategoriesJpaController(emf);
-    controller.create(category);
-  }
 
   /**
    * Update category
@@ -133,4 +120,18 @@ public class CategoriesServices {
     controller = new CategoriesJpaController(emf);
     return controller.getCategoriesCount();
   }
+
+@WebMethod(operationName = "findServiceByCategory")
+    public java.util.List<org.hyperpath.persistence.entities.Services> findServiceByCategory(@WebParam(name="categoryId") Integer categoryId) {
+        emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+        CategoriesJpaController controller = new CategoriesJpaController(emf);
+        return controller.findServicesByCategories(categoryId);
+    }
+
+    @WebMethod(operationName = "addNewCategory")
+    public void addNewCategory(@WebParam(name="category") Categories category) throws Exception {
+        emf = Persistence.createEntityManagerFactory("HyperPathServerPU");
+        CategoriesJpaController controller = new CategoriesJpaController(emf);
+        controller.create(category);
+    }
 }

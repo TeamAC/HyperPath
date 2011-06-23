@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +34,7 @@ public class Phones implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "number", nullable = false, length = 45)
     private String number;
-    @ManyToMany(mappedBy = "phonesList")
+    @ManyToMany(mappedBy = "phonesList", fetch = FetchType.EAGER)
     private List<Entities> entitiesList;
 
     public Phones() {

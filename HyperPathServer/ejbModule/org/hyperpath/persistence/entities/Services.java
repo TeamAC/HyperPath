@@ -6,6 +6,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,24 +49,24 @@ public class Services implements Serializable {
     @JoinTable(name = "clients_bookmarked_services", joinColumns = {
         @JoinColumn(name = "services_id", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
         @JoinColumn(name = "clients_id", referencedColumnName = "id", nullable = false)})
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Clients> clientsList;
     @JoinColumn(name = "ads_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Ads adsId;
     @JoinColumn(name = "gpslocation_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Gpslocation gpslocationId;
     @JoinColumn(name = "openingHours_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private OpeningHours openingHoursid;
     @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Entities entitiesId;
     @JoinColumn(name = "categories_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
-    private Categories categoriesId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "servicesId")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Categories category;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "servicesId", fetch = FetchType.EAGER)
     private List<Reviews> reviewsList;
 
     public Services() {
@@ -155,12 +156,12 @@ public class Services implements Serializable {
         this.entitiesId = entitiesId;
     }
 
-    public Categories getCategoriesId() {
-        return categoriesId;
+    public Categories getCategory() {
+        return category;
     }
 
-    public void setCategoriesId(Categories categoriesId) {
-        this.categoriesId = categoriesId;
+    public void setCategory(Categories categoriesId) {
+        this.category = categoriesId;
     }
 
     @XmlTransient

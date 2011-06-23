@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package org.hyperpath.persistence.jpa;
 
 import java.io.Serializable;
@@ -5,44 +9,41 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-
+import javax.transaction.UserTransaction;
 import org.hyperpath.persistence.entities.OpeningHours;
 import org.hyperpath.persistence.entities.Services;
 import java.util.ArrayList;
 import java.util.List;
 import org.hyperpath.persistence.jpa.exceptions.IllegalOrphanException;
 import org.hyperpath.persistence.jpa.exceptions.NonexistentEntityException;
+import org.hyperpath.persistence.jpa.exceptions.RollbackFailureException;
 
+/**
+ *
+ * @author chedi
+ */
 public class OpeningHoursJpaController implements Serializable {
-  private static final long serialVersionUID = -2301993862953287459L;
 
-  public OpeningHoursJpaController(EntityManagerFactory emf) {
-    this.emf = emf;
-  }
-
-  public OpeningHoursJpaController(EntityManager mockedEM) {
-     em = mockedEM;
-  }
-
-  private EntityManager        em  = null;
-  private EntityManagerFactory emf = null;
-
-  public EntityManager getEntityManager() {
-    if(em != null){
-      return em;
+    public OpeningHoursJpaController(EntityManagerFactory emf) {
+        this.utx = utx;
+        this.emf = emf;
     }
-    return emf.createEntityManager();
-  }
+    private UserTransaction utx = null;
+    private EntityManagerFactory emf = null;
 
-    public void create(OpeningHours openingHours) throws Exception {
+    public EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
+
+    public void create(OpeningHours openingHours) throws RollbackFailureException, Exception {
         if (openingHours.getServicesList() == null) {
             openingHours.setServicesList(new ArrayList<Services>());
         }
         EntityManager em = null;
         try {
+            utx.begin();
             em = getEntityManager();
             List<Services> attachedServicesList = new ArrayList<Services>();
             for (Services servicesListServicesToAttach : openingHours.getServicesList()) {
@@ -60,8 +61,14 @@ public class OpeningHoursJpaController implements Serializable {
                     oldOpeningHoursidOfServicesListServices = em.merge(oldOpeningHoursidOfServicesListServices);
                 }
             }
+            utx.commit();
         } catch (Exception ex) {
-          throw ex;
+            try {
+                utx.rollback();
+            } catch (Exception re) {
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -69,9 +76,10 @@ public class OpeningHoursJpaController implements Serializable {
         }
     }
 
-    public void edit(OpeningHours openingHours) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(OpeningHours openingHours) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
+            utx.begin();
             em = getEntityManager();
             OpeningHours persistentOpeningHours = em.find(OpeningHours.class, openingHours.getId());
             List<Services> servicesListOld = persistentOpeningHours.getServicesList();
@@ -107,7 +115,13 @@ public class OpeningHoursJpaController implements Serializable {
                     }
                 }
             }
+            utx.commit();
         } catch (Exception ex) {
+            try {
+                utx.rollback();
+            } catch (Exception re) {
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = openingHours.getId();
@@ -123,9 +137,10 @@ public class OpeningHoursJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
+            utx.begin();
             em = getEntityManager();
             OpeningHours openingHours;
             try {
@@ -146,8 +161,14 @@ public class OpeningHoursJpaController implements Serializable {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(openingHours);
+            utx.commit();
         } catch (Exception ex) {
-          throw ex;
+            try {
+                utx.rollback();
+            } catch (Exception re) {
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -159,50 +180,46 @@ public class OpeningHoursJpaController implements Serializable {
         return findOpeningHoursEntities(true, -1, -1);
     }
 
-  public List<OpeningHours> findOpeningHoursEntities(int maxResults, int firstResult) {
-    return findOpeningHoursEntities(false, maxResults, firstResult);
-  }
-
-  @SuppressWarnings("unchecked")
-  private List<OpeningHours> findOpeningHoursEntities(boolean all,
-                                                      int maxResults,
-                                                      int firstResult) {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-      CriteriaQuery<OpeningHours> criteriaQuery = criteriaBuilder.createQuery(OpeningHours.class);
-      Query query = em.createQuery(criteriaQuery);
-      if (!all) {
-        query.setMaxResults(maxResults);
-        query.setFirstResult(firstResult);
-      }
-      return query.getResultList();
-    } finally {
-      em.close();
+    public List<OpeningHours> findOpeningHoursEntities(int maxResults, int firstResult) {
+        return findOpeningHoursEntities(false, maxResults, firstResult);
     }
-  }
 
-  public OpeningHours findOpeningHours(Integer id) {
-    EntityManager em = getEntityManager();
-    try {
-      return em.find(OpeningHours.class, id);
-    } finally {
-      em.close();
+    private List<OpeningHours> findOpeningHoursEntities(boolean all, int maxResults, int firstResult) {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(OpeningHours.class));
+            Query q = em.createQuery(cq);
+            if (!all) {
+                q.setMaxResults(maxResults);
+                q.setFirstResult(firstResult);
+            }
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
     }
-  }
 
-  public int getOpeningHoursCount() {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-      CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
-      Root<OpeningHours> openningHoursRoot = criteriaQuery.from(OpeningHours.class);
-      criteriaQuery.select(criteriaBuilder.count(openningHoursRoot));
-      Query query = em.createQuery(criteriaQuery);
-      return ((Long) query.getSingleResult()).intValue();
-    } finally {
-      em.close();
+    public OpeningHours findOpeningHours(Integer id) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(OpeningHours.class, id);
+        } finally {
+            em.close();
+        }
     }
-  }
+
+    public int getOpeningHoursCount() {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            Root<OpeningHours> rt = cq.from(OpeningHours.class);
+            cq.select(em.getCriteriaBuilder().count(rt));
+            Query q = em.createQuery(cq);
+            return ((Long) q.getSingleResult()).intValue();
+        } finally {
+            em.close();
+        }
+    }
 
 }

@@ -6,6 +6,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,31 +30,25 @@ public class Entities implements Serializable {
     @NotNull
     @Column(name = "id", nullable = false)
     private Integer id;
-    @JoinTable(name = "entities_has_emails", joinColumns = {
-        @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
-        @JoinColumn(name = "emails_id", referencedColumnName = "id", nullable = false)})
-    @ManyToMany
+    @ManyToMany(mappedBy = "entitiesList", fetch = FetchType.EAGER)
     private List<Emails> emailsList;
     @JoinTable(name = "entities_has_faxes", joinColumns = {
         @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
         @JoinColumn(name = "faxes_id", referencedColumnName = "id", nullable = false)})
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Faxes> faxesList;
     @JoinTable(name = "entities_has_phones", joinColumns = {
         @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
         @JoinColumn(name = "phones_id", referencedColumnName = "id", nullable = false)})
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Phones> phonesList;
-    @JoinTable(name = "entities_has_address", joinColumns = {
-        @JoinColumn(name = "entities_id", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
-        @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)})
-    @ManyToMany
+    @ManyToMany(mappedBy = "entitiesList", fetch = FetchType.EAGER)
     private List<Address> addressList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entitiesId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entitiesId", fetch = FetchType.EAGER)
     private List<Services> servicesList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entitiesId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entitiesId", fetch = FetchType.EAGER)
     private List<Advertisers> advertisersList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entitiesId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entitiesId", fetch = FetchType.EAGER)
     private List<Clients> clientsList;
 
     public Entities() {
