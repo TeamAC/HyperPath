@@ -40,8 +40,7 @@ to acces the services searchs and recomender feeds\footnote{In general for
 testing reason or to select a specific item for update}. To satisfy the
 constraints of separation of services, we implement security checks for some web
 services and restrict them to validly authentificated
-clients.\todo[inline,size=\footnotesize]{Add the security strategy or the
-reference to the implementation details}
+clients.
 
 \begin{figure}[!htb]
   \begin{center}
@@ -50,12 +49,6 @@ reference to the implementation details}
   \caption{General application architecture}
   \label{General application architecture}
 \end{figure}
-
-\ldots\todo[inline,size=\footnotesize]{may be this figure need rework, adding
-extra mobile device, emphsis the mobility nature of android client and soap communication protocole used in the
-communication???}
-\ldots\todo[inline,size=\footnotesize]{Where is the BIRT and datawarehousing
-part ???}
 
 \section{Application Server}
 
@@ -107,7 +100,7 @@ store)
 entity is transactional (an entity is created, updated and deleted within a
 transaction, and a transaction is required for the changes to be committed in the
 database). However, in memory entities can be changed without the changes being
-persisted. 
+persisted.
 \item it is not a primitive, a primitive wrapper, or built-in object.
 An entity is a fine-graned object that has a set of aggregated state that is
 typically stored in a single place (such as a row in a table), and have
@@ -116,7 +109,7 @@ relationships to other entities.
 
 \item Entity metadata–describes every entity. Metadata could be expressed as
 annotations (specifically defined types that may be attached to or place in front
-of Java programming elements) or XML (descriptors). 
+of Java programming elements) or XML (descriptors).
 \item Entity manager–enables
 API calls to perform operations on an entity. Until an entity manager is used to
 create, read, or write an entity, the entity is just a regular nonpersistent Java
@@ -160,10 +153,17 @@ manner. This lets you rapidly build applications that combine the best aspects
 of object technology and the specific data source. EclipseLink lets you do the following:
 
 \begin{itemize}
-\item Persist Java objects to virtually any relational database supported by a JDBC-compliant driver.
-\item Persist Java objects to virtually any nonrelational data source supported by a Java EE Connector architecture (JCA) adapter using indexed, mapped, or XML enterprise information system (EIS) records.
-\item Perform in-memory conversions between Java objects and XML Schema (XSD) based XML documents using JAXB.
-\item Map any object model to any relational or nonrelational schema, using EclipseLink and JPA integration with several tools including Eclipse Dali, Oracle JDeveloper, or NetBeans. The Workbench, a graphical mapping tool, is also provided for backward compatibility for projects using the EclipseLink native API.
+\item Persist Java objects to virtually any relational dqatabase supported by a
+JDBC-compliant driver.
+\item Persist Java objects to virtually any nonrelational data source supported
+by a Java EE Connector architecture (JCA) adapter using indexed, mapped, or XML
+enterprise information system (EIS) records.
+\item Perform in-memory conversions between Java objects and XML Schema (XSD)
+based XML documents using JAXB.
+\item Map any object model to any relational or nonrelational schema, using
+EclipseLink and JPA integration with several tools including Eclipse Dali,
+Oracle JDeveloper, or NetBeans. The Workbench, a graphical mapping tool, is also
+provided for backward compatibility for projects using the EclipseLink native API.
 \end{itemize}
 
 \section{Web services}
